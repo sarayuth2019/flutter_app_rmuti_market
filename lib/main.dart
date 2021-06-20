@@ -2,11 +2,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/account_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/account_page.dart';
 import 'package:flutter_app_rmuti_market/screens/my_order_tab/my_order_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/my_shop_tab/my_shop_tab.dart';
-import 'package:flutter_app_rmuti_market/screens/sing_in_page.dart';
-import 'package:flutter_app_rmuti_market/screens/sing_up_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/sing_in_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/sing_up_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -64,6 +64,7 @@ class _HomePage extends State {
       ),
       body: PageView(
         controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
         children: [
           MyOrderTab(accountID),
           MyShop(accountID),
@@ -74,18 +75,18 @@ class _HomePage extends State {
         selectedItemColor: Colors.orange[600],
         currentIndex: tabNum,
         backgroundColor: Colors.white,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_basket), label: "My Product"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
-        ],
         onTap: (index) {
           setState(() {
             tabNum = index;
             pageChanged(index);
           });
         },
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_basket), label: "My Product"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
+        ],
       ),
     );
   }
@@ -94,6 +95,7 @@ class _HomePage extends State {
     _pageController.jumpToPage(numPageView);
     setState(() {
       tabNum = numPageView;
+      print(tabNum);
     });
   }
 

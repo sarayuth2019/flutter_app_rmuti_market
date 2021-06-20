@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/main.dart';
+import 'package:flutter_app_rmuti_market/screens/account/sing_up_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -63,11 +64,17 @@ class _SingIn extends State {
                         color: Colors.white,
                       ),
                     ),
-                    Center(
-                      child: Icon(
-                        Icons.shopping_cart,
-                        size: 30,
-                        color: Colors.white,
+                    GestureDetector(
+                      onDoubleTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SingUp()));
+                      },
+                      child: Center(
+                        child: Icon(
+                          Icons.shopping_cart,
+                          size: 30,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -163,8 +170,7 @@ class _SingIn extends State {
             MaterialPageRoute(builder: (context) => HomePage(accountID)),
             (route) => false);
       });
-    }
-    else{
+    } else {
       print("No user login");
     }
   }
