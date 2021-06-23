@@ -9,6 +9,10 @@ import 'package:flutter_app_rmuti_market/screens/account/sing_in_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/sing_up_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+void main() =>
+    runApp(MaterialApp(debugShowCheckedModeBanner: false, home: SingIn()));
+
 class HomePage extends StatefulWidget {
   HomePage(this.accountID);
 
