@@ -112,13 +112,10 @@ class _SingIn extends State {
             )),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
-                color: Colors.orange[600],
+              child: ElevatedButton(
                 onPressed: onSingIn,
-                child: Text(
-                  "Sing In",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text('Sing in'),
+                style: ElevatedButton.styleFrom(primary: Colors.orange[600]),
               ),
             ),
           ],

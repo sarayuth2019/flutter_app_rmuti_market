@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
@@ -248,7 +247,7 @@ class _EditAccount extends State {
     params['surname'] = surname.toString();
     params['phone_number'] = phone_number.toString();
     params['description_store'] = description_store.toString();
-    
+
     http.post(urlSingUp, body: params).then((res) {
       print(res.body);
       Map resBody = jsonDecode(res.body) as Map;
