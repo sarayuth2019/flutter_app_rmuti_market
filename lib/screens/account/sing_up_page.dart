@@ -50,118 +50,121 @@ class _SingUp extends State {
           // ignore: deprecated_member_use
           autovalidate: _checkText,
           key: _formKey,
-          child: Column(
-            children: [
-              Text("กรุณากรอกข้อมูลให้ครบ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: (){
-                    _showAlertSelectImage(context);
-                  },
-                  child: Container(
-                    child: imageData == null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Container(
-                              height: 200,
-                              width: 270,
-                              color: Colors.grey,
-                              child: Icon(
-                                Icons.add,size: 40,
-                                color: Colors.white,
-                              ),
-                            ))
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Container(
-                              child: Image.memory(
-                                base64Decode(imageData!),
-                                fit: BoxFit.fill,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Text("กรุณากรอกข้อมูลให้ครบ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: (){
+                      _showAlertSelectImage(context);
+                    },
+                    child: Container(
+                      child: imageData == null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Container(
                                 height: 200,
                                 width: 270,
+                                color: Colors.grey,
+                                child: Icon(
+                                  Icons.add,size: 40,
+                                  color: Colors.white,
+                                ),
+                              ))
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Container(
+                                child: Image.memory(
+                                  base64Decode(imageData!),
+                                  fit: BoxFit.fill,
+                                  height: 200,
+                                  width: 270,
+                                ),
                               ),
                             ),
-                          ),
+                    ),
                   ),
                 ),
-              ),
-              Text("รูปถ่ายร้าน",style: TextStyle(fontWeight: FontWeight.bold),),
-              TextFormField(
-                decoration: InputDecoration(hintText: "Email"),
-                maxLength: 32,
-                validator: validateEmail,
-                onSaved: (String? _text) {
-                  email = _text;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(hintText: "Password"),
-                maxLength: 12,
-                obscureText: true,
-                validator: validatePassword,
-                controller: confirmPass,
-                onSaved: (String? _text) {
-                  password = _text;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(hintText: "Confirm Password"),
-                maxLength: 12,
-                obscureText: true,
-                validator: validateConfirmPassword,
-              ),
-              TextFormField(
-                decoration: InputDecoration(hintText: "ชื่อร้าน"),
-                maxLength: 32,
-                validator: validateNameMarket,
-                onSaved: (String? _text) {
-                  nameMarket = _text;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(hintText: "ชื่อเจ้าของร้าน"),
-                maxLength: 32,
-                validator: validateName,
-                onSaved: (String? _text) {
-                  name = _text;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(hintText: "นามสกุล"),
-                maxLength: 32,
-                validator: validateSurName,
-                onSaved: (String? _text) {
-                  surname = _text;
-                },
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                maxLength: 10,
-                decoration: InputDecoration(hintText: "เบอร์โทรติดต่อ"),
-                validator: validateNumber,
-                onSaved: (String? _num) {
-                  number = _num;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(hintText: "รายละเอียดที่ตั้งของร้าน"),
-                maxLength: 100,
-                maxLines: null,
-                validator: validateMarketAddress,
-                onSaved: (String? _text) {
-                  marketAddress = _text;
-                },
-              ),
-              RaisedButton(
-                color: Colors.orange[600],
-                onPressed: onSingUp,
-                child: Text(
-                  "Sing up",
-                  style: TextStyle(color: Colors.white),
+                Text("รูปถ่ายร้าน",style: TextStyle(fontWeight: FontWeight.bold),),
+                TextFormField(
+                  decoration: InputDecoration(hintText: "Email"),
+                  maxLength: 32,
+                  validator: validateEmail,
+                  onSaved: (String? _text) {
+                    email = _text;
+                  },
                 ),
-              )
-            ],
+                TextFormField(
+                  decoration: InputDecoration(hintText: "Password"),
+                  maxLength: 12,
+                  obscureText: true,
+                  validator: validatePassword,
+                  controller: confirmPass,
+                  onSaved: (String? _text) {
+                    password = _text;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(hintText: "Confirm Password"),
+                  maxLength: 12,
+                  obscureText: true,
+                  validator: validateConfirmPassword,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(hintText: "ชื่อร้าน"),
+                  maxLength: 32,
+                  validator: validateNameMarket,
+                  onSaved: (String? _text) {
+                    nameMarket = _text;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(hintText: "ชื่อเจ้าของร้าน"),
+                  maxLength: 32,
+                  validator: validateName,
+                  onSaved: (String? _text) {
+                    name = _text;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(hintText: "นามสกุล"),
+                  maxLength: 32,
+                  validator: validateSurName,
+                  onSaved: (String? _text) {
+                    surname = _text;
+                  },
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  maxLength: 10,
+                  decoration: InputDecoration(hintText: "เบอร์โทรติดต่อ"),
+                  validator: validateNumber,
+                  onSaved: (String? _num) {
+                    number = _num;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(hintText: "รายละเอียดที่ตั้งของร้าน"),
+                  maxLength: 100,
+                  maxLines: null,
+                  validator: validateMarketAddress,
+                  onSaved: (String? _text) {
+                    marketAddress = _text;
+                  },
+                ),
+                RaisedButton(
+                  color: Colors.orange[600],
+                  onPressed: onSingUp,
+                  child: Text(
+                    "Sing up",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

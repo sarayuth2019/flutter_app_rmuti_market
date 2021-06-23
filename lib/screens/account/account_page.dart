@@ -23,6 +23,7 @@ class _AccountPage extends State {
   final accountID;
   final String urlSendAccountById = "${Config.API_URL}/Customer/list/id";
   AccountData? _marketAccountData;
+
   @override
   Widget build(BuildContext context) {
     print("Market ID : ${accountID.toString()}");
@@ -31,7 +32,12 @@ class _AccountPage extends State {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.orange[600],
           child: Icon(Icons.edit),
-          onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>EditAccount(_marketAccountData)));},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditAccount(_marketAccountData)));
+          },
         ),
         body: FutureBuilder(
           future: sendDataMarketByUser(),
@@ -40,87 +46,81 @@ class _AccountPage extends State {
               print('snapshotData : ${snapshot.data}');
               return Center(child: CircularProgressIndicator());
             } else {
-              return Column(
-                children: [
-                  Container(
-                    child: Image.memory(
-                      base64Decode(snapshot.data.image),
-                      fit: BoxFit.fill,
-                    ),
-                    color: Colors.blueGrey,
-                    height: 270,
-                    width: double.infinity,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Card(
-                    child: Container(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "วันสมัคสมาชิก : ${snapshot.data.dateRegister}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Market ID : ${snapshot.data.id}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "ชื่อร้าน : ${snapshot.data.name_store}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "ชื่อเจ้าของร้าน : ${snapshot.data.name} ${snapshot.data.surname}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "อีเมล : ${snapshot.data.email}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "เบอร์ติดต่อ : ${snapshot.data.phone_number}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "รายละเอียดที่อยู่ร้าน : ${snapshot.data.description_store}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      child: Image.memory(
+                        base64Decode(snapshot.data.image),
+                        fit: BoxFit.fill,
                       ),
+                      color: Colors.blueGrey,
+                      height: 270,
+                      width: double.infinity,
                     ),
-                  )
-                ],
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Card(
+                      child: Container(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Market ID : ${snapshot.data.id}",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "ชื่อร้าน : ${snapshot.data.name_store}",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "ชื่อเจ้าของร้าน : ${snapshot.data.name} ${snapshot.data.surname}",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "อีเมล : ${snapshot.data.email}",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "เบอร์ติดต่อ : ${snapshot.data.phone_number}",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "รายละเอียดที่อยู่ร้าน : ${snapshot.data.description_store}",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               );
             }
           },
@@ -148,8 +148,6 @@ class _AccountPage extends State {
           _dataAccount['dateRegister'],
           _dataAccount['image']);
       print("market data : ${_marketAccountData}");
-
-
     });
     return _marketAccountData!;
   }
