@@ -77,7 +77,8 @@ class _ManageOrder extends State {
       SnackBar(content: Text("ยกเลิกฮอร์เดอร์ สำเร็จ !"));
   final snackBarOnTab =
       SnackBar(content: Text("กำลังดำเนินการ กรุณารอซักครู่..."));
-  int _status = 0;
+  var _status;
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,21 +103,35 @@ class _ManageOrder extends State {
                   ),
                 ),
                 Container(
+                    child: status == 0
+                        ? Text(
+                      "รอดำเนินการ",
+                      style: TextStyle(
+                          color: Colors.yellow[600],
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    )
+                        : Container()),
+                Container(
                     child: status == 1
                         ? Text(
-                            "สำเร็จ",
+                      "จัดเตรียมสินค้าสำเร็จ",
+                      style: TextStyle(
+                          color: Colors.blue[400],
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    )
+                        : Container()),
+                Container(
+                    child: status == 2
+                        ? Text(
+                            "ส่งมอบสินค้าแล้ว สำเร็จ",
                             style: TextStyle(
-                                color: Colors.greenAccent[400],
+                                color: Colors.green[600],
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
                           )
-                        : Text(
-                            "รอดำเนินการ",
-                            style: TextStyle(
-                                color: Colors.yellowAccent[700],
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ))
+                        : Container()),
               ],
             ),
             Center(
@@ -215,10 +230,12 @@ class _ManageOrder extends State {
                       child: GestureDetector(
                           child: Text('ยืนยัน'),
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(snackBarOnTab);
                             setState(() {
                               _status = 1;
-                              print("status order : ${_status.toString()}");
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(snackBarOnTab);
+                            setState(() {
+                              print("status order : ${status.toString()}");
                             });
                             _saveOrderSuccess();
                           })),
@@ -296,7 +313,6 @@ class _ManageOrder extends State {
         _params['status'] = statusText.toString();
         _params['user'] = customer_id.toString();
         _params['item'] = item_id.toString();
-        _params['image'] = image.toString();
         print("save notify...");
         http.post(urlSaveNotify,body: _params).then((res){
           print("save notify success !");
@@ -305,7 +321,7 @@ class _ManageOrder extends State {
           print("save BackUp notify success !");
         });
         print("save status ${statusData.toString()} to Order success");
-        ScaffoldMessenger.of(context).showSnackBar(snackBarCancelOrderSuccess);
+        ScaffoldMessenger.of(context).showSnackBar(snackBarSaveStatusOrderSuccess);
         //snackBarKey.currentState.showSnackBar(snackBarSaveStatusOrderSuccess);
         Navigator.of(context).pop();
       } else {

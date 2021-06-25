@@ -26,6 +26,9 @@ class _MyShop extends State {
 
   final urlListItemByUser = "${Config.API_URL}/Item/find/user";
   final urlDeleteProducts = "${Config.API_URL}/Item/delete/";
+  final snackBarOnDeleteProducts = SnackBar(content: Text("กำลังลบสินค้า..."));
+  final snackBarOnDeleteProductsSuccess = SnackBar(content: Text("ลบสินค้า สำเร็จ"));
+  final snackBarOnDeleteProductsFall = SnackBar(content: Text("ผิดพลาด !"));
 
   @override
   void initState() {
@@ -66,106 +69,165 @@ class _MyShop extends State {
                       fontWeight: FontWeight.bold),
                 ));
               } else {
-                return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, index) {
-                      return Card(
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
+                return RefreshIndicator(
+                  onRefresh: _onRefresh,
+                  child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, index) {
+                        return Card(
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.memory(
+                                          base64Decode(
+                                              snapshot.data[index].image),
+                                          height: 100,
+                                          width: 100,
+                                          fit: BoxFit.fill,
+                                        )),
+                                    Text("PID : ${snapshot.data[index].id}"),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: ListTile(
+                                  title: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${snapshot.data[index].name}",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text("฿${snapshot.data[index].price}"),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.location_on,
+                                            color: Colors.red,
+                                          ),
+                                          Text(
+                                              "${snapshot.data[index].location}"),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Column(
                                 children: [
-                                  ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: Image.memory(
-                                        base64Decode(
-                                            snapshot.data[index].image),
-                                        height: 100,
-                                        width: 100,
-                                        fit: BoxFit.fill,
-                                      )),
-                                  Text("PID : ${snapshot.data[index].id}"),
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: Colors.amber,
+                                        size: 17,
+                                      ),
+                                      onPressed: () {
+                                        print(
+                                            "Edit Product ID ${snapshot.data[index].id}");
+                                        Navigator.push(
+                                            context,
+                                            (MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditProductPage(
+                                                      snapshot.data[index].id,
+                                                      snapshot.data[index].name,
+                                                      snapshot.data[index].group,
+                                                      snapshot.data[index]
+                                                          .description,
+                                                      snapshot.data[index].price,
+                                                      snapshot
+                                                          .data[index].location,
+                                                      snapshot
+                                                          .data[index].user_id,
+                                                      snapshot
+                                                          .data[index].discount,
+                                                      snapshot.data[index]
+                                                          .count_promotion,
+                                                      snapshot.data[index]
+                                                          .status_promotion,
+                                                      snapshot.data[index].date,
+                                                      snapshot.data[index].image,
+                                                    ))));
+                                      }),
+                                  IconButton(
+                                      onPressed: () {
+                                        _showAlertDeleteProducts(
+                                            context, snapshot.data[index].id);
+                                      },
+                                      icon: Icon(
+                                        Icons.remove_circle_outline,
+                                        color: Colors.red,
+                                        size: 17,
+                                      ))
                                 ],
                               ),
-                            ),
-                            Expanded(
-                              child: ListTile(
-                                trailing: Column(
-                                  children: [
-                                    IconButton(
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: Colors.amber,
-                                          size: 17,
-                                        ),
-                                        onPressed: () {
-                                          print(
-                                              "Edit Product ID ${snapshot.data[index].id}");
-                                          Navigator.push(
-                                              context,
-                                              (MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditProductPage(
-                                                        snapshot.data[index].id,
-                                                        snapshot
-                                                            .data[index].name,
-                                                        snapshot
-                                                            .data[index].group,
-                                                        snapshot.data[index]
-                                                            .description,
-                                                        snapshot
-                                                            .data[index].price,
-                                                        snapshot.data[index]
-                                                            .location,
-                                                        snapshot.data[index]
-                                                            .user_id,
-                                                        snapshot.data[index]
-                                                            .discount,
-                                                        snapshot.data[index]
-                                                            .count_promotion,
-                                                        snapshot.data[index]
-                                                            .status_promotion,
-                                                        snapshot
-                                                            .data[index].date,
-                                                        snapshot
-                                                            .data[index].image,
-                                                      ))));
-                                        }),
-                                  ],
-                                ),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${snapshot.data[index].name}",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text("฿${snapshot.data[index].price}"),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.location_on,
-                                          color: Colors.red,
-                                        ),
-                                        Text(
-                                            "${snapshot.data[index].location}"),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    });
+                            ],
+                          ),
+                        );
+                      }),
+                );
               }
             },
           ),
         ));
+  }
+
+  Future<void> _onRefresh() async {
+    listItemByUser();
+    setState(() {});
+    await Future.delayed(Duration(seconds: 3));
+  }
+
+  void _showAlertDeleteProducts(BuildContext context, snapshotIndexID) async {
+    print('Show Alert Dialog Image !');
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('ยืนยันการลบสินค้า'),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      child: GestureDetector(
+                          child: Text('ยืนยัน'),
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(snackBarOnDeleteProducts);
+                            http.get("${urlDeleteProducts}${snapshotIndexID}").then((res){
+                              print(res.body);
+                              var dataRes = jsonDecode(res.body);
+                              var statusRes = dataRes['status'];
+                              print(statusRes);
+                              if(statusRes == 0 ){
+                                ScaffoldMessenger.of(context).showSnackBar(snackBarOnDeleteProductsSuccess);
+                              }
+                              else {
+                                ScaffoldMessenger.of(context).showSnackBar(snackBarOnDeleteProductsFall);
+                              }
+                            });
+                          })),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      child: GestureDetector(
+                          child: Text('ยกเลิก'),
+                          onTap: () {
+                            Navigator.pop(context);
+                          })),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   Future<List<_Products>> listItemByUser() async {
