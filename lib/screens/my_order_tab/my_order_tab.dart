@@ -29,7 +29,7 @@ class _MyOrderTab extends State {
   final snackBarOnPickUpOrder = SnackBar(content: Text("กำลังดำเนินการ..."));
   final snackBarSaveStatusOrderFall = SnackBar(content: Text("ผิดพลาด !"));
   final snackBarPickUpOrderSuccess =
-  SnackBar(content: Text("ส่งมอบสินค้าสำ สำเร็จ !"));
+      SnackBar(content: Text("ส่งมอบสินค้าสำ สำเร็จ !"));
 
   var productsData;
 
@@ -69,7 +69,6 @@ class _MyOrderTab extends State {
                     return Card(
                         child: Row(
                       children: [
-
                         /*
                         Column(
                           children: [
@@ -95,7 +94,8 @@ class _MyOrderTab extends State {
                                 Text(
                                   "Order ID : ${snapshot.data[index].id}",
                                   style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   "${snapshot.data[index].name}",
@@ -118,8 +118,8 @@ class _MyOrderTab extends State {
                                   children: [
                                     Text(
                                       "สถานะสินค้า : ",
-                                      style:
-                                          TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Container(
                                         child: snapshot.data[index].status == 0
@@ -127,7 +127,8 @@ class _MyOrderTab extends State {
                                                 "รอดำเนินการ",
                                                 style: TextStyle(
                                                     color: Colors.yellow[700],
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               )
                                             : Container()),
                                     Container(
@@ -136,7 +137,8 @@ class _MyOrderTab extends State {
                                                 "จัดเตรียมสินค้า สำเร็จ",
                                                 style: TextStyle(
                                                     color: Colors.blue[700],
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               )
                                             : Container()),
                                     Container(
@@ -145,7 +147,8 @@ class _MyOrderTab extends State {
                                                 "ส่งมอบสินค้า สำเร็จ",
                                                 style: TextStyle(
                                                     color: Colors.green[700],
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               )
                                             : Container()),
                                   ],
@@ -159,7 +162,8 @@ class _MyOrderTab extends State {
                                               child: Text(
                                                 "จัดการออร์เดอร์",
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                               onPressed: () {
                                                 Navigator.push(
@@ -169,24 +173,34 @@ class _MyOrderTab extends State {
                                                             ManageOrder(
                                                               accountID,
                                                               snapshot
-                                                                  .data[index].id,
-                                                              snapshot.data[index]
+                                                                  .data[index]
+                                                                  .id,
+                                                              snapshot
+                                                                  .data[index]
                                                                   .status,
-                                                              snapshot.data[index]
+                                                              snapshot
+                                                                  .data[index]
                                                                   .name,
-                                                              snapshot.data[index]
+                                                              snapshot
+                                                                  .data[index]
                                                                   .number,
-                                                              snapshot.data[index]
+                                                              snapshot
+                                                                  .data[index]
                                                                   .price,
-                                                              snapshot.data[index]
+                                                              snapshot
+                                                                  .data[index]
                                                                   .customer_id,
-                                                              snapshot.data[index]
+                                                              snapshot
+                                                                  .data[index]
                                                                   .seller_id,
-                                                              snapshot.data[index]
+                                                              snapshot
+                                                                  .data[index]
                                                                   .item_id,
-                                                              snapshot.data[index]
+                                                              snapshot
+                                                                  .data[index]
                                                                   .date,
-                                                              snapshot.data[index]
+                                                              snapshot
+                                                                  .data[index]
                                                                   .image,
                                                             )));
                                               },
@@ -202,10 +216,12 @@ class _MyOrderTab extends State {
                                               child: Text(
                                                 "ส่งมอบสินค้า สำเร็จ",
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
-                                              onPressed: (){
-                                                _pickUpOrder(snapshot.data[index]);
+                                              onPressed: () {
+                                                _pickUpOrder(
+                                                    snapshot.data[index]);
                                               },
                                             ),
                                           )
@@ -230,13 +246,14 @@ class _MyOrderTab extends State {
       ),
     );
   }
+
   Future<void> _onRefresh() async {
     streamListMyOrder();
     setState(() {});
     await Future.delayed(Duration(seconds: 3));
   }
 
-  void _pickUpOrder (var snapShot) async {
+  void _pickUpOrder(var snapShot) async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarOnPickUpOrder);
     var _status = 2;
     Map params = Map();
@@ -263,16 +280,17 @@ class _MyOrderTab extends State {
         _params['user'] = snapShot.customer_id.toString();
         _params['item'] = snapShot.item_id.toString();
         print("save notify...");
-        http.post(urlSaveNotify,body: _params).then((res){
+        http.post(urlSaveNotify, body: _params).then((res) {
           print("save notify success !");
         });
-        http.post(urlSaveBackUpNotify,body: _params).then((res){
+        http.post(urlSaveBackUpNotify, body: _params).then((res) {
           print("save BackUp notify success !");
         });
         print("save status ${statusData.toString()} to Order success");
-        ScaffoldMessenger.of(context).showSnackBar(snackBarPickUpOrderSuccess);
+        setState(() {
+          ScaffoldMessenger.of(context).showSnackBar(snackBarPickUpOrderSuccess);
+        });
         //snackBarKey.currentState.showSnackBar(snackBarSaveStatusOrderSuccess);
-        Navigator.of(context).pop();
       } else {
         print("save status to Order fall");
         ScaffoldMessenger.of(context).showSnackBar(snackBarSaveStatusOrderFall);

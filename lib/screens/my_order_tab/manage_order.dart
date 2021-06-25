@@ -233,11 +233,8 @@ class _ManageOrder extends State {
                             setState(() {
                               _status = 1;
                             });
-                            ScaffoldMessenger.of(context).showSnackBar(snackBarOnTab);
-                            setState(() {
-                              print("status order : ${status.toString()}");
-                            });
-                            _saveOrderSuccess();
+                            Navigator.of(context).pop();
+                            _saveStatusOrderSuccess();
                           })),
                   SizedBox(
                     height: 10,
@@ -270,8 +267,8 @@ class _ManageOrder extends State {
                       child: GestureDetector(
                           child: Text('ยืนยัน'),
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(snackBarOnTab);
-                            _cancelOrder();
+                            Navigator.of(context).pop();
+                            _saveStatusCancelOrder();
                           })),
                   SizedBox(
                     height: 10,
@@ -289,7 +286,8 @@ class _ManageOrder extends State {
         });
   }
 
-  void _saveOrderSuccess() async {
+  void _saveStatusOrderSuccess() async {
+    ScaffoldMessenger.of(context).showSnackBar(snackBarOnTab);
     Map params = Map();
     params['id'] = id.toString();
     params['status'] = _status.toString();
@@ -332,7 +330,8 @@ class _ManageOrder extends State {
     });
   }
 
-  void _cancelOrder() async {
+  void _saveStatusCancelOrder() async {
+    ScaffoldMessenger.of(context).showSnackBar(snackBarOnTab);
     http.get("${urlCancelOrder}${id}").then((res) {
       print(res.body);
       var jsonData = jsonDecode(res.body);

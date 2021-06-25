@@ -27,7 +27,8 @@ class _MyShop extends State {
   final urlListItemByUser = "${Config.API_URL}/Item/find/user";
   final urlDeleteProducts = "${Config.API_URL}/Item/delete/";
   final snackBarOnDeleteProducts = SnackBar(content: Text("กำลังลบสินค้า..."));
-  final snackBarOnDeleteProductsSuccess = SnackBar(content: Text("ลบสินค้า สำเร็จ"));
+  final snackBarOnDeleteProductsSuccess =
+      SnackBar(content: Text("ลบสินค้า สำเร็จ"));
   final snackBarOnDeleteProductsFall = SnackBar(content: Text("ผิดพลาด !"));
 
   @override
@@ -97,7 +98,8 @@ class _MyShop extends State {
                               Expanded(
                                 child: ListTile(
                                   title: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "${snapshot.data[index].name}",
@@ -138,10 +140,12 @@ class _MyShop extends State {
                                                     EditProductPage(
                                                       snapshot.data[index].id,
                                                       snapshot.data[index].name,
-                                                      snapshot.data[index].group,
+                                                      snapshot
+                                                          .data[index].group,
                                                       snapshot.data[index]
                                                           .description,
-                                                      snapshot.data[index].price,
+                                                      snapshot
+                                                          .data[index].price,
                                                       snapshot
                                                           .data[index].location,
                                                       snapshot
@@ -153,7 +157,8 @@ class _MyShop extends State {
                                                       snapshot.data[index]
                                                           .status_promotion,
                                                       snapshot.data[index].date,
-                                                      snapshot.data[index].image,
+                                                      snapshot
+                                                          .data[index].image,
                                                     ))));
                                       }),
                                   IconButton(
@@ -186,7 +191,7 @@ class _MyShop extends State {
   }
 
   void _showAlertDeleteProducts(BuildContext context, snapshotIndexID) async {
-    print('Show Alert Dialog Image !');
+    print('Show Alert Dialog Delete Product !');
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -200,19 +205,8 @@ class _MyShop extends State {
                       child: GestureDetector(
                           child: Text('ยืนยัน'),
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(snackBarOnDeleteProducts);
-                            http.get("${urlDeleteProducts}${snapshotIndexID}").then((res){
-                              print(res.body);
-                              var dataRes = jsonDecode(res.body);
-                              var statusRes = dataRes['status'];
-                              print(statusRes);
-                              if(statusRes == 0 ){
-                                ScaffoldMessenger.of(context).showSnackBar(snackBarOnDeleteProductsSuccess);
-                              }
-                              else {
-                                ScaffoldMessenger.of(context).showSnackBar(snackBarOnDeleteProductsFall);
-                              }
-                            });
+                            Navigator.of(context).pop();
+                            _deleteProduct(snapshotIndexID);
                           })),
                   SizedBox(
                     height: 10,
@@ -228,6 +222,24 @@ class _MyShop extends State {
             ),
           );
         });
+  }
+
+  void _deleteProduct(var snapshotIndexID) {
+    ScaffoldMessenger.of(context).showSnackBar(snackBarOnDeleteProducts);
+    http.get("${urlDeleteProducts}${snapshotIndexID}").then((res) {
+      print(res.body);
+      var dataRes = jsonDecode(res.body);
+      var statusRes = dataRes['status'];
+      print(statusRes);
+      if (statusRes == 0) {
+        setState(() {});
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBarOnDeleteProductsSuccess);
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBarOnDeleteProductsFall);
+      }
+    });
   }
 
   Future<List<_Products>> listItemByUser() async {
