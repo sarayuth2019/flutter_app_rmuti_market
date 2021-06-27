@@ -155,8 +155,8 @@ class _SingUp extends State {
                     marketAddress = _text;
                   },
                 ),
-                RaisedButton(
-                  color: Colors.orange[600],
+               ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.orange[600]),
                   onPressed: onSingUp,
                   child: Text(
                     "Sing up",
