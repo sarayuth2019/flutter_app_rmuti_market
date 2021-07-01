@@ -411,7 +411,7 @@ class _SellProducts extends State {
     params['discount'] = discountPromotion.toString();
     params['promotion'] = statusPromotion.toString();
 
-    http.post(urlSellProducts, body: params).then((res) {
+    http.post(Uri.parse(urlSellProducts), body: params).then((res) {
       Map _resData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       print(_resData);
       var _resStatus = _resData['status'];

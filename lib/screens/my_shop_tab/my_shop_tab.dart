@@ -226,7 +226,7 @@ class _MyShop extends State {
 
   void _deleteProduct(var snapshotIndexID) {
     ScaffoldMessenger.of(context).showSnackBar(snackBarOnDeleteProducts);
-    http.get("${urlDeleteProducts}${snapshotIndexID}").then((res) {
+    http.get(Uri.parse("${urlDeleteProducts}${snapshotIndexID}")).then((res) {
       print(res.body);
       var dataRes = jsonDecode(res.body);
       var statusRes = dataRes['status'];
@@ -246,7 +246,7 @@ class _MyShop extends State {
     Map params = Map();
     List<_Products> listItem = [];
     params['user'] = accountID.toString();
-    await http.post(urlListItemByUser, body: params).then((res) {
+    await http.post(Uri.parse(urlListItemByUser), body: params).then((res) {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];

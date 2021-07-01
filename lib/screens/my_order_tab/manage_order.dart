@@ -298,7 +298,7 @@ class _ManageOrder extends State {
     params['user'] = seller_id.toString();
     params['item'] = item_id.toString();
     params['image'] = image.toString();
-    http.post(urlSaveToOrder, body: params).then((res) {
+    http.post(Uri.parse(urlSaveToOrder), body: params).then((res) {
       print(res.body);
       Map jsonData = jsonDecode(res.body);
       var statusData = jsonData['status'];
@@ -312,10 +312,10 @@ class _ManageOrder extends State {
         _params['user'] = customer_id.toString();
         _params['item'] = item_id.toString();
         print("save notify...");
-        http.post(urlSaveNotify,body: _params).then((res){
+        http.post(Uri.parse(urlSaveNotify),body: _params).then((res){
           print("save notify success !");
         });
-        http.post(urlSaveBackUpNotify,body: _params).then((res){
+        http.post(Uri.parse(urlSaveBackUpNotify),body: _params).then((res){
           print("save BackUp notify success !");
         });
         print("save status ${statusData.toString()} to Order success");
@@ -332,7 +332,7 @@ class _ManageOrder extends State {
 
   void _saveStatusCancelOrder() async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarOnTab);
-    http.get("${urlCancelOrder}${id}").then((res) {
+    http.get(Uri.parse("${urlCancelOrder}${id}")).then((res) {
       print(res.body);
       var jsonData = jsonDecode(res.body);
       var statusData = jsonData['status'];
@@ -348,10 +348,10 @@ class _ManageOrder extends State {
         _params['item'] = item_id.toString();
         _params['image'] = image.toString();
         print("save notify...");
-        http.post(urlSaveNotify,body: _params).then((res){
+        http.post(Uri.parse(urlSaveNotify),body: _params).then((res){
           print("save notify success !");
         });
-        http.post(urlSaveBackUpNotify,body: _params).then((res){
+        http.post(Uri.parse(urlSaveBackUpNotify),body: _params).then((res){
           print("save BackUp notify success !");
         });
         ScaffoldMessenger.of(context).showSnackBar(snackBarCancelOrderSuccess);

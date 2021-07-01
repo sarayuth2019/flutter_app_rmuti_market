@@ -266,7 +266,7 @@ class _MyOrderTab extends State {
     params['user'] = snapShot.seller_id.toString();
     params['item'] = snapShot.item_id.toString();
     params['image'] = snapShot.image.toString();
-    http.post(urlSaveToOrder, body: params).then((res) {
+    http.post(Uri.parse(urlSaveToOrder), body: params).then((res) {
       print(res.body);
       Map jsonData = jsonDecode(res.body);
       var statusData = jsonData['status'];
@@ -280,10 +280,10 @@ class _MyOrderTab extends State {
         _params['user'] = snapShot.customer_id.toString();
         _params['item'] = snapShot.item_id.toString();
         print("save notify...");
-        http.post(urlSaveNotify, body: _params).then((res) {
+        http.post(Uri.parse(urlSaveNotify), body: _params).then((res) {
           print("save notify success !");
         });
-        http.post(urlSaveBackUpNotify, body: _params).then((res) {
+        http.post(Uri.parse(urlSaveBackUpNotify), body: _params).then((res) {
           print("save BackUp notify success !");
         });
         print("save status ${statusData.toString()} to Order success");
@@ -304,7 +304,7 @@ class _MyOrderTab extends State {
     Map params = Map();
     params['user'] = accountID.toString();
     print("connect to Api Order by Account...");
-    await http.post(urlMyOrder, body: params).then((res) {
+    await http.post(Uri.parse(urlMyOrder), body: params).then((res) {
       print("connect to Api Order by Account Success");
       Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
 

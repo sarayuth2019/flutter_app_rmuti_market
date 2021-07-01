@@ -248,7 +248,7 @@ class _EditAccount extends State {
     params['phone_number'] = phone_number.toString();
     params['description_store'] = description_store.toString();
 
-    http.post(urlSingUp, body: params).then((res) {
+    http.post(Uri.parse(urlSingUp), body: params).then((res) {
       print(res.body);
       Map resBody = jsonDecode(res.body) as Map;
       var _resStatus = resBody['status'];

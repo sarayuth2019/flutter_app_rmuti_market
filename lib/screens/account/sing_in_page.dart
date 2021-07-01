@@ -1,4 +1,3 @@
-// @dart=2.9
 
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -24,7 +23,7 @@ class _SingIn extends State {
       SnackBar(content: Text("กรุณาตรวจสอบ Email หรือ Password"));
   final urlSingIn = "${Config.API_URL}/Customer/Login";
 
-  int accountID;
+  int?  accountID;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
@@ -126,7 +125,7 @@ class _SingIn extends State {
     Map params = Map();
     params['email'] = email.text;
     params['password'] = password.text;
-    http.post(urlSingIn, body: params).then((res) {
+    http.post(Uri.parse(urlSingIn), body: params).then((res) {
       Map resData = jsonDecode(res.body) as Map;
       var _resStatus = resData['status'];
       var _accountData = resData['data'];
@@ -137,7 +136,7 @@ class _SingIn extends State {
           saveUserIDToDevice();
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => HomePage(accountID)),
+              MaterialPageRoute(builder: (context) => HomePage(accountID!)),
               (route) => false);
         } else if (_resStatus == 0) {
           ScaffoldMessenger.of(context).showSnackBar(snackBarSingInFail);
@@ -148,7 +147,7 @@ class _SingIn extends State {
 
   Future saveUserIDToDevice() async {
     final SharedPreferences _accountID = await SharedPreferences.getInstance();
-    _accountID.setInt('accountID', accountID);
+    _accountID.setInt('accountID', accountID!);
     print("save accountID to device : aid ${_accountID.toString()}");
   }
 
@@ -161,7 +160,7 @@ class _SingIn extends State {
         print("account login future: accountID ${accountID.toString()}");
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomePage(accountID)),
+            MaterialPageRoute(builder: (context) => HomePage(accountID!)),
             (route) => false);
       });
     } else {
