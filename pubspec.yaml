@@ -27,6 +27,7 @@ dependencies:
   image_picker:
 
 
+
   flutter:
     sdk: flutter
 
