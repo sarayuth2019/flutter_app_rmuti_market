@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,7 @@ class _SingIn extends State {
       SnackBar(content: Text("กรุณาตรวจสอบ Email หรือ Password"));
   final urlSingIn = "${Config.API_URL}/Customer/Login";
 
-  int?  accountID;
+  int? accountID;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
@@ -38,84 +37,78 @@ class _SingIn extends State {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
-      appBar: AppBar(
-        backgroundColor: Colors.orange[600],
-        title: Text("Sing IN"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: CircleAvatar(
-                radius: 60,
-                backgroundColor: Colors.orange[600],
-                child: Stack(
-                  children: [
-                    Center(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 30.0),
+            child: CircleAvatar(
+              radius: 60,
+              backgroundColor: Colors.teal,
+              child: Stack(
+                children: [
+                  Center(
+                    child: Icon(
+                      Icons.location_searching,
+                      size: 100,
+                      color: Colors.white,
+                    ),
+                  ),
+                  GestureDetector(
+                    onDoubleTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => SingUp()));
+                    },
+                    child: Center(
                       child: Icon(
-                        Icons.location_searching,
-                        size: 100,
+                        Icons.shopping_cart,
+                        size: 30,
                         color: Colors.white,
                       ),
                     ),
-                    GestureDetector(
-                      onDoubleTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SingUp()));
-                      },
-                      child: Center(
-                        child: Icon(
-                          Icons.shopping_cart,
-                          size: 30,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 30),
-              child: Text(
-                "RMUTI Market",
-                style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 30),
+            child: Text(
+              "RMUTI Market",
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            Card(
-                child: ListTile(
-              leading: Icon(Icons.account_circle_outlined),
-              title: TextField(
-                controller: email,
-                decoration: InputDecoration(
-                    hintText: "Email", border: InputBorder.none),
-              ),
-            )),
-            Card(
-                child: ListTile(
-              leading: Icon(Icons.vpn_key_outlined),
-              title: TextField(
-                controller: password,
-                obscureText: true,
-                decoration: InputDecoration(
-                    hintText: "Password", border: InputBorder.none),
-              ),
-            )),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: onSingIn,
-                child: Text('Sing in'),
-                style: ElevatedButton.styleFrom(primary: Colors.orange[600]),
-              ),
+          ),
+          Card(
+              child: ListTile(
+            leading: Icon(Icons.account_circle_outlined),
+            title: TextField(
+              controller: email,
+              decoration:
+                  InputDecoration(hintText: "Email", border: InputBorder.none),
             ),
-          ],
-        ),
+          )),
+          Card(
+              child: ListTile(
+            leading: Icon(Icons.vpn_key_outlined),
+            title: TextField(
+              controller: password,
+              obscureText: true,
+              decoration: InputDecoration(
+                  hintText: "Password", border: InputBorder.none),
+            ),
+          )),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: onSingIn,
+              child: Text('Sing in'),
+              style: ElevatedButton.styleFrom(primary: Colors.teal),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -144,7 +137,6 @@ class _SingIn extends State {
       });
     });
   }
-
 
   Future saveUserIDToDevice() async {
     final SharedPreferences _accountID = await SharedPreferences.getInstance();

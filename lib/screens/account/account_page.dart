@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/edit_account.dart';
+import 'package:flutter_app_rmuti_market/screens/account/sing_in_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountPage extends StatefulWidget {
   AccountPage(this.accountID);
@@ -30,7 +32,7 @@ class _AccountPage extends State {
     // TODO: implement build
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.orange[600],
+          backgroundColor: Colors.teal,
           child: Icon(Icons.edit),
           onPressed: () {
             Navigator.push(
@@ -118,6 +120,11 @@ class _AccountPage extends State {
                           ],
                         ),
                       ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: Colors.teal),
+                      onPressed: logout,
+                      child: Text("ออกจากระบบ"),
                     )
                   ],
                 ),
@@ -151,6 +158,15 @@ class _AccountPage extends State {
     });
     return _marketAccountData!;
   }
+
+  Future logout() async {
+    final SharedPreferences _accountID = await SharedPreferences.getInstance();
+    _accountID.clear();
+    print("account logout ! ${_accountID.toString()}");
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
+  }
+
 }
 
 class AccountData {

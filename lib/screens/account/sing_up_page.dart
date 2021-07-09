@@ -42,7 +42,7 @@ class _SingUp extends State {
     return Scaffold(
       key: _snackBarKey,
       appBar: AppBar(
-        backgroundColor: Colors.orange[600],
+        backgroundColor: Colors.teal,
         title: Text("Sing Up"),
       ),
       body: SingleChildScrollView(
@@ -156,7 +156,7 @@ class _SingUp extends State {
                   },
                 ),
                ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.orange[600]),
+                  style: ElevatedButton.styleFrom(primary: Colors.teal),
                   onPressed: onSingUp,
                   child: Text(
                     "Sing up",

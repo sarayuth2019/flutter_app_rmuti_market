@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/my_shop_tab/edit_product_page.dart';
 import 'package:flutter_app_rmuti_market/screens/my_shop_tab/sell_products_tab.dart';
 import 'package:http/http.dart' as http;
-
-import 'edit_product_page.dart';
 
 class MyShop extends StatefulWidget {
   MyShop(this.accountID);
@@ -104,7 +103,8 @@ class _MyShop extends State {
                                             Text(
                                               "${snapshot.data[index].name}",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             Text(
                                               "${snapshot.data[index].deal_begin} - ${snapshot.data[index].deal_final}",
@@ -121,18 +121,42 @@ class _MyShop extends State {
                                         padding: const EdgeInsets.only(
                                             left: 8.0, right: 8.0),
                                         child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               "ราคา ${snapshot.data[index].price_sell} จาก ${snapshot.data[index].price} ต้องการลงชิ่อ ${snapshot.data[index].count_request} มีคนลงแล้ว ${snapshot.data[index].count}",
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
+                                            Container(
+                                                child: snapshot.data[index]
+                                                            .count !=
+                                                        0
+                                                    ? Container()
+                                                    : Container(
+                                                        height: 20,
+                                                        child: ElevatedButton(
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                                    primary: Colors
+                                                                        .orange),
+                                                            onPressed: () {
+                                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProductPage(snapshot.data[index])));
+                                                            },
+                                                            child: Text(
+                                                              "แก้ไข",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ))))
                                           ],
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 8.0, right: 8.0),
+                                            left: 8.0, right: 8.0, bottom: 4),
                                         child: Row(
                                           children: [
                                             Text(
@@ -162,58 +186,6 @@ class _MyShop extends State {
     listItemByUser();
     setState(() {});
     await Future.delayed(Duration(seconds: 3));
-  }
-
-  void _showAlertDeleteProducts(BuildContext context, snapshotIndexID) async {
-    print('Show Alert Dialog Delete Product !');
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('ยืนยันการลบสินค้า'),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                      child: GestureDetector(
-                          child: Text('ยืนยัน'),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            _deleteProduct(snapshotIndexID);
-                          })),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                      child: GestureDetector(
-                          child: Text('ยกเลิก'),
-                          onTap: () {
-                            Navigator.pop(context);
-                          })),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  void _deleteProduct(var snapshotIndexID) {
-    ScaffoldMessenger.of(context).showSnackBar(snackBarOnDeleteProducts);
-    http.get(Uri.parse("${urlDeleteProducts}${snapshotIndexID}")).then((res) {
-      print(res.body);
-      var dataRes = jsonDecode(res.body);
-      var statusRes = dataRes['status'];
-      print(statusRes);
-      if (statusRes == 0) {
-        setState(() {});
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBarOnDeleteProductsSuccess);
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBarOnDeleteProductsFall);
-      }
-    });
   }
 
   Future<List<_Items>> listItemByUser() async {

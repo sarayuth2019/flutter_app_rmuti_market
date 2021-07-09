@@ -6,7 +6,6 @@ import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
-
 class SellProducts extends StatefulWidget {
   SellProducts(this.accountID);
 
@@ -49,13 +48,18 @@ class _SellProducts extends State {
   String? date_begin;
   String? date_final;
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        iconTheme: IconThemeData(color: Colors.teal),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "Sell Product",
+          style: TextStyle(color: Colors.teal),
+        ),
       ),
       body: SingleChildScrollView(
         child: Form(
