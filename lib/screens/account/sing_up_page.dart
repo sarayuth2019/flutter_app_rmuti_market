@@ -333,11 +333,11 @@ class _SingUp extends State {
     params['image'] = imageData;
     params['email'] = email;
     params['password'] = password;
-    params['name_store'] = nameMarket;
+    params['nameStore'] = nameMarket;
     params['name'] = name;
     params['surname'] = surname;
-    params['phone_number'] = number;
-    params['description_store'] = marketAddress;
+    params['phoneNumber'] = number;
+    params['descriptionStore'] = marketAddress;
     http.post(Uri.parse(urlSingUp), body: params).then((res) {
       print(res.body);
       Map resBody = jsonDecode(res.body) as Map;

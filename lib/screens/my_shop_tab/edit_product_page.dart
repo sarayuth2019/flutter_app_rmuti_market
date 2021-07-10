@@ -129,17 +129,18 @@ class _EditProductPage extends State {
   /*void saveToDB() async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarOnSave);
     Map params = Map();
-    params['id'] = id.toString();
-    params['user'] = user_id.toString();
-    params['name'] = name.toString();
+    params['userId'] = accountID.toString();
+    params['nameItems'] = nameMenu.toString();
+    params['groupItems'] = group.toString();
     params['price'] = price.toString();
-    params['description'] = description.toString();
-    params['location'] = location.toString();
-    params['group'] = group.toString();
-    params['image'] = image.toString();
-    params['count_promotion'] = count_promotion.toString();
-    params['discount'] = discount.toString();
-    params['promotion'] = status_promotion.toString();
+    params['priceSell'] = price_sell.toString();
+    params['count'] = count.toString();
+    params['countRequest'] = count_request.toString();
+    params['dateBegin'] = date_begin.toString();
+    params['dateFinal'] = date_final.toString();
+    params['dealBegin'] = deal_begin.toString();
+    params['dealFinal'] = deal_final.toString();
+    params['imageItems'] = imageData.toString();
 
     http.post(Uri.parse(urlSellProducts), body: params).then((res) {
       Map _resData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;

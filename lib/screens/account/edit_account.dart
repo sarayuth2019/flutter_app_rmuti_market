@@ -54,40 +54,30 @@ class _EditAccount extends State {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Market ID : ${marketData.id}"),
-        backgroundColor: Colors.orange[600],
+        backgroundColor: Colors.transparent,elevation: 0,iconTheme: IconThemeData(color: Colors.teal),
+        title: Text("แก้ไขข้อมูลผู้ใช้",style: TextStyle(color: Colors.teal),),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              children: [
-                Container(
-                  child: image == null
-                      ? Icon(Icons.image,size: 30,)
-                      : Image.memory(
-                          base64Decode(image!),
-                          fit: BoxFit.fill,
-                        ),
-                  color: Colors.blueGrey,
-                  height: 270,
-                  width: double.infinity,
-                ),
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: GestureDetector(
-                    onTap: () {
-                      print("edit image");
-                      _showAlertSelectImage(context);
-                    },
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.orange[600],
+            Container(
+              child: image == null
+                  ? Icon(
+                      Icons.image,
+                      size: 30,
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        _showAlertSelectImage(context);
+                      },
+                      child: Image.memory(
+                        base64Decode(image!),
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                  ),
-                ),
-              ],
+              color: Colors.blueGrey,
+              height: 270,
+              width: double.infinity,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -156,7 +146,7 @@ class _EditAccount extends State {
                   editMarketData();
                 },
                 child: Text('บันทึก'),
-                style: ElevatedButton.styleFrom(primary: Colors.orange[600])),
+                style: ElevatedButton.styleFrom(primary: Colors.teal)),
           ],
         ),
       ),
@@ -242,11 +232,11 @@ class _EditAccount extends State {
     params['image'] = image.toString();
     params['email'] = email.toString();
     params['password'] = marketData.password.toString();
-    params['name_store'] = name_store.toString();
+    params['nameStore'] = name_store.toString();
     params['name'] = name.toString();
     params['surname'] = surname.toString();
-    params['phone_number'] = phone_number.toString();
-    params['description_store'] = description_store.toString();
+    params['phoneNumber'] = phone_number.toString();
+    params['descriptionStore'] = description_store.toString();
 
     http.post(Uri.parse(urlSingUp), body: params).then((res) {
       print(res.body);

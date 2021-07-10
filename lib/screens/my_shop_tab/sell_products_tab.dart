@@ -440,19 +440,18 @@ class _SellProducts extends State {
 
   void saveToDB() async {
     Map params = Map();
-    params['user'] = accountID.toString();
-    params['name'] = nameMenu.toString();
-    params['group'] = group.toString();
+    params['userId'] = accountID.toString();
+    params['nameItems'] = nameMenu.toString();
+    params['groupItems'] = group.toString();
     params['price'] = price.toString();
-    params['price_sell'] = price_sell.toString();
+    params['priceSell'] = price_sell.toString();
     params['count'] = count.toString();
-    params['count_request'] = count_request.toString();
-    params['date_begin'] = date_begin.toString();
-    params['date_final'] = date_final.toString();
-    params['deal_begin'] = deal_begin.toString();
-    params['deal_final'] = deal_final.toString();
-    params['image'] = imageData.toString();
-
+    params['countRequest'] = count_request.toString();
+    params['dateBegin'] = date_begin.toString();
+    params['dateFinal'] = date_final.toString();
+    params['dealBegin'] = deal_begin.toString();
+    params['dealFinal'] = deal_final.toString();
+    params['imageItems'] = imageData.toString();
     http.post(Uri.parse(urlSellProducts), body: params).then((res) {
       Map _resData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       print(_resData);

@@ -42,7 +42,7 @@ class _AccountPage extends State {
           },
         ),
         body: FutureBuilder(
-          future: sendDataMarketByUser(),
+          future: sendAccountDataByUser(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.data == null) {
               print('snapshotData : ${snapshot.data}');
@@ -134,24 +134,25 @@ class _AccountPage extends State {
         ));
   }
 
-  Future<AccountData> sendDataMarketByUser() async {
+  Future<AccountData> sendAccountDataByUser() async {
     Map params = Map();
     params['id'] = accountID.toString();
     await http.post(Uri.parse(urlSendAccountById), body: params).then((res) {
       print("Send Market Data...");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
+      print(_jsonRes);
       var _dataAccount = _jsonRes['data'];
       print("data Market : ${_dataAccount.toString()}");
-
+      print(_dataAccount);
       _marketAccountData = AccountData(
           _dataAccount['id'],
           _dataAccount['password'],
           _dataAccount['name'],
           _dataAccount['surname'],
           _dataAccount['email'],
-          _dataAccount['phone_number'],
-          _dataAccount['name_store'],
-          _dataAccount['description_store'],
+          _dataAccount['phoneNumber'],
+          _dataAccount['nameStore'],
+          _dataAccount['descriptionStore'],
           _dataAccount['dateRegister'],
           _dataAccount['image']);
       print("market data : ${_marketAccountData}");
@@ -166,7 +167,6 @@ class _AccountPage extends State {
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
   }
-
 }
 
 class AccountData {

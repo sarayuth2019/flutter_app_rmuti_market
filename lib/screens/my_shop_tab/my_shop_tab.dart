@@ -142,7 +142,12 @@ class _MyShop extends State {
                                                                     primary: Colors
                                                                         .orange),
                                                             onPressed: () {
-                                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProductPage(snapshot.data[index])));
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          EditProductPage(
+                                                                              snapshot.data[index])));
                                                             },
                                                             child: Text(
                                                               "แก้ไข",
@@ -196,23 +201,23 @@ class _MyShop extends State {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
-
+      print(_itemData);
       for (var i in _itemData) {
         _Items _items = _Items(
-          i['id'],
-          i['name'],
-          i['group'],
+          i['itemId'],
+          i['nameItems'],
+          i['imageItems'],
+          i['groupItems'],
           i['price'],
-          i['price_sell'],
+          i['priceSell'],
           i['count'],
-          i['count_request'],
-          i['user'],
-          i['date_begin'],
-          i['date_final'],
-          i['deal_begin'],
-          i['deal_final'],
+          i['countRequest'],
+          i['userId'],
+          i['dateBegin'],
+          i['dateFinal'],
+          i['dealBegin'],
+          i['dealFinal'],
           i['date'],
-          i['image'],
         );
         listItem.insert(0, _items);
       }
@@ -225,6 +230,7 @@ class _MyShop extends State {
 class _Items {
   final int id;
   final String name;
+  final String image;
   final int group;
   final int price;
   final int price_sell;
@@ -236,11 +242,11 @@ class _Items {
   final String deal_begin;
   final String deal_final;
   final String date;
-  final String image;
 
   _Items(
       this.id,
       this.name,
+      this.image,
       this.group,
       this.price,
       this.price_sell,
@@ -251,6 +257,5 @@ class _Items {
       this.date_final,
       this.deal_begin,
       this.deal_final,
-      this.date,
-      this.image);
+      this.date);
 }
