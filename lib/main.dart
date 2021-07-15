@@ -4,28 +4,27 @@ import 'package:flutter_app_rmuti_market/screens/account/account_page.dart';
 import 'package:flutter_app_rmuti_market/screens/my_order_tab/my_order_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/account/sing_in_page.dart';
-import 'package:flutter_app_rmuti_market/screens/account/sing_up_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() =>
     runApp(MaterialApp(debugShowCheckedModeBanner: false, home: SingIn()));
 
 class HomePage extends StatefulWidget {
-  HomePage(this.accountID);
+  HomePage(this.token);
 
-  final int accountID;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _HomePage(accountID);
+    return _HomePage(token);
   }
 }
 
 class _HomePage extends State {
-  _HomePage(this.accountID);
+  _HomePage(this.token);
 
-  final int accountID;
+  final token;
 
   final testSnackBar = SnackBar(content: Text("เทสๆสแนคบา"));
   PageController _pageController = PageController();
@@ -35,7 +34,7 @@ class _HomePage extends State {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Market account ID : ${accountID.toString()}");
+    print("Market account ID : ${token.toString()}");
   }
 
   @override
@@ -46,9 +45,9 @@ class _HomePage extends State {
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          MyShop(accountID),
-          MyOrderTab(accountID),
-          AccountPage(accountID)
+          MyShop(token),
+          MyOrderTab(token),
+          AccountPage(token)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -80,9 +79,9 @@ class _HomePage extends State {
   }
 
   Future logout() async {
-    final SharedPreferences _accountID = await SharedPreferences.getInstance();
-    _accountID.clear();
-    print("account logout ! ${_accountID.toString()}");
+    final SharedPreferences _tokenIDInDevice = await SharedPreferences.getInstance();
+    _tokenIDInDevice.clear();
+    print("account logout ! ${_tokenIDInDevice.toString()}");
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
   }

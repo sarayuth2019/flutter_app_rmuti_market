@@ -8,29 +8,42 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountPage extends StatefulWidget {
-  AccountPage(this.accountID);
+  AccountPage(this.token);
 
-  final accountID;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _AccountPage(accountID);
+    return _AccountPage(token);
   }
 }
 
 class _AccountPage extends State {
-  _AccountPage(this.accountID);
+  _AccountPage(this.token);
 
-  final accountID;
+  final token;
   final String urlSendAccountById = "${Config.API_URL}/Customer/list/id";
   AccountData? _marketAccountData;
 
   @override
   Widget build(BuildContext context) {
-    print("Market ID : ${accountID.toString()}");
+    print("Market ID : ${token.toString()}");
     // TODO: implement build
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            TextButton(
+                onPressed: logout,
+                child: Text(
+                  "ออกจากระบบ",
+                  style: TextStyle(
+                      color: Colors.teal, fontWeight: FontWeight.bold),
+                ))
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.teal,
           child: Icon(Icons.edit),
@@ -121,11 +134,6 @@ class _AccountPage extends State {
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: Colors.teal),
-                      onPressed: logout,
-                      child: Text("ออกจากระบบ"),
-                    )
                   ],
                 ),
               );
@@ -136,7 +144,7 @@ class _AccountPage extends State {
 
   Future<AccountData> sendAccountDataByUser() async {
     Map params = Map();
-    params['id'] = accountID.toString();
+    //params['id'] = accountID.toString();
     await http.post(Uri.parse(urlSendAccountById), body: params).then((res) {
       print("Send Market Data...");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;

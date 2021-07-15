@@ -7,21 +7,21 @@ import 'package:flutter_app_rmuti_market/screens/my_shop_tab/sell_products_tab.d
 import 'package:http/http.dart' as http;
 
 class MyShop extends StatefulWidget {
-  MyShop(this.accountID);
+  MyShop(this.token);
 
-  final accountID;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _MyShop(accountID);
+    return _MyShop(token);
   }
 }
 
 class _MyShop extends State {
-  _MyShop(this.accountID);
+  _MyShop(this.token);
 
-  final accountID;
+  final token;
 
   final urlListItemByUser = "${Config.API_URL}/Item/find/user";
   final urlDeleteProducts = "${Config.API_URL}/Item/delete/";
@@ -50,7 +50,7 @@ class _MyShop extends State {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => SellProducts(accountID)));
+                    builder: (context) => SellProducts(token)));
           },
         ),
         body: RefreshIndicator(
@@ -125,7 +125,7 @@ class _MyShop extends State {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              "ราคา ${snapshot.data[index].price_sell} จาก ${snapshot.data[index].price} ต้องการลงชิ่อ ${snapshot.data[index].count_request} มีคนลงแล้ว ${snapshot.data[index].count}",
+                                              "ราคา ${snapshot.data[index].price_sell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].count_request} มีคนลงแล้ว ${snapshot.data[index].count}",
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
@@ -196,7 +196,7 @@ class _MyShop extends State {
   Future<List<_Items>> listItemByUser() async {
     Map params = Map();
     List<_Items> listItem = [];
-    params['user'] = accountID.toString();
+    //params['user'] = accountID.toString();
     await http.post(Uri.parse(urlListItemByUser), body: params).then((res) {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;

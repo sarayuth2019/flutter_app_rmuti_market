@@ -6,21 +6,21 @@ import 'package:flutter_app_rmuti_market/screens/my_order_tab/manage_order.dart'
 import 'package:http/http.dart' as http;
 
 class MyOrderTab extends StatefulWidget {
-  MyOrderTab(this.accountID);
+  MyOrderTab(this.token);
 
-  final int accountID;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _MyOrderTab(accountID);
+    return _MyOrderTab(token);
   }
 }
 
 class _MyOrderTab extends State {
-  _MyOrderTab(this.accountID);
+  _MyOrderTab(this.token);
 
-  final int accountID;
+  final token;
   final urlMyOrder = "${Config.API_URL}/Order/find/user";
   final urlSaveNotify = "${Config.API_URL}/Notify/save";
   final urlSaveBackUpNotify = "${Config.API_URL}/Backup/save";
@@ -171,7 +171,7 @@ class _MyOrderTab extends State {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             ManageOrder(
-                                                              accountID,
+                                                              token,
                                                               snapshot
                                                                   .data[index]
                                                                   .id,
@@ -302,7 +302,7 @@ class _MyOrderTab extends State {
   Stream<List<_Order>> streamListMyOrder() async* {
     List<_Order> listOrderByAccount = [];
     Map params = Map();
-    params['user'] = accountID.toString();
+    //params['user'] = accountID.toString();
     print("connect to Api Order by Account...");
     await http.post(Uri.parse(urlMyOrder), body: params).then((res) {
       print("connect to Api Order by Account Success");
