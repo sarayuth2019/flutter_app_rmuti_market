@@ -7,19 +7,23 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class SellProducts extends StatefulWidget {
-  SellProducts(this.accountID);
+  SellProducts(this.token, this.marketID);
 
-  final accountID;
+  final token;
+  final marketID;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _SellProducts(accountID);
+    return _SellProducts(this.token, this.marketID);
   }
 }
 
 class _SellProducts extends State {
-  _SellProducts(this.accountID);
+  _SellProducts(this.token, this.marketID);
+
+  final token;
+  final marketID;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -34,7 +38,6 @@ class _SellProducts extends State {
   bool checkText = false;
   String textPromotion = "เพิ่มโปรโมชันสินค้า";
 
-  final int accountID;
   String? nameMenu;
   int group = 1;
   int? price;
@@ -426,7 +429,7 @@ class _SellProducts extends State {
       _formKey.currentState!.save();
       ScaffoldMessenger.of(context).showSnackBar(snackBarOnSave);
 
-      print("account Id ${accountID.toString()}");
+      print("account Id ${marketID.toString()}");
       print("name product : ${nameMenu.toString()}");
       print("price : ${price.toString()}");
 
@@ -440,7 +443,7 @@ class _SellProducts extends State {
 
   void saveToDB() async {
     Map params = Map();
-    params['userId'] = accountID.toString();
+    params['marketId'] = marketID.toString();
     params['nameItems'] = nameMenu.toString();
     params['groupItems'] = group.toString();
     params['price'] = price.toString();
@@ -452,7 +455,9 @@ class _SellProducts extends State {
     params['dealBegin'] = deal_begin.toString();
     params['dealFinal'] = deal_final.toString();
     params['imageItems'] = imageData.toString();
-    http.post(Uri.parse(urlSellProducts), body: params).then((res) {
+    http.post(Uri.parse(urlSellProducts), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
       Map _resData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       print(_resData);
       var _resStatus = _resData['status'];

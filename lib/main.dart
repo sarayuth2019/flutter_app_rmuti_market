@@ -10,21 +10,23 @@ void main() =>
     runApp(MaterialApp(debugShowCheckedModeBanner: false, home: SingIn()));
 
 class HomePage extends StatefulWidget {
-  HomePage(this.token);
+  HomePage(this.token, this.marketId);
 
   final token;
+  final marketId;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _HomePage(token);
+    return _HomePage(token,marketId);
   }
 }
 
 class _HomePage extends State {
-  _HomePage(this.token);
+  _HomePage(this.token,this.marketId);
 
   final token;
+  final marketId;
 
   final testSnackBar = SnackBar(content: Text("เทสๆสแนคบา"));
   PageController _pageController = PageController();
@@ -45,9 +47,9 @@ class _HomePage extends State {
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          MyShop(token),
+          MyShop(token,marketId),
           MyOrderTab(token),
-          AccountPage(token)
+          AccountPage(token,marketId)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

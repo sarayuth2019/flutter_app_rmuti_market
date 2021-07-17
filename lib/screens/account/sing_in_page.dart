@@ -21,10 +21,11 @@ class _SingIn extends State {
       SnackBar(content: Text("กำลังเข้าสู้ระบบ กรุณารอซักครู่..."));
   final snackBarSingInFail =
       SnackBar(content: Text("กรุณาตรวจสอบ Email หรือ Password"));
-  final urlSingIn = "${Config.API_URL}/authorizeCustomer";
+  final urlSingIn = "${Config.API_URL}/authorizeMarket";
 
   //int? accountID;
   var token;
+  var marketID;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
@@ -123,17 +124,19 @@ class _SingIn extends State {
     print(email.text);
     print(password.text);
     http.post(Uri.parse(urlSingIn), body: params).then((res) {
-      print(res.statusCode);
+      print(res.body);
       Map resData = jsonDecode(res.body) as Map;
       var _resStatus = resData['data'];
       var _resToken = resData['token'];
+      var _resCustomerID = resData['marketId'];
       setState(() {
         if (_resStatus == 1) {
           token = _resToken;
+          marketID = _resCustomerID;
           saveUserIDToDevice();
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => HomePage(token!)),
+              MaterialPageRoute(builder: (context) => HomePage(token!,marketID!)),
               (route) => false);
         } else if (_resStatus == 0) {
           ScaffoldMessenger.of(context).showSnackBar(snackBarSingInFail);
@@ -143,21 +146,25 @@ class _SingIn extends State {
   }
 
   Future saveUserIDToDevice() async {
-    final SharedPreferences _tokenID = await SharedPreferences.getInstance();
-    _tokenID.setString('tokenIDInDevice', token!);
-    print("save accountID to device : aid ${_tokenID.toString()}");
+    final SharedPreferences _dataID = await SharedPreferences.getInstance();
+    _dataID.setString('tokenIDInDevice', token!);
+    _dataID.setInt('marketIDInDevice', marketID!);
+    print("save accountID to device : aid ${_dataID.toString()}");
   }
 
   Future autoLogin() async {
-    final SharedPreferences _tokenID = await SharedPreferences.getInstance();
-    final _tokenIDInDevice = _tokenID.getString('tokenIDInDevice');
+    final SharedPreferences _dataID = await SharedPreferences.getInstance();
+    final _tokenIDInDevice = _dataID.getString('tokenIDInDevice');
+    final _userIDInDevice = _dataID.getInt('marketIDInDevice');
     if (_tokenIDInDevice != null) {
       setState(() {
         token = _tokenIDInDevice;
-        print("account login future: accountID ${token.toString()}");
+        print("account login future: token ${token.toString()}");
+        marketID = _userIDInDevice;
+        print("account login future: CustomerID ${token.toString()}");
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomePage(token!)),
+            MaterialPageRoute(builder: (context) => HomePage(token!,marketID!)),
             (route) => false);
       });
     } else {

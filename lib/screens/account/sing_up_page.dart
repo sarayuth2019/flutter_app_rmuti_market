@@ -17,7 +17,7 @@ class SingUp extends StatefulWidget {
 }
 
 class _SingUp extends State {
-  final urlSingUp = "${Config.API_URL}/Register/customer";
+  final urlSingUp = "${Config.API_URL}/Register/market";
   final _formKey = GlobalKey<FormState>();
   final _snackBarKey = GlobalKey<ScaffoldState>();
   final singUpSnackBar =
@@ -329,15 +329,17 @@ class _SingUp extends State {
   }
 
   void saveToDB() async {
+    String _statusMarket = "user";
     Map params = Map();
-    params['image'] = imageData;
+    params['imageMarket'] = imageData;
     params['email'] = email;
     params['password'] = password;
-    params['nameStore'] = nameMarket;
+    params['nameMarket'] = nameMarket;
     params['name'] = name;
     params['surname'] = surname;
     params['phoneNumber'] = number;
-    params['descriptionStore'] = marketAddress;
+    params['statusMarket'] = _statusMarket;
+    params['descriptionMarket'] = marketAddress;
     http.post(Uri.parse(urlSingUp), body: params).then((res) {
       print(res.body);
       Map resBody = jsonDecode(res.body) as Map;

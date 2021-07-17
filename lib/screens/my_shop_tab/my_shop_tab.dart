@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
@@ -7,23 +8,24 @@ import 'package:flutter_app_rmuti_market/screens/my_shop_tab/sell_products_tab.d
 import 'package:http/http.dart' as http;
 
 class MyShop extends StatefulWidget {
-  MyShop(this.token);
+  MyShop(this.token, this.marketId);
 
   final token;
-
+  final marketId;
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _MyShop(token);
+    return _MyShop(token,marketId);
   }
 }
 
 class _MyShop extends State {
-  _MyShop(this.token);
+  _MyShop(this.token,this.marketId);
 
   final token;
+  final marketId;
 
-  final urlListItemByUser = "${Config.API_URL}/Item/find/user";
+  final urlListItemByUser = "${Config.API_URL}/Item/find/market";
   final urlDeleteProducts = "${Config.API_URL}/Item/delete/";
   final snackBarOnDeleteProducts = SnackBar(content: Text("กำลังลบสินค้า..."));
   final snackBarOnDeleteProductsSuccess =
@@ -50,7 +52,7 @@ class _MyShop extends State {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => SellProducts(token)));
+                    builder: (context) => SellProducts(token,marketId)));
           },
         ),
         body: RefreshIndicator(
@@ -196,8 +198,9 @@ class _MyShop extends State {
   Future<List<_Items>> listItemByUser() async {
     Map params = Map();
     List<_Items> listItem = [];
-    //params['user'] = accountID.toString();
-    await http.post(Uri.parse(urlListItemByUser), body: params).then((res) {
+    params['market'] = marketId.toString();
+    await http.post(Uri.parse(urlListItemByUser), body: params,headers: {HttpHeaders.authorizationHeader:'Bearer ${token.toString()}'}).then((res) {
+      print(res.body);
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
@@ -212,7 +215,7 @@ class _MyShop extends State {
           i['priceSell'],
           i['count'],
           i['countRequest'],
-          i['userId'],
+          i['marketId'],
           i['dateBegin'],
           i['dateFinal'],
           i['dealBegin'],
@@ -228,20 +231,20 @@ class _MyShop extends State {
 }
 
 class _Items {
-  final int id;
-  final String name;
-  final String image;
-  final int group;
-  final int price;
-  final int price_sell;
-  final int count;
-  final int count_request;
-  final int user;
-  final String date_begin;
-  final String date_final;
-  final String deal_begin;
-  final String deal_final;
-  final String date;
+  final int? id;
+  final String? name;
+  final String? image;
+  final int? group;
+  final int? price;
+  final int? price_sell;
+  final int? count;
+  final int? count_request;
+  final int? marketID;
+  final String? date_begin;
+  final String? date_final;
+  final String? deal_begin;
+  final String? deal_final;
+  final String? date;
 
   _Items(
       this.id,
@@ -252,7 +255,7 @@ class _Items {
       this.price_sell,
       this.count,
       this.count_request,
-      this.user,
+      this.marketID,
       this.date_begin,
       this.date_final,
       this.deal_begin,

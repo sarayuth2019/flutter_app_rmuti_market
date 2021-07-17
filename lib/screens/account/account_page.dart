@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
@@ -8,27 +9,30 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountPage extends StatefulWidget {
-  AccountPage(this.token);
+  AccountPage(this.token, this.marketId);
 
   final token;
+  final marketId;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _AccountPage(token);
+    return _AccountPage(token, marketId);
   }
 }
 
 class _AccountPage extends State {
-  _AccountPage(this.token);
+  _AccountPage(this.token, this.marketId);
 
   final token;
-  final String urlSendAccountById = "${Config.API_URL}/Customer/list/id";
-  AccountData? _marketAccountData;
+  final marketId;
+
+  final String urlSendAccountById = "${Config.API_URL}/Market/list";
+  MarketData? _marketAccountData;
 
   @override
   Widget build(BuildContext context) {
-    print("Market ID : ${token.toString()}");
+    print("Market ID : ${marketId.toString()}");
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
@@ -58,7 +62,7 @@ class _AccountPage extends State {
           future: sendAccountDataByUser(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.data == null) {
-              print('snapshotData : ${snapshot.data}');
+              print('Account snapshotData : ${snapshot.data}');
               return Center(child: CircularProgressIndicator());
             } else {
               return SingleChildScrollView(
@@ -66,7 +70,7 @@ class _AccountPage extends State {
                   children: [
                     Container(
                       child: Image.memory(
-                        base64Decode(snapshot.data.image),
+                        base64Decode(snapshot.data.imageMarket),
                         fit: BoxFit.fill,
                       ),
                       color: Colors.blueGrey,
@@ -85,7 +89,7 @@ class _AccountPage extends State {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "Market ID : ${snapshot.data.id}",
+                                "Market ID : ${snapshot.data.marketID}",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
@@ -93,7 +97,7 @@ class _AccountPage extends State {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "ชื่อร้าน : ${snapshot.data.name_store}",
+                                "ชื่อร้าน : ${snapshot.data.nameMarket}",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
@@ -117,7 +121,7 @@ class _AccountPage extends State {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "เบอร์ติดต่อ : ${snapshot.data.phone_number}",
+                                "เบอร์ติดต่อ : ${snapshot.data.phoneNumber}",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
@@ -125,7 +129,7 @@ class _AccountPage extends State {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "รายละเอียดที่อยู่ร้าน : ${snapshot.data.description_store}",
+                                "รายละเอียดที่อยู่ร้าน : ${snapshot.data.descriptionMarket}",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
@@ -142,62 +146,66 @@ class _AccountPage extends State {
         ));
   }
 
-  Future<AccountData> sendAccountDataByUser() async {
-    Map params = Map();
-    //params['id'] = accountID.toString();
-    await http.post(Uri.parse(urlSendAccountById), body: params).then((res) {
+  Future<MarketData> sendAccountDataByUser() async {
+    await http.post(Uri.parse(urlSendAccountById), headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
       print("Send Market Data...");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      print(_jsonRes);
       var _dataAccount = _jsonRes['data'];
+      print(_dataAccount);
       print("data Market : ${_dataAccount.toString()}");
       print(_dataAccount);
-      _marketAccountData = AccountData(
-          _dataAccount['id'],
-          _dataAccount['password'],
-          _dataAccount['name'],
-          _dataAccount['surname'],
-          _dataAccount['email'],
-          _dataAccount['phoneNumber'],
-          _dataAccount['nameStore'],
-          _dataAccount['descriptionStore'],
-          _dataAccount['dateRegister'],
-          _dataAccount['image']);
+      _marketAccountData = MarketData(
+        _dataAccount['marketId'],
+        _dataAccount['password'],
+        _dataAccount['name'],
+        _dataAccount['surname'],
+        _dataAccount['email'],
+        _dataAccount['statusMarket'],
+        _dataAccount['imageMarket'],
+        _dataAccount['phoneNumber'],
+        _dataAccount['nameMarket'],
+        _dataAccount['descriptionMarket'],
+        _dataAccount['dateRegister'],
+      );
       print("market data : ${_marketAccountData}");
     });
     return _marketAccountData!;
   }
 
   Future logout() async {
-    final SharedPreferences _accountID = await SharedPreferences.getInstance();
-    _accountID.clear();
-    print("account logout ! ${_accountID.toString()}");
+    final SharedPreferences _dataID = await SharedPreferences.getInstance();
+    _dataID.clear();
+    print("account logout ! ${_dataID.toString()}");
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
   }
 }
 
-class AccountData {
-  final int id;
-  final String password;
-  final String name;
-  final String surname;
-  final String email;
-  final String phone_number;
-  final String name_store;
-  final String description_store;
-  final String dateRegister;
-  final String image;
+class MarketData {
+  final int? marketID;
+  final String? password;
+  final String? name;
+  final String? surname;
+  final String? email;
+  final String? statusMarket;
+  final String? imageMarket;
+  final String? phoneNumber;
+  final String? nameMarket;
+  final String? descriptionMarket;
+  final String? dateRegister;
 
-  AccountData(
-      this.id,
+  MarketData(
+      this.marketID,
       this.password,
       this.name,
       this.surname,
       this.email,
-      this.phone_number,
-      this.name_store,
-      this.description_store,
-      this.dateRegister,
-      this.image);
+      this.statusMarket,
+      this.imageMarket,
+      this.phoneNumber,
+      this.nameMarket,
+      this.descriptionMarket,
+      this.dateRegister);
 }
