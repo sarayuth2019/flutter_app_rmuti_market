@@ -7,46 +7,49 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class EditAccount extends StatefulWidget {
-  EditAccount(this.marketData);
+  EditAccount(this.marketData, this.token);
 
   final marketData;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _EditAccount(marketData);
+    return _EditAccount(marketData, token);
   }
 }
 
 class _EditAccount extends State {
-  _EditAccount(this.marketData);
+  _EditAccount(this.marketData, this.token);
 
   var marketData;
-  final urlSingUp = "${Config.API_URL}/Customer/update";
+  final token;
+
+  final urlUpdate = "${Config.API_URL}/Market/update";
   final snackBarEdit = SnackBar(content: Text("กำลังบันทึกการแก้ไข..."));
   final snackBarEditSuccess = SnackBar(content: Text("แก้ไขสำเร็จ"));
   final snackBarEditFall = SnackBar(content: Text("แก้ไขผิดพลาด"));
 
-  String? name_store;
+  String? nameMarket;
   String? name;
   String? surname;
   String? email;
-  String? phone_number;
-  String? description_store;
-  String? image;
+  String? phoneNumber;
+  String? descriptionMarket;
+  String? imageMarket;
   File? imageFile;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    name_store = marketData.name_store;
+    nameMarket = marketData.nameMarket;
     name = marketData.name;
     surname = marketData.surname;
     email = marketData.email;
-    phone_number = marketData.phone_number;
-    description_store = marketData.description_store;
-    image = marketData.image;
+    phoneNumber = marketData.phoneNumber;
+    descriptionMarket = marketData.descriptionMarket;
+    imageMarket = marketData.imageMarket;
   }
 
   @override
@@ -54,14 +57,19 @@ class _EditAccount extends State {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,elevation: 0,iconTheme: IconThemeData(color: Colors.teal),
-        title: Text("แก้ไขข้อมูลผู้ใช้",style: TextStyle(color: Colors.teal),),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.teal),
+        title: Text(
+          "แก้ไขข้อมูลผู้ใช้",
+          style: TextStyle(color: Colors.teal),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              child: image == null
+              child: imageMarket == null
                   ? Icon(
                       Icons.image,
                       size: 30,
@@ -71,7 +79,7 @@ class _EditAccount extends State {
                         _showAlertSelectImage(context);
                       },
                       child: Image.memory(
-                        base64Decode(image!),
+                        base64Decode(imageMarket!),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -86,10 +94,10 @@ class _EditAccount extends State {
                   TextField(
                     maxLength: 32,
                     decoration: InputDecoration(
-                        hintText: " ชื่อร้าน : ${marketData.name_store}"),
+                        hintText: " ชื่อร้าน : ${marketData.nameMarket}"),
                     onChanged: (text) {
                       setState(() {
-                        name_store = text;
+                        nameMarket = text;
                       });
                     },
                   ),
@@ -118,10 +126,10 @@ class _EditAccount extends State {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         hintText:
-                            " เบอร์โทรติดต่อ : ${marketData.phone_number}"),
+                            " เบอร์โทรติดต่อ : ${marketData.phoneNumber}"),
                     onChanged: (text) {
                       setState(() {
-                        phone_number = text;
+                        phoneNumber = text;
                       });
                     },
                   ),
@@ -130,10 +138,10 @@ class _EditAccount extends State {
                     maxLines: null,
                     decoration: InputDecoration(
                         hintText:
-                            " รายละเอียดที่อยู่: ${marketData.description_store}"),
+                            " รายละเอียดที่อยู่: ${marketData.descriptionMarket}"),
                     onChanged: (text) {
                       setState(() {
-                        description_store = text;
+                        descriptionMarket = text;
                       });
                     },
                   ),
@@ -189,9 +197,9 @@ class _EditAccount extends State {
       setState(() {
         imageFile = File(_imageGallery.path);
       });
-      image = base64Encode(imageFile!.readAsBytesSync());
+      imageMarket = base64Encode(imageFile!.readAsBytesSync());
       Navigator.of(context).pop();
-      return image;
+      return imageMarket;
     } else {
       return null;
     }
@@ -206,39 +214,43 @@ class _EditAccount extends State {
       setState(() {
         imageFile = File(_imageGallery.path);
       });
-      image = base64Encode(imageFile!.readAsBytesSync());
+      imageMarket = base64Encode(imageFile!.readAsBytesSync());
       Navigator.of(context).pop();
-      return image;
+      return imageMarket;
     } else {
       return null;
     }
   }
 
   void editMarketData() {
-    print("market ID : ${marketData.id.toString()}");
-    print("ชื่อร้าน : ${name_store.toString()}");
+    print("market ID : ${marketData.marketID.toString()}");
+    print("ชื่อร้าน : ${nameMarket.toString()}");
     print("ชื่อ : ${name.toString()}");
     print("นามสกุล : ${surname.toString()}");
     print("อีเมล : ${email.toString()}");
-    print("เบอร์โทร : ${phone_number.toString()}");
-    print("ที่อยู่ : ${description_store.toString()}");
+    print("เบอร์โทร : ${phoneNumber.toString()}");
+    print("ที่อยู่ : ${descriptionMarket.toString()}");
     saveToDB();
   }
 
   void saveToDB() async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarEdit);
+    String _statusMarket = "user";
     Map params = Map();
-    params['id'] = marketData.id.toString();
-    params['image'] = image.toString();
+    params['marketId'] = marketData.marketID.toString();
+    params['imageMarket'] = imageMarket.toString();
     params['email'] = email.toString();
     params['password'] = marketData.password.toString();
-    params['nameStore'] = name_store.toString();
+    params['nameMarket'] = nameMarket.toString();
     params['name'] = name.toString();
     params['surname'] = surname.toString();
-    params['phoneNumber'] = phone_number.toString();
-    params['descriptionStore'] = description_store.toString();
+    params['phoneNumber'] = phoneNumber.toString();
+    params['statusMarket'] = _statusMarket;
+    params['descriptionMarket'] = descriptionMarket.toString();
 
-    http.post(Uri.parse(urlSingUp), body: params).then((res) {
+    http.post(Uri.parse(urlUpdate), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
       print(res.body);
       Map resBody = jsonDecode(res.body) as Map;
       var _resStatus = resBody['status'];

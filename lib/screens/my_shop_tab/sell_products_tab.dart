@@ -41,15 +41,15 @@ class _SellProducts extends State {
   String? nameMenu;
   int group = 1;
   int? price;
-  int? price_sell;
+  int? priceSell;
   int count = 0;
-  int? count_request;
+  int? countRequest;
   File? imageFile;
   String? imageData;
-  String? deal_begin;
-  String? deal_final;
-  String? date_begin;
-  String? date_final;
+  String? dealBegin;
+  String? dealFinal;
+  String? dateBegin;
+  String? dateFinal;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,7 @@ class _SellProducts extends State {
                         keyboardType: TextInputType.number,
                         validator: _checkPrice,
                         onSaved: (String? num) {
-                          price_sell = int.parse(num!);
+                          priceSell = int.parse(num!);
                         },
                       ),
                     ),
@@ -170,7 +170,7 @@ class _SellProducts extends State {
                         keyboardType: TextInputType.number,
                         validator: _checkNumUser,
                         onSaved: (String? num) {
-                          count_request = int.parse(num!);
+                          countRequest = int.parse(num!);
                         },
                       ),
                     ),
@@ -197,7 +197,7 @@ class _SellProducts extends State {
                                     },
                                     icon: Icon(Icons.date_range)),
                                 Text("วันเริ่ม"),
-                                Text("${deal_begin ?? 'เลือกวันที่'}"),
+                                Text("${dealBegin ?? 'เลือกวันที่'}"),
                               ],
                             ),
                             Icon(Icons.arrow_forward),
@@ -209,7 +209,7 @@ class _SellProducts extends State {
                                     },
                                     icon: Icon(Icons.date_range)),
                                 Text("วันสิ้นสุด"),
-                                Text("${deal_final ?? 'เลือกวันที่'}"),
+                                Text("${dealFinal ?? 'เลือกวันที่'}"),
                               ],
                             ),
                           ],
@@ -239,7 +239,7 @@ class _SellProducts extends State {
                                     },
                                     icon: Icon(Icons.date_range)),
                                 Text("วันเริ่ม"),
-                                Text('${date_begin ?? 'เลือกวันที่'}'),
+                                Text('${dateBegin ?? 'เลือกวันที่'}'),
                               ],
                             ),
                             Icon(Icons.arrow_forward),
@@ -251,7 +251,7 @@ class _SellProducts extends State {
                                     },
                                     icon: Icon(Icons.date_range)),
                                 Text("วันสิ้นสุด"),
-                                Text("${date_final ?? 'เลือกวันที่'}"),
+                                Text("${dateFinal ?? 'เลือกวันที่'}"),
                               ],
                             ),
                           ],
@@ -288,7 +288,7 @@ class _SellProducts extends State {
             lastDate: DateTime(DateTime.now().year + 5))
         .then((date) {
       setState(() {
-        deal_begin = "${date!.month}/${date.day}/${date.year}";
+        dealBegin = "${date!.month}/${date.day}/${date.year}";
         print(date);
       });
     });
@@ -303,7 +303,7 @@ class _SellProducts extends State {
             lastDate: DateTime(DateTime.now().year + 5))
         .then((date) {
       setState(() {
-        deal_final = "${date!.month}/${date.day}/${date.year}";
+        dealFinal = "${date!.month}/${date.day}/${date.year}";
         print(date);
       });
     });
@@ -318,7 +318,7 @@ class _SellProducts extends State {
             lastDate: DateTime(DateTime.now().year + 5))
         .then((date) {
       setState(() {
-        date_begin = "${date!.month}/${date.day}/${date.year}";
+        dateBegin = "${date!.month}/${date.day}/${date.year}";
         print(date);
       });
     });
@@ -333,7 +333,7 @@ class _SellProducts extends State {
             lastDate: DateTime(DateTime.now().year + 5))
         .then((date) {
       setState(() {
-        date_final = "${date!.month}/${date.day}/${date.year}";
+        dateFinal = "${date!.month}/${date.day}/${date.year}";
         print(date);
       });
     });
@@ -447,13 +447,13 @@ class _SellProducts extends State {
     params['nameItems'] = nameMenu.toString();
     params['groupItems'] = group.toString();
     params['price'] = price.toString();
-    params['priceSell'] = price_sell.toString();
+    params['priceSell'] = priceSell.toString();
     params['count'] = count.toString();
-    params['countRequest'] = count_request.toString();
-    params['dateBegin'] = date_begin.toString();
-    params['dateFinal'] = date_final.toString();
-    params['dealBegin'] = deal_begin.toString();
-    params['dealFinal'] = deal_final.toString();
+    params['countRequest'] = countRequest.toString();
+    params['dateBegin'] = dateBegin.toString();
+    params['dateFinal'] = dateFinal.toString();
+    params['dealBegin'] = dealBegin.toString();
+    params['dealFinal'] = dealFinal.toString();
     params['imageItems'] = imageData.toString();
     http.post(Uri.parse(urlSellProducts), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'

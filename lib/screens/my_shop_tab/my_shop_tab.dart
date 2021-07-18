@@ -12,15 +12,16 @@ class MyShop extends StatefulWidget {
 
   final token;
   final marketId;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _MyShop(token,marketId);
+    return _MyShop(token, marketId);
   }
 }
 
 class _MyShop extends State {
-  _MyShop(this.token,this.marketId);
+  _MyShop(this.token, this.marketId);
 
   final token;
   final marketId;
@@ -52,7 +53,7 @@ class _MyShop extends State {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => SellProducts(token,marketId)));
+                    builder: (context) => SellProducts(token, marketId)));
           },
         ),
         body: RefreshIndicator(
@@ -85,7 +86,8 @@ class _MyShop extends State {
                                   height: 170,
                                   width: double.infinity,
                                   child: Image.memory(
-                                    base64Decode(snapshot.data[index].image),
+                                    base64Decode(
+                                        snapshot.data[index].imageItems),
                                     fit: BoxFit.fill,
                                   )),
                               Opacity(
@@ -97,19 +99,19 @@ class _MyShop extends State {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 8.0, right: 8.0),
+                                            top: 3.0, left: 8.0, right: 8.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              "${snapshot.data[index].name}",
+                                              "${snapshot.data[index].nameItem}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(
-                                              "${snapshot.data[index].deal_begin} - ${snapshot.data[index].deal_final}",
+                                              "${snapshot.data[index].dealBegin} - ${snapshot.data[index].dealFinal}",
                                               style: TextStyle(
                                                   color: Colors.white),
                                             )
@@ -127,7 +129,7 @@ class _MyShop extends State {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              "ราคา ${snapshot.data[index].price_sell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].count_request} มีคนลงแล้ว ${snapshot.data[index].count}",
+                                              "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
@@ -147,9 +149,10 @@ class _MyShop extends State {
                                                               Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
-                                                                      builder: (context) =>
-                                                                          EditProductPage(
-                                                                              snapshot.data[index])));
+                                                                      builder: (context) => EditProductPage(
+                                                                          snapshot
+                                                                              .data[index],
+                                                                          token)));
                                                             },
                                                             child: Text(
                                                               "แก้ไข",
@@ -167,7 +170,7 @@ class _MyShop extends State {
                                         child: Row(
                                           children: [
                                             Text(
-                                              "ระยะเวลาการใช้ส่วนลด : ${snapshot.data[index].date_begin} - ${snapshot.data[index].date_final}",
+                                              "ระยะเวลาการใช้ส่วนลด : ${snapshot.data[index].dateBegin} - ${snapshot.data[index].dateFinal}",
                                               style: TextStyle(
                                                   color: Colors.white),
                                             )
@@ -199,7 +202,9 @@ class _MyShop extends State {
     Map params = Map();
     List<_Items> listItem = [];
     params['market'] = marketId.toString();
-    await http.post(Uri.parse(urlListItemByUser), body: params,headers: {HttpHeaders.authorizationHeader:'Bearer ${token.toString()}'}).then((res) {
+    await http.post(Uri.parse(urlListItemByUser), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
       print(res.body);
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
@@ -231,34 +236,34 @@ class _MyShop extends State {
 }
 
 class _Items {
-  final int? id;
-  final String? name;
-  final String? image;
-  final int? group;
+  final int? itemID;
+  final String? nameItem;
+  final String? imageItems;
+  final int? groupItems;
   final int? price;
-  final int? price_sell;
+  final int? priceSell;
   final int? count;
-  final int? count_request;
+  final int? countRequest;
   final int? marketID;
-  final String? date_begin;
-  final String? date_final;
-  final String? deal_begin;
-  final String? deal_final;
+  final String? dateBegin;
+  final String? dateFinal;
+  final String? dealBegin;
+  final String? dealFinal;
   final String? date;
 
   _Items(
-      this.id,
-      this.name,
-      this.image,
-      this.group,
+      this.itemID,
+      this.nameItem,
+      this.imageItems,
+      this.groupItems,
       this.price,
-      this.price_sell,
+      this.priceSell,
       this.count,
-      this.count_request,
+      this.countRequest,
       this.marketID,
-      this.date_begin,
-      this.date_final,
-      this.deal_begin,
-      this.deal_final,
+      this.dateBegin,
+      this.dateFinal,
+      this.dealBegin,
+      this.dealFinal,
       this.date);
 }

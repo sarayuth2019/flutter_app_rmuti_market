@@ -55,7 +55,8 @@ class _AccountPage extends State {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EditAccount(_marketAccountData)));
+                    builder: (context) =>
+                        EditAccount(_marketAccountData, token)));
           },
         ),
         body: FutureBuilder(
@@ -91,7 +92,8 @@ class _AccountPage extends State {
                               child: Text(
                                 "Market ID : ${snapshot.data.marketID}",
                                 style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -99,7 +101,8 @@ class _AccountPage extends State {
                               child: Text(
                                 "ชื่อร้าน : ${snapshot.data.nameMarket}",
                                 style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -107,7 +110,8 @@ class _AccountPage extends State {
                               child: Text(
                                 "ชื่อเจ้าของร้าน : ${snapshot.data.name} ${snapshot.data.surname}",
                                 style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -115,7 +119,8 @@ class _AccountPage extends State {
                               child: Text(
                                 "อีเมล : ${snapshot.data.email}",
                                 style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -123,7 +128,8 @@ class _AccountPage extends State {
                               child: Text(
                                 "เบอร์ติดต่อ : ${snapshot.data.phoneNumber}",
                                 style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -131,7 +137,8 @@ class _AccountPage extends State {
                               child: Text(
                                 "รายละเอียดที่อยู่ร้าน : ${snapshot.data.descriptionMarket}",
                                 style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
@@ -144,6 +151,12 @@ class _AccountPage extends State {
             }
           },
         ));
+  }
+
+  Future<void> _onRefresh() async {
+    setState(() {
+      sendAccountDataByUser();
+    });
   }
 
   Future<MarketData> sendAccountDataByUser() async {

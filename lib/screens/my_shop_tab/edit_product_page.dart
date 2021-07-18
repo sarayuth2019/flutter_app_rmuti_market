@@ -7,54 +7,344 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
 class EditProductPage extends StatefulWidget {
-  EditProductPage(this.productData
-     );
-  var productData;
+  EditProductPage(this.itemData, this.token);
+
+  var itemData;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _EditProductPage(productData);
+    return _EditProductPage(itemData, token);
   }
 }
 
 class _EditProductPage extends State {
-  _EditProductPage(
-      this.productData
-     );
-  final productData;
-  int? accountID;
-  String? nameMenu;
+  _EditProductPage(this.itemData, this.token);
+
+  final itemData;
+  final token;
+
+  int? marketID;
+  String? nameItem;
   int group = 1;
   int? price;
-  int? price_sell;
-  int count = 0;
-  int? count_request;
+  int? priceSell;
+  int? count;
+  int? countRequest;
   File? imageFile;
   String? imageData;
-  String? deal_begin;
-  String? deal_final;
-  String? date_begin;
-  String? date_final;
-
+  String? dealBegin;
+  String? dealFinal;
+  String? dateBegin;
+  String? dateFinal;
   final snackBarOnSave =
       SnackBar(content: Text("กำลังแก้ไขสินค้า กรุณารอซักครู่..."));
   final snackBarOnSaveSuccess = SnackBar(content: Text("แก้ไขสินค้า สำเร็จ !"));
   final snackBarSaveFail = SnackBar(content: Text("แก้ไขสินค้า ล้มเหลว !"));
-  final urlSellProducts = "${Config.API_URL}/Item/save";
+  final urlSellProducts = "${Config.API_URL}/Item/update";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    marketID = itemData.marketID;
+    nameItem = itemData.nameItem;
+    price = itemData.price;
+    priceSell = itemData.priceSell;
+    count = itemData.count;
+    countRequest = itemData.countRequest;
+    imageData = itemData.imageItems;
+    dealBegin = itemData.dealBegin;
+    dealFinal = itemData.dealFinal;
+    dateBegin = itemData.dateBegin;
+    dateFinal = itemData.dateFinal;
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.teal),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text("Edit Product ID",style: TextStyle(color: Colors.teal),),
-      ),
-      body: Text("${productData.name}")
-    );
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.teal),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text(
+            "Edit Product ID",
+            style: TextStyle(color: Colors.teal),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _showAlertSelectImage(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(border: Border.all()),
+                    child: imageData == null
+                        ? Container(
+                            height: 150,
+                            width: double.infinity,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.black,
+                                ),
+                                Text("เลือกรูปภาพ")
+                              ],
+                            ),
+                          )
+                        : Container(
+                            child: Image.memory(
+                              base64Decode(imageData!),
+                              fit: BoxFit.fill,
+                              height: 150,
+                              width: double.infinity,
+                            ),
+                          ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(border: Border.all()),
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 8, right: 8),
+                        child: TextField(
+                          decoration: InputDecoration(hintText: nameItem),
+                          onChanged: (text) {
+                            setState(() {
+                              nameItem = text;
+                            });
+                          },
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(border: Border.all()),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            hintText: ": ราคาลด ${priceSell}",
+                            border: InputBorder.none),
+                        keyboardType: TextInputType.number,
+                        onChanged: (num) {
+                          setState(() {
+                            priceSell = int.parse(num);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(border: Border.all()),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            hintText: ": ราคาเต็ม ${price}",
+                            border: InputBorder.none),
+                        keyboardType: TextInputType.number,
+                        onChanged: (num) {
+                          setState(() {
+                            price = int.parse(num);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(border: Border.all()),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            hintText: ": จำนวนคนที่ต้องการ ${countRequest}",
+                            border: InputBorder.none),
+                        keyboardType: TextInputType.number,
+                        onChanged: (num) {
+                          setState(() {
+                            countRequest = int.parse(num);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(border: Border.all()),
+                    child: Column(
+                      children: [
+                        Text(
+                          "ระยะเวลาในการลงทะเบียน",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      _pickDealBegin(context);
+                                    },
+                                    icon: Icon(Icons.date_range)),
+                                Text("วันเริ่ม"),
+                                Text("${dealBegin ?? 'เลือกวันที่'}"),
+                              ],
+                            ),
+                            Icon(Icons.arrow_forward),
+                            Column(
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      _pickDealFinal(context);
+                                    },
+                                    icon: Icon(Icons.date_range)),
+                                Text("วันสิ้นสุด"),
+                                Text("${dealFinal ?? 'เลือกวันที่'}"),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(border: Border.all()),
+                    child: Column(
+                      children: [
+                        Text(
+                          "ระยะเวลาในการใช้สิทธิ์ลดราคา",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      _pickDateBegin(context);
+                                    },
+                                    icon: Icon(Icons.date_range)),
+                                Text("วันเริ่ม"),
+                                Text('${dateBegin ?? 'เลือกวันที่'}'),
+                              ],
+                            ),
+                            Icon(Icons.arrow_forward),
+                            Column(
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      _pickDateFinal(context);
+                                    },
+                                    icon: Icon(Icons.date_range)),
+                                Text("วันสิ้นสุด"),
+                                Text("${dateFinal ?? 'เลือกวันที่'}"),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: Colors.teal),
+                      child: Text(
+                        "แก้ไขสินค้า",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: updateItemData),
+                )
+              ],
+            ),
+          ),
+        ));
+  }
+
+  Future _pickDealBegin(BuildContext context) async {
+    final initialDate = DateTime.now();
+    showDatePicker(
+            context: context,
+            initialDate: initialDate,
+            firstDate: DateTime(DateTime.now().year),
+            lastDate: DateTime(DateTime.now().year + 5))
+        .then((date) {
+      setState(() {
+        dealBegin = "${date!.month}/${date.day}/${date.year}";
+        print(date);
+      });
+    });
+  }
+
+  Future _pickDealFinal(BuildContext context) async {
+    final initialDate = DateTime.now();
+    showDatePicker(
+            context: context,
+            initialDate: initialDate,
+            firstDate: DateTime(DateTime.now().year),
+            lastDate: DateTime(DateTime.now().year + 5))
+        .then((date) {
+      setState(() {
+        dealFinal = "${date!.month}/${date.day}/${date.year}";
+        print(date);
+      });
+    });
+  }
+
+  Future _pickDateBegin(BuildContext context) async {
+    final initialDate = DateTime.now();
+    showDatePicker(
+            context: context,
+            initialDate: initialDate,
+            firstDate: DateTime(DateTime.now().year),
+            lastDate: DateTime(DateTime.now().year + 5))
+        .then((date) {
+      setState(() {
+        dateBegin = "${date!.month}/${date.day}/${date.year}";
+        print(date);
+      });
+    });
+  }
+
+  Future _pickDateFinal(BuildContext context) async {
+    final initialDate = DateTime.now();
+    showDatePicker(
+            context: context,
+            initialDate: initialDate,
+            firstDate: DateTime(DateTime.now().year),
+            lastDate: DateTime(DateTime.now().year + 5))
+        .then((date) {
+      setState(() {
+        dateFinal = "${date!.month}/${date.day}/${date.year}";
+        print(date);
+      });
+    });
   }
 
   void _showAlertSelectImage(BuildContext context) async {
@@ -118,41 +408,43 @@ class _EditProductPage extends State {
     }
   }
 
-
-  void testApp() {
-    print(productData.name);
+  void updateItemData() {
+    print(itemData.nameItem);
     print(price.toString());
-    print(productData.date_begin);
-    //saveToDB();
+    print(itemData.dateBegin);
+    saveToDB();
   }
 
-  /*void saveToDB() async {
+  void saveToDB() async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarOnSave);
     Map params = Map();
-    params['userId'] = accountID.toString();
-    params['nameItems'] = nameMenu.toString();
+    params['itemId'] = itemData.itemID.toString();
+    params['marketId'] = itemData.marketID.toString();
+    params['nameItems'] = nameItem.toString();
     params['groupItems'] = group.toString();
     params['price'] = price.toString();
-    params['priceSell'] = price_sell.toString();
+    params['priceSell'] = priceSell.toString();
     params['count'] = count.toString();
-    params['countRequest'] = count_request.toString();
-    params['dateBegin'] = date_begin.toString();
-    params['dateFinal'] = date_final.toString();
-    params['dealBegin'] = deal_begin.toString();
-    params['dealFinal'] = deal_final.toString();
+    params['countRequest'] = countRequest.toString();
+    params['dateBegin'] = dateBegin.toString();
+    params['dateFinal'] = dateFinal.toString();
+    params['dealBegin'] = dealBegin.toString();
+    params['dealFinal'] = dealFinal.toString();
     params['imageItems'] = imageData.toString();
 
-    http.post(Uri.parse(urlSellProducts), body: params).then((res) {
+    http.post(Uri.parse(urlSellProducts), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
       Map _resData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       print(_resData);
       var _resStatus = _resData['status'];
       setState(() {
-        if (_resStatus == 0) {
+        if (_resStatus == 1) {
           ScaffoldMessenger.of(context).showSnackBar(snackBarOnSaveSuccess);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(snackBarSaveFail);
         }
       });
     });
-  }*/
+  }
 }
