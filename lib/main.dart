@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/account/account_page.dart';
 import 'package:flutter_app_rmuti_market/screens/my_order_tab/my_order_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/my_shop_tab/my_shop_tab.dart';
-import 'package:flutter_app_rmuti_market/screens/account/sing_in_page.dart';
+import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() =>

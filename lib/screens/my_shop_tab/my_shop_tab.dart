@@ -225,7 +225,7 @@ class _MyShop extends State {
           i['dateFinal'],
           i['dealBegin'],
           i['dealFinal'],
-          i['date'],
+          i['createDate'],
         );
         listItem.insert(0, _items);
       }
@@ -236,20 +236,20 @@ class _MyShop extends State {
 }
 
 class _Items {
-  final int? itemID;
-  final String? nameItem;
-  final String? imageItems;
-  final int? groupItems;
-  final int? price;
-  final int? priceSell;
-  final int? count;
-  final int? countRequest;
-  final int? marketID;
-  final String? dateBegin;
-  final String? dateFinal;
-  final String? dealBegin;
-  final String? dealFinal;
-  final String? date;
+  final int itemID;
+  final String nameItem;
+  final String imageItems;
+  final int groupItems;
+  final int price;
+  final int priceSell;
+  final int count;
+  final int countRequest;
+  final int marketID;
+  final String dateBegin;
+  final String dateFinal;
+  final String dealBegin;
+  final String dealFinal;
+  final String date;
 
   _Items(
       this.itemID,

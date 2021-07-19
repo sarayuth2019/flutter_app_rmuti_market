@@ -6,7 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/account/sing_in_page.dart';
+import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_app_rmuti_market/main.dart';
