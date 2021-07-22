@@ -99,12 +99,15 @@ class _EditAccount extends State {
                       Text('ชื่อสินค้า'),
                       Container(
                         decoration: BoxDecoration(border: Border.all()),
-                        child: TextField(
-                          decoration: InputDecoration(border: InputBorder.none),
-                          controller: TextEditingController(text: nameMarket),
-                          onChanged: (text) {
-                            nameMarket = text;
-                          },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          child: TextField(
+                            decoration: InputDecoration(border: InputBorder.none),
+                            controller: TextEditingController(text: nameMarket),
+                            onChanged: (text) {
+                              nameMarket = text;
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -118,12 +121,15 @@ class _EditAccount extends State {
                       Text('ชื่อเจ้าของร้าน'),
                       Container(
                         decoration: BoxDecoration(border: Border.all()),
-                        child: TextField(
-                          decoration: InputDecoration(border: InputBorder.none),
-                          controller: TextEditingController(text: name),
-                          onChanged: (text) {
-                            name = text;
-                          },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          child: TextField(
+                            decoration: InputDecoration(border: InputBorder.none),
+                            controller: TextEditingController(text: name),
+                            onChanged: (text) {
+                              name = text;
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -137,12 +143,15 @@ class _EditAccount extends State {
                       Text('นามสกุล'),
                       Container(
                         decoration: BoxDecoration(border: Border.all()),
-                        child: TextField(
-                          decoration: InputDecoration(border: InputBorder.none),
-                          controller: TextEditingController(text: surname),
-                          onChanged: (text) {
-                            surname = text;
-                          },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          child: TextField(
+                            decoration: InputDecoration(border: InputBorder.none),
+                            controller: TextEditingController(text: surname),
+                            onChanged: (text) {
+                              surname = text;
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -156,14 +165,17 @@ class _EditAccount extends State {
                       Text('เบอร์โทร'),
                       Container(
                         decoration: BoxDecoration(border: Border.all()),
-                        child: TextField(
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(border: InputBorder.none),
-                          controller: TextEditingController(
-                              text: phoneNumber.toString()),
-                          onChanged: (text) {
-                            phoneNumber = text;
-                          },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          child: TextField(
+                            keyboardType: TextInputType.phone,
+                            decoration: InputDecoration(border: InputBorder.none),
+                            controller: TextEditingController(
+                                text: phoneNumber.toString()),
+                            onChanged: (text) {
+                              phoneNumber = text;
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -177,14 +189,17 @@ class _EditAccount extends State {
                       Text('รายละเอียดที่ตั้งร้าน'),
                       Container(
                         decoration: BoxDecoration(border: Border.all()),
-                        child: TextField(
-                          maxLines: null,
-                          decoration: InputDecoration(border: InputBorder.none),
-                          controller:
-                              TextEditingController(text: descriptionMarket),
-                          onChanged: (text) {
-                            descriptionMarket = text;
-                          },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          child: TextField(
+                            maxLines: null,
+                            decoration: InputDecoration(border: InputBorder.none),
+                            controller:
+                                TextEditingController(text: descriptionMarket),
+                            onChanged: (text) {
+                              descriptionMarket = text;
+                            },
+                          ),
                         ),
                       ),
                     ],
