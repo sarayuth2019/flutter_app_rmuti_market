@@ -458,6 +458,8 @@ class _SellProducts extends State {
     http.post(Uri.parse(urlSellProducts), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
+      Navigator.of(context).pop();
+
       Map _resData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       print(_resData);
       var _resStatus = _resData['status'];

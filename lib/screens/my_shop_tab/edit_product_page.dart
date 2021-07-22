@@ -112,78 +112,93 @@ class _EditProductPage extends State {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 8),
-                        child: TextField(
-                          decoration: InputDecoration(hintText: nameItem),
-                          onChanged: (text) {
-                            setState(() {
-                              nameItem = text;
-                            });
-                          },
-                        )),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ชื่อสินค้า'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 8, right: 8),
+                            child: TextField(
+                              decoration: InputDecoration(border: InputBorder.none),
+                              controller: TextEditingController(text: nameItem),
+                              onChanged: (text) {
+                                nameItem = text;
+                              },
+                            )),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8),
-                      child: TextField(
-                        decoration: InputDecoration(
-                            hintText: ": ราคาลด ${priceSell}",
-                            border: InputBorder.none),
-                        keyboardType: TextInputType.number,
-                        onChanged: (num) {
-                          setState(() {
-                            priceSell = int.parse(num);
-                          });
-                        },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ราคาลด'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8),
+                          child: TextField(
+                            decoration: InputDecoration(border: InputBorder.none),
+                            keyboardType: TextInputType.number,
+                            controller:
+                                TextEditingController(text: priceSell.toString()),
+                            onChanged: (num) {
+                              priceSell = int.parse(num);
+                            },
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8),
-                      child: TextField(
-                        decoration: InputDecoration(
-                            hintText: ": ราคาเต็ม ${price}",
-                            border: InputBorder.none),
-                        keyboardType: TextInputType.number,
-                        onChanged: (num) {
-                          setState(() {
-                            price = int.parse(num);
-                          });
-                        },
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ราคาปกติ'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8),
+                          child: TextField(
+                            decoration: InputDecoration(border: InputBorder.none),
+                            keyboardType: TextInputType.number,
+                            controller:
+                                TextEditingController(text: price.toString()),
+                            onChanged: (num) {
+                              price = int.parse(num);
+                            },
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8),
-                      child: TextField(
-                        decoration: InputDecoration(
-                            hintText: ": จำนวนคนที่ต้องการ ${countRequest}",
-                            border: InputBorder.none),
-                        keyboardType: TextInputType.number,
-                        onChanged: (num) {
-                          setState(() {
-                            countRequest = int.parse(num);
-                          });
-                        },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('จำนวนคนที่ต้องการ'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8),
+                          child: TextField(
+                            decoration: InputDecoration(border: InputBorder.none),
+                            keyboardType: TextInputType.number,
+                            controller: TextEditingController(text: countRequest.toString()),
+                            onChanged: (num) {
+                              countRequest = int.parse(num);
+                            },
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -435,6 +450,8 @@ class _EditProductPage extends State {
     http.post(Uri.parse(urlSellProducts), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
+      Navigator.of(context).pop();
+
       Map _resData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       print(_resData);
       var _resStatus = _resData['status'];

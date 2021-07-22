@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -87,66 +88,109 @@ class _EditAccount extends State {
               height: 270,
               width: double.infinity,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  TextField(
-                    maxLength: 32,
-                    decoration: InputDecoration(
-                        hintText: " ชื่อร้าน : ${marketData.nameMarket}"),
-                    onChanged: (text) {
-                      setState(() {
-                        nameMarket = text;
-                      });
-                    },
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ชื่อสินค้า'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: TextField(
+                          decoration: InputDecoration(border: InputBorder.none),
+                          controller: TextEditingController(text: nameMarket),
+                          onChanged: (text) {
+                            nameMarket = text;
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  TextField(
-                    maxLength: 32,
-                    decoration: InputDecoration(
-                        hintText: " ชื่อเจ้าของร้าน : ${marketData.name}"),
-                    onChanged: (text) {
-                      setState(() {
-                        name = text;
-                      });
-                    },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ชื่อเจ้าของร้าน'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: TextField(
+                          decoration: InputDecoration(border: InputBorder.none),
+                          controller: TextEditingController(text: name),
+                          onChanged: (text) {
+                            name = text;
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  TextField(
-                    maxLength: 32,
-                    decoration: InputDecoration(
-                        hintText: " นามสกุล : ${marketData.surname}"),
-                    onChanged: (text) {
-                      setState(() {
-                        surname = text;
-                      });
-                    },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('นามสกุล'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: TextField(
+                          decoration: InputDecoration(border: InputBorder.none),
+                          controller: TextEditingController(text: surname),
+                          onChanged: (text) {
+                            surname = text;
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  TextField(
-                    maxLength: 10,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText:
-                            " เบอร์โทรติดต่อ : ${marketData.phoneNumber}"),
-                    onChanged: (text) {
-                      setState(() {
-                        phoneNumber = text;
-                      });
-                    },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('เบอร์โทร'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: TextField(
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(border: InputBorder.none),
+                          controller: TextEditingController(
+                              text: phoneNumber.toString()),
+                          onChanged: (text) {
+                            phoneNumber = text;
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  TextField(
-                    maxLength: 100,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                        hintText:
-                            " รายละเอียดที่อยู่: ${marketData.descriptionMarket}"),
-                    onChanged: (text) {
-                      setState(() {
-                        descriptionMarket = text;
-                      });
-                    },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('รายละเอียดที่ตั้งร้าน'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: TextField(
+                          maxLines: null,
+                          decoration: InputDecoration(border: InputBorder.none),
+                          controller:
+                              TextEditingController(text: descriptionMarket),
+                          onChanged: (text) {
+                            descriptionMarket = text;
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             ElevatedButton(
                 onPressed: () {
@@ -251,6 +295,7 @@ class _EditAccount extends State {
     http.post(Uri.parse(urlUpdate), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
+      Navigator.of(context).pop();
       print(res.body);
       Map resBody = jsonDecode(res.body) as Map;
       var _resStatus = resBody['status'];
