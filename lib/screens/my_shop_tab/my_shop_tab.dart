@@ -28,10 +28,12 @@ class _MyShop extends State {
 
   final urlListItemByUser = "${Config.API_URL}/Item/find/market";
   final urlDeleteProducts = "${Config.API_URL}/Item/delete/";
+  final urlGetImageByItemId = "${Config.API_URL}/images/";
   final snackBarOnDeleteProducts = SnackBar(content: Text("กำลังลบสินค้า..."));
   final snackBarOnDeleteProductsSuccess =
       SnackBar(content: Text("ลบสินค้า สำเร็จ"));
   final snackBarOnDeleteProductsFall = SnackBar(content: Text("ผิดพลาด !"));
+  var image;
 
   @override
   void initState() {
@@ -82,14 +84,29 @@ class _MyShop extends State {
                           child: Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              Container(
-                                  height: 170,
-                                  width: double.infinity,
-                                  child: Image.memory(
-                                    base64Decode(
-                                        snapshot.data[index].imageItems),
-                                    fit: BoxFit.fill,
-                                  )),
+                              FutureBuilder(
+                                future: getImage(snapshot.data[index].itemID),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  print(snapshot.data.runtimeType);
+                                  if (snapshot.data == null) {
+                                    return Container(
+                                        color: Colors.grey,
+                                        height: 170,
+                                        width: double.infinity,
+                                        child:
+                                            Center(child: Icon(Icons.image)));
+                                  } else {
+                                    return Container(
+                                        height: 170,
+                                        width: double.infinity,
+                                        child: Image.memory(
+                                          snapshot.data,
+                                          fit: BoxFit.fill,
+                                        ));
+                                  }
+                                },
+                              ),
                               Opacity(
                                 opacity: 0.70,
                                 child: Container(
@@ -176,7 +193,7 @@ class _MyShop extends State {
                                             )
                                           ],
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -214,7 +231,6 @@ class _MyShop extends State {
         _Items _items = _Items(
           i['itemId'],
           i['nameItems'],
-          i['imageItems'],
           i['groupItems'],
           i['price'],
           i['priceSell'],
@@ -233,12 +249,30 @@ class _MyShop extends State {
     print("Products By Account : ${listItem.length}");
     return listItem;
   }
+
+  Future<void> getImage(_itemId) async {
+    var _resData;
+    await http.get(
+        Uri.parse('${urlGetImageByItemId.toString()}${_itemId.toString()}'),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+        }).then((res) {
+      print(res.body);
+      Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
+      var _statusData = jsonData['status'];
+      if (_statusData == 1) {
+        _resData = base64Decode(jsonData['data']);
+        print("jsonData : ${_resData.toString()}");
+      }
+    });
+    print("_resData ${_resData.toString()}");
+    return _resData;
+  }
 }
 
 class _Items {
   final int itemID;
   final String nameItem;
-  final String imageItems;
   final int groupItems;
   final int price;
   final int priceSell;
@@ -254,7 +288,6 @@ class _Items {
   _Items(
       this.itemID,
       this.nameItem,
-      this.imageItems,
       this.groupItems,
       this.price,
       this.priceSell,

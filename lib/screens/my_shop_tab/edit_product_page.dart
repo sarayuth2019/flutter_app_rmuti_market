@@ -54,7 +54,6 @@ class _EditProductPage extends State {
     priceSell = itemData.priceSell;
     count = itemData.count;
     countRequest = itemData.countRequest;
-    imageData = itemData.imageItems;
     dealBegin = itemData.dealBegin;
     dealFinal = itemData.dealFinal;
     dateBegin = itemData.dateBegin;

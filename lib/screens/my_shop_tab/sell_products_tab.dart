@@ -28,6 +28,7 @@ class _SellProducts extends State {
   final _formKey = GlobalKey<FormState>();
 
   final urlSellProducts = "${Config.API_URL}/Item/save";
+  final urlSaveImage = "${Config.API_URL}/images/save";
   final snackBarOnSave =
       SnackBar(content: Text("กำลังขายลงขาย กรุณารอซักครู่..."));
   final snackBarOnSaveSuccess = SnackBar(content: Text("ลงขายสินค้า สำเร็จ !"));
@@ -454,23 +455,42 @@ class _SellProducts extends State {
     params['dateFinal'] = dateFinal.toString();
     params['dealBegin'] = dealBegin.toString();
     params['dealFinal'] = dealFinal.toString();
-    params['imageItems'] = imageData.toString();
+    //params['imageItems'] = imageFile.toString();
     http.post(Uri.parse(urlSellProducts), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
-
       Navigator.of(context).pop();
 
-      Map _resData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      print(_resData);
-      var _resStatus = _resData['status'];
+      Map _res = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
+      print(_res);
+      var _resStatus = _res['status'];
+      var _resData = _res['data'];
+      var _itemId = _resData['itemId'];
       setState(() {
         if (_resStatus == 0) {
-          ScaffoldMessenger.of(context).showSnackBar(snackBarOnSaveSuccess);
+          saveImage(_itemId);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(snackBarSaveFail);
         }
       });
+    });
+  }
+
+  void saveImage(_itemId) async {
+    print("ItemID : ${_itemId.toString()}");
+    var request = http.MultipartRequest('POST', Uri.parse(urlSaveImage));
+
+    var _multipart = await http.MultipartFile.fromPath(
+        'picture', imageFile!.path);
+    request.files.add(_multipart);
+
+    request.headers.addAll(
+        {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+    request.fields['itemId'] = _itemId.toString();
+    request.fields['marketId'] = marketID.toString();
+
+    await http.Response.fromStream(await request.send()).then((res) {
+      print(res.body);
     });
   }
 }
