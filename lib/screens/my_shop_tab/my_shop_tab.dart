@@ -260,8 +260,9 @@ class _MyShop extends State {
       print(res.body);
       Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _statusData = jsonData['status'];
+      var _dataImage = jsonData['data'];
       if (_statusData == 1) {
-        _resData = base64Decode(jsonData['data']);
+        _resData = base64Decode(_dataImage[0]);
         print("jsonData : ${_resData.toString()}");
       }
     });
