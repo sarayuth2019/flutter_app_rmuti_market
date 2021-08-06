@@ -36,6 +36,7 @@ class _SellProducts extends State {
   final snackBarNoImage = SnackBar(content: Text("กรุณาใส่รูปภาพสินค้า"));
   final snackBarNoLocation = SnackBar(content: Text("กรุณาเลือกสถานที่"));
   final snackBarNoGroupItem = SnackBar(content: Text("กรุณาเลือกประเภทสินค้า"));
+  final snackBarNoDateTime = SnackBar(content: Text("กรอกวันที่ให้ครบ"));
   bool checkText = false;
   String textPromotion = "เพิ่มโปรโมชันสินค้า";
 
@@ -423,13 +424,17 @@ class _SellProducts extends State {
     }
   }
 
+
   void onSaveData() {
     if (imageData == null) {
       ScaffoldMessenger.of(context).showSnackBar(snackBarNoImage);
-    } else if (_formKey.currentState!.validate()) {
+    }
+    else if (dealBegin==null||dealFinal==null||dateBegin==null||dateFinal==null){
+      ScaffoldMessenger.of(context).showSnackBar(snackBarNoDateTime);
+    }
+    else if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       ScaffoldMessenger.of(context).showSnackBar(snackBarOnSave);
-
       print("account Id ${marketID.toString()}");
       print("name product : ${nameMenu.toString()}");
       print("price : ${price.toString()}");

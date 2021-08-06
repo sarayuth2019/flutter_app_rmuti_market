@@ -87,9 +87,9 @@ class _MyShop extends State {
                               FutureBuilder(
                                 future: getImage(snapshot.data[index].itemID),
                                 builder: (BuildContext context,
-                                    AsyncSnapshot<dynamic> snapshot) {
-                                  print(snapshot.data.runtimeType);
-                                  if (snapshot.data == null) {
+                                    AsyncSnapshot<dynamic> snapshotImage) {
+                                  print(snapshotImage.data.runtimeType);
+                                  if (snapshotImage.data == null) {
                                     return Container(
                                         color: Colors.grey,
                                         height: 170,
@@ -101,7 +101,7 @@ class _MyShop extends State {
                                         height: 170,
                                         width: double.infinity,
                                         child: Image.memory(
-                                          snapshot.data,
+                                          base64Decode(snapshotImage.data[0]),
                                           fit: BoxFit.fill,
                                         ));
                                   }
@@ -167,9 +167,7 @@ class _MyShop extends State {
                                                                   context,
                                                                   MaterialPageRoute(
                                                                       builder: (context) => EditProductPage(
-                                                                          snapshot
-                                                                              .data[index],
-                                                                          token)));
+                                                                          snapshot.data[index],token)));
                                                             },
                                                             child: Text(
                                                               "แก้ไข",
@@ -222,11 +220,10 @@ class _MyShop extends State {
     await http.post(Uri.parse(urlListItemByUser), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
-      print(res.body);
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
-      print(_itemData);
+
       for (var i in _itemData) {
         _Items _items = _Items(
           i['itemId'],
@@ -257,12 +254,11 @@ class _MyShop extends State {
         headers: {
           HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
         }).then((res) {
-      print(res.body);
       Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _statusData = jsonData['status'];
       var _dataImage = jsonData['data'];
       if (_statusData == 1) {
-        _resData = base64Decode(_dataImage[0]);
+        _resData = _dataImage;
         print("jsonData : ${_resData.toString()}");
       }
     });

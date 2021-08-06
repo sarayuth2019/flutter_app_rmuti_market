@@ -43,6 +43,9 @@ class _EditProductPage extends State {
   final snackBarOnSaveSuccess = SnackBar(content: Text("แก้ไขสินค้า สำเร็จ !"));
   final snackBarSaveFail = SnackBar(content: Text("แก้ไขสินค้า ล้มเหลว !"));
   final urlSellProducts = "${Config.API_URL}/Item/update";
+  final urlSaveImage = "${Config.API_URL}/images/save";
+  final urlDeleteItem = "${Config.API_URL}/Item/delete/";
+  final urlDeleteImage = "${Config.API_URL}/images/deleteItemId";
 
   @override
   void initState() {
@@ -72,6 +75,13 @@ class _EditProductPage extends State {
             "Edit Product ID",
             style: TextStyle(color: Colors.teal),
           ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  _onDeleteItem(context);
+                },
+                icon: Icon(Icons.delete_forever))
+          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -120,7 +130,8 @@ class _EditProductPage extends State {
                         child: Padding(
                             padding: const EdgeInsets.only(left: 8, right: 8),
                             child: TextField(
-                              decoration: InputDecoration(border: InputBorder.none),
+                              decoration:
+                                  InputDecoration(border: InputBorder.none),
                               controller: TextEditingController(text: nameItem),
                               onChanged: (text) {
                                 nameItem = text;
@@ -141,10 +152,11 @@ class _EditProductPage extends State {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
-                            decoration: InputDecoration(border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             keyboardType: TextInputType.number,
-                            controller:
-                                TextEditingController(text: priceSell.toString()),
+                            controller: TextEditingController(
+                                text: priceSell.toString()),
                             onChanged: (num) {
                               priceSell = int.parse(num);
                             },
@@ -156,7 +168,8 @@ class _EditProductPage extends State {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('ราคาปกติ'),
                       Container(
@@ -164,7 +177,8 @@ class _EditProductPage extends State {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
-                            decoration: InputDecoration(border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             keyboardType: TextInputType.number,
                             controller:
                                 TextEditingController(text: price.toString()),
@@ -188,9 +202,11 @@ class _EditProductPage extends State {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
-                            decoration: InputDecoration(border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             keyboardType: TextInputType.number,
-                            controller: TextEditingController(text: countRequest.toString()),
+                            controller: TextEditingController(
+                                text: countRequest.toString()),
                             onChanged: (num) {
                               countRequest = int.parse(num);
                             },
@@ -294,7 +310,7 @@ class _EditProductPage extends State {
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       onPressed: updateItemData),
-                )
+                ),
               ],
             ),
           ),
@@ -359,6 +375,56 @@ class _EditProductPage extends State {
         print(date);
       });
     });
+  }
+
+  void _onDeleteItem(BuildContext context) async {
+    print('Show Alert Dialog Delete Item !');
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('ต้องการลบสินค้า ?'),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      child: GestureDetector(
+                          child: Text('ลบสินค้า'), onTap: (){
+                            Navigator.pop(context);
+                            deleteItem();
+                      })),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      child: GestureDetector(
+                          child: Text('ยกเลิก'),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          })),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void deleteItem() async {
+    Map params = Map();
+    params['itemId'] = itemData.itemID.toString();
+
+    var resDeleteImage = await http.post(Uri.parse(urlDeleteImage), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    });
+    print("RespondDeleteImage : ${resDeleteImage.body}");
+
+    var resDeleteItem =  await http.get(Uri.parse("${urlDeleteItem.toString()}${itemData.itemID}"), headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    });
+    print("RespondDeleteItem : ${resDeleteItem.body}");
+
+    Navigator.of(context).pop();
   }
 
   void _showAlertSelectImage(BuildContext context) async {
@@ -444,7 +510,7 @@ class _EditProductPage extends State {
     params['dateFinal'] = dateFinal.toString();
     params['dealBegin'] = dealBegin.toString();
     params['dealFinal'] = dealFinal.toString();
-    params['imageItems'] = imageData.toString();
+    // params['imageItems'] = imageData.toString();
 
     http.post(Uri.parse(urlSellProducts), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
@@ -461,6 +527,24 @@ class _EditProductPage extends State {
           ScaffoldMessenger.of(context).showSnackBar(snackBarSaveFail);
         }
       });
+    });
+  }
+
+  void saveImage(_itemId) async {
+    print("ItemID : ${_itemId.toString()}");
+    var request = http.MultipartRequest('POST', Uri.parse(urlSaveImage));
+
+    var _multipart =
+        await http.MultipartFile.fromPath('picture', imageFile!.path);
+    request.files.add(_multipart);
+
+    request.headers.addAll(
+        {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+    request.fields['itemId'] = _itemId.toString();
+    request.fields['marketId'] = marketID.toString();
+
+    await http.Response.fromStream(await request.send()).then((res) {
+      print(res.body);
     });
   }
 }
