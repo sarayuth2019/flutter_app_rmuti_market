@@ -254,12 +254,14 @@ class _MyShop extends State {
         headers: {
           HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
         }).then((res) {
+      print(res.body);
       Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _statusData = jsonData['status'];
-      var _dataImage = jsonData['data'];
+      var _dataImage = jsonData['dataImages'];
+      //var _dataId = jsonData['dataId'];
       if (_statusData == 1) {
         _resData = _dataImage;
-        print("jsonData : ${_resData.toString()}");
+        //print("jsonData : ${_resData.toString()}");
       }
     });
     print("_resData ${_resData.toString()}");

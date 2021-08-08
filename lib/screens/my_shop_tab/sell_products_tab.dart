@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
@@ -47,7 +48,8 @@ class _SellProducts extends State {
   int count = 0;
   int? countRequest;
   File? imageFile;
-  String? imageData;
+  List<File> listImageFile = [];
+  String? imageData1;
   String? dealBegin;
   String? dealFinal;
   String? dateBegin;
@@ -75,35 +77,108 @@ class _SellProducts extends State {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    _showAlertSelectImage(context);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
-                    child: imageData == null
-                        ? Container(
-                            height: 150,
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.black,
-                                ),
-                                Text("เลือกรูปภาพ")
-                              ],
-                            ),
-                          )
-                        : Container(
-                            child: Image.memory(
-                              base64Decode(imageData!),
-                              fit: BoxFit.fill,
-                              height: 150,
-                              width: double.infinity,
-                            ),
+                Container(
+                  height: 150,
+                  width: double.infinity,
+                  decoration: BoxDecoration(border: Border.all()),
+                  child: listImageFile.length == 0
+                      ? Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.camera_alt,
+                                color: Colors.black,
+                              ),
+                              Text("กรุณาเลือกรูปภาพ")
+                            ],
                           ),
+                        )
+                      : Container(
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                                enlargeCenterPage: true, autoPlay: false),
+                            items: listImageFile
+                                .map((e) => Container(
+                                    height: 150,
+                                    width: double.infinity,
+                                    child: Image.file(
+                                      e,
+                                      fit: BoxFit.fill,
+                                    )))
+                                .toList(),
+                          ),
+                        ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: listImageFile.length == 0
+                            ? Container(
+                                child: IconButton(
+                                  icon: Icon(Icons.add),
+                                  onPressed: () {
+                                    _showAlertSelectImage(context, 0);
+                                  },
+                                ),
+                              )
+                            : Container(
+                                child: Image.file(
+                                  listImageFile[0],
+                                  fit: BoxFit.fill,
+                                  width: double.infinity,
+                                ),
+                              ),
+                      ),
+                      Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: listImageFile.length <= 1
+                            ? Container(
+                                child: IconButton(
+                                  icon: Icon(Icons.add),
+                                  onPressed: () {
+                                    _showAlertSelectImage(context, 1);
+                                  },
+                                ),
+                              )
+                            : Container(
+                                child: Image.file(
+                                  listImageFile[1],
+                                  fit: BoxFit.fill,
+                                  width: double.infinity,
+                                ),
+                              ),
+                      ),
+                      Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: listImageFile.length <= 2
+                            ? Container(
+                                child: IconButton(
+                                  icon: Icon(Icons.add),
+                                  onPressed: () {
+                                    _showAlertSelectImage(context, 2);
+                                  },
+                                ),
+                              )
+                            : Container(
+                                child: Image.file(
+                                  listImageFile[2],
+                                  fit: BoxFit.fill,
+                                  width: double.infinity,
+                                ),
+                              ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -341,7 +416,7 @@ class _SellProducts extends State {
     });
   }
 
-  void _showAlertSelectImage(BuildContext context) async {
+  void _showAlertSelectImage(BuildContext context, index) async {
     print('Show Alert Dialog Image !');
     return showDialog(
         context: context,
@@ -354,13 +429,19 @@ class _SellProducts extends State {
                 children: [
                   Container(
                       child: GestureDetector(
-                          child: Text('Gallery'), onTap: _onGallery)),
+                          child: Text('Gallery'),
+                          onTap: () {
+                            _onGallery(index);
+                          })),
                   SizedBox(
                     height: 10,
                   ),
                   Container(
                       child: GestureDetector(
-                          child: Text('Camera'), onTap: _onCamera)),
+                          child: Text('Camera'),
+                          onTap: () {
+                            _onCamera(index);
+                          })),
                 ],
               ),
             ),
@@ -368,33 +449,33 @@ class _SellProducts extends State {
         });
   }
 
-  _onGallery() async {
+  _onGallery(index) async {
     print('Select Gallery');
     var _imageGallery = await ImagePicker()
         .getImage(source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
+        listImageFile.insert(index, imageFile!);
       });
-      imageData = base64Encode(imageFile!.readAsBytesSync());
       Navigator.of(context).pop();
-      return imageData;
+      return listImageFile;
     } else {
       return null;
     }
   }
 
-  _onCamera() async {
+  _onCamera(index) async {
     print('Select Camera');
     var _imageGallery = await ImagePicker()
         .getImage(source: ImageSource.camera, maxHeight: 1920, maxWidth: 1080);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
+        listImageFile.insert(index, imageFile!);
       });
-      imageData = base64Encode(imageFile!.readAsBytesSync());
       Navigator.of(context).pop();
-      return imageData;
+      return listImageFile;
     } else {
       return null;
     }
@@ -424,15 +505,15 @@ class _SellProducts extends State {
     }
   }
 
-
   void onSaveData() {
-    if (imageData == null) {
+    if (listImageFile.length == 0) {
       ScaffoldMessenger.of(context).showSnackBar(snackBarNoImage);
-    }
-    else if (dealBegin==null||dealFinal==null||dateBegin==null||dateFinal==null){
+    } else if (dealBegin == null ||
+        dealFinal == null ||
+        dateBegin == null ||
+        dateFinal == null) {
       ScaffoldMessenger.of(context).showSnackBar(snackBarNoDateTime);
-    }
-    else if (_formKey.currentState!.validate()) {
+    } else if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       ScaffoldMessenger.of(context).showSnackBar(snackBarOnSave);
       print("account Id ${marketID.toString()}");
@@ -483,19 +564,22 @@ class _SellProducts extends State {
 
   void saveImage(_itemId) async {
     print("ItemID : ${_itemId.toString()}");
-    var request = http.MultipartRequest('POST', Uri.parse(urlSaveImage));
 
-    var _multipart = await http.MultipartFile.fromPath(
-        'picture', imageFile!.path);
-    request.files.add(_multipart);
+    listImageFile.forEach((element) async {
+      var request = http.MultipartRequest('POST', Uri.parse(urlSaveImage));
 
-    request.headers.addAll(
-        {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
-    request.fields['itemId'] = _itemId.toString();
-    request.fields['marketId'] = marketID.toString();
+      var _multipart =
+          await http.MultipartFile.fromPath('picture', element.path);
+      request.files.add(_multipart);
 
-    await http.Response.fromStream(await request.send()).then((res) {
-      print(res.body);
+      request.headers.addAll(
+          {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+      request.fields['itemId'] = _itemId.toString();
+      request.fields['marketId'] = marketID.toString();
+
+      await http.Response.fromStream(await request.send()).then((res) {
+        print(res.body);
+      });
     });
   }
 }
