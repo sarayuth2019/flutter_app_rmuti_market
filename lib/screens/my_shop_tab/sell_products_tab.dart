@@ -34,7 +34,7 @@ class _SellProducts extends State {
       SnackBar(content: Text("กำลังขายลงขาย กรุณารอซักครู่..."));
   final snackBarOnSaveSuccess = SnackBar(content: Text("ลงขายสินค้า สำเร็จ !"));
   final snackBarSaveFail = SnackBar(content: Text("ลงขายสินค้า ล้มเหลว !"));
-  final snackBarNoImage = SnackBar(content: Text("กรุณาใส่รูปภาพสินค้า"));
+  final snackBarNoImage = SnackBar(content: Text("กรุณาใส่รูปภาพสินค้าอย่างน้อย 1 รูป"));
   final snackBarNoLocation = SnackBar(content: Text("กรุณาเลือกสถานที่"));
   final snackBarNoGroupItem = SnackBar(content: Text("กรุณาเลือกประเภทสินค้า"));
   final snackBarNoDateTime = SnackBar(content: Text("กรอกวันที่ให้ครบ"));
@@ -566,10 +566,12 @@ class _SellProducts extends State {
     print("ItemID : ${_itemId.toString()}");
 
     listImageFile.forEach((element) async {
+      print("save image Item ID : ${_itemId.toString()}");
+      print("Update image File : ${element}");
+
       var request = http.MultipartRequest('POST', Uri.parse(urlSaveImage));
 
-      var _multipart =
-          await http.MultipartFile.fromPath('picture', element.path);
+      var _multipart = await http.MultipartFile.fromPath('picture', element.path);
       request.files.add(_multipart);
 
       request.headers.addAll(
