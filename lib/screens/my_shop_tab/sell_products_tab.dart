@@ -34,7 +34,8 @@ class _SellProducts extends State {
       SnackBar(content: Text("กำลังขายลงขาย กรุณารอซักครู่..."));
   final snackBarOnSaveSuccess = SnackBar(content: Text("ลงขายสินค้า สำเร็จ !"));
   final snackBarSaveFail = SnackBar(content: Text("ลงขายสินค้า ล้มเหลว !"));
-  final snackBarNoImage = SnackBar(content: Text("กรุณาใส่รูปภาพสินค้าอย่างน้อย 1 รูป"));
+  final snackBarNoImage =
+      SnackBar(content: Text("กรุณาใส่รูปภาพสินค้าอย่างน้อย 1 รูป"));
   final snackBarNoLocation = SnackBar(content: Text("กรุณาเลือกสถานที่"));
   final snackBarNoGroupItem = SnackBar(content: Text("กรุณาเลือกประเภทสินค้า"));
   final snackBarNoDateTime = SnackBar(content: Text("กรอกวันที่ให้ครบ"));
@@ -90,97 +91,63 @@ class _SellProducts extends State {
                                 Icons.camera_alt,
                                 color: Colors.black,
                               ),
-                              Text("กรุณาเลือกรูปภาพ")
+                              Text("รูปภาพ"),
                             ],
                           ),
                         )
                       : Container(
                           child: CarouselSlider(
                             options: CarouselOptions(
+                                initialPage: 0,
                                 enlargeCenterPage: true, autoPlay: false),
                             items: listImageFile
-                                .map((e) => Container(
-                                    height: 150,
-                                    width: double.infinity,
-                                    child: Image.file(
-                                      e,
-                                      fit: BoxFit.fill,
-                                    )))
+                                .map((e) => Stack(
+                                      children: [
+                                        Container(
+                                          height: 150,
+                                          width: double.infinity,
+                                          child: Image.file(
+                                            e,
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  listImageFile.remove(e);
+                                                });
+                                              },
+                                              icon: Icon(
+                                                Icons.remove_circle,
+                                                color: Colors.red,
+                                              )),
+                                        )
+                                      ],
+                                    ))
                                 .toList(),
                           ),
                         ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        height: 80,
-                        width: 80,
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        _showAlertSelectImage(context);
+                      },
+                      child: Container(
                         decoration: BoxDecoration(border: Border.all()),
-                        child: listImageFile.length == 0
-                            ? Container(
-                                child: IconButton(
-                                  icon: Icon(Icons.add),
-                                  onPressed: () {
-                                    _showAlertSelectImage(context, 0);
-                                  },
-                                ),
-                              )
-                            : Container(
-                                child: Image.file(
-                                  listImageFile[0],
-                                  fit: BoxFit.fill,
-                                  width: double.infinity,
-                                ),
-                              ),
+                        height: 50,
+                        width: 120,
+                        child: Center(
+                          child: Column(
+                            children: [Icon(Icons.add), Text("เพิ่มรูปภาพ")],
+                          ),
+                        ),
                       ),
-                      Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: listImageFile.length <= 1
-                            ? Container(
-                                child: IconButton(
-                                  icon: Icon(Icons.add),
-                                  onPressed: () {
-                                    _showAlertSelectImage(context, 1);
-                                  },
-                                ),
-                              )
-                            : Container(
-                                child: Image.file(
-                                  listImageFile[1],
-                                  fit: BoxFit.fill,
-                                  width: double.infinity,
-                                ),
-                              ),
-                      ),
-                      Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: listImageFile.length <= 2
-                            ? Container(
-                                child: IconButton(
-                                  icon: Icon(Icons.add),
-                                  onPressed: () {
-                                    _showAlertSelectImage(context, 2);
-                                  },
-                                ),
-                              )
-                            : Container(
-                                child: Image.file(
-                                  listImageFile[2],
-                                  fit: BoxFit.fill,
-                                  width: double.infinity,
-                                ),
-                              ),
-                      ),
-                    ],
-                  ),
-                ),
+                    )),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -416,7 +383,7 @@ class _SellProducts extends State {
     });
   }
 
-  void _showAlertSelectImage(BuildContext context, index) async {
+  void _showAlertSelectImage(BuildContext context) async {
     print('Show Alert Dialog Image !');
     return showDialog(
         context: context,
@@ -431,7 +398,7 @@ class _SellProducts extends State {
                       child: GestureDetector(
                           child: Text('Gallery'),
                           onTap: () {
-                            _onGallery(index);
+                            _onGallery();
                           })),
                   SizedBox(
                     height: 10,
@@ -440,7 +407,7 @@ class _SellProducts extends State {
                       child: GestureDetector(
                           child: Text('Camera'),
                           onTap: () {
-                            _onCamera(index);
+                            _onCamera();
                           })),
                 ],
               ),
@@ -449,14 +416,14 @@ class _SellProducts extends State {
         });
   }
 
-  _onGallery(index) async {
+  _onGallery() async {
     print('Select Gallery');
     var _imageGallery = await ImagePicker()
         .getImage(source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
-        listImageFile.insert(index, imageFile!);
+        listImageFile.insert(0,imageFile!);
       });
       Navigator.of(context).pop();
       return listImageFile;
@@ -465,14 +432,14 @@ class _SellProducts extends State {
     }
   }
 
-  _onCamera(index) async {
+  _onCamera() async {
     print('Select Camera');
     var _imageGallery = await ImagePicker()
         .getImage(source: ImageSource.camera, maxHeight: 1920, maxWidth: 1080);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
-        listImageFile.insert(index, imageFile!);
+        listImageFile.insert(0,imageFile!);
       });
       Navigator.of(context).pop();
       return listImageFile;
@@ -571,7 +538,8 @@ class _SellProducts extends State {
 
       var request = http.MultipartRequest('POST', Uri.parse(urlSaveImage));
 
-      var _multipart = await http.MultipartFile.fromPath('picture', element.path);
+      var _multipart =
+          await http.MultipartFile.fromPath('picture', element.path);
       request.files.add(_multipart);
 
       request.headers.addAll(

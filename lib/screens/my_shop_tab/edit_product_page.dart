@@ -29,7 +29,8 @@ class _EditProductPage extends State {
   var _resImageData;
   var _resIdData;
   List? _listImage;
-  List _listUpdateImage = [];
+  List _listAddImage = [];
+  List _listDeleteImage = [];
 
   int? marketID;
   String? nameItem;
@@ -47,11 +48,14 @@ class _EditProductPage extends State {
       SnackBar(content: Text("กำลังแก้ไขสินค้า กรุณารอซักครู่..."));
   final snackBarOnSaveSuccess = SnackBar(content: Text("แก้ไขสินค้า สำเร็จ !"));
   final snackBarSaveFail = SnackBar(content: Text("แก้ไขสินค้า ล้มเหลว !"));
+  final snackBarNoHaveImage =
+      SnackBar(content: Text("ต้องใส่รูปอย่างน้อย 1 รูป !"));
   final urlSellProducts = "${Config.API_URL}/Item/update";
   final urlGetImageByItemId = "${Config.API_URL}/images/";
-  final urlUpdateImage = "${Config.API_URL}/images/update/";
   final urlDeleteItem = "${Config.API_URL}/Item/delete/";
   final urlDeleteImage = "${Config.API_URL}/images/deleteItemId";
+  final urlSaveImage = "${Config.API_URL}/images/save";
+  final urlDeleteImageByImageId = "${Config.API_URL}/images/deleteId/";
 
   @override
   void initState() {
@@ -67,7 +71,6 @@ class _EditProductPage extends State {
     dealFinal = itemData.dealFinal;
     dateBegin = itemData.dateBegin;
     dateFinal = itemData.dateFinal;
-    _listUpdateImage = [null, null, null];
     getImage(itemData.itemID).then((value) {
       if (value.length != 0) {
         setState(() {
@@ -112,85 +115,66 @@ class _EditProductPage extends State {
                                 decoration: BoxDecoration(border: Border.all()),
                                 child: CarouselSlider.builder(
                                   options: CarouselOptions(
-                                      enlargeCenterPage: true, autoPlay: false),
+                                      initialPage: 0,
+                                      enlargeCenterPage: true,
+                                      autoPlay: false),
                                   itemCount: _listImage!.length,
                                   itemBuilder: (BuildContext context, int index,
                                       int realIndex) {
-                                    return Stack(
-                                      children: [
-                                        Container(
-                                            height: 150,
-                                            width: double.infinity,
-                                            child: Image.memory(
-                                              base64Decode(_listImage![index]),
-                                              fit: BoxFit.fill,
-                                            )),
-                                      ],
-                                    );
+                                    return Container(
+                                        child: _listImage!.length == 0
+                                            ? Container(
+                                                child: Center(
+                                                    child:
+                                                        Text('กรุณาเพิ่มภาพ')))
+                                            : Stack(
+                                                children: [
+                                                  Container(
+                                                      height: 150,
+                                                      width: double.infinity,
+                                                      child: Image.memory(
+                                                        base64Decode(
+                                                            _listImage![index]),
+                                                        fit: BoxFit.fill,
+                                                      )),
+                                                  Positioned(
+                                                    top: 0,
+                                                    right: 0,
+                                                    child: IconButton(
+                                                        onPressed: () {
+                                                          _onDeleteImageShow(
+                                                              index, realIndex);
+                                                        },
+                                                        icon: Icon(
+                                                          Icons.remove_circle,
+                                                          color: Colors.red,
+                                                        )),
+                                                  ),
+                                                ],
+                                              ));
                                   },
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        _showAlertSelectImage(context, 0);
-                                      },
-                                      child: Container(
-                                        height: 80,
-                                        width: 80,
-                                        decoration:
-                                            BoxDecoration(border: Border.all()),
-                                        child: Container(
-                                          child: Image.memory(
-                                            base64Decode(_listImage![0]),
-                                            fit: BoxFit.fill,
-                                            width: double.infinity,
-                                          ),
-                                        ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _showAlertSelectImage(context);
+                                  },
+                                  child: Container(
+                                    decoration:
+                                        BoxDecoration(border: Border.all()),
+                                    height: 50,
+                                    width: 120,
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          Icon(Icons.add),
+                                          Text("เพิ่มรูปภาพ")
+                                        ],
                                       ),
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        _showAlertSelectImage(context, 1);
-                                      },
-                                      child: Container(
-                                        height: 80,
-                                        width: 80,
-                                        decoration:
-                                            BoxDecoration(border: Border.all()),
-                                        child: Container(
-                                          child: Image.memory(
-                                            base64Decode(_listImage![1]),
-                                            fit: BoxFit.fill,
-                                            width: double.infinity,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        _showAlertSelectImage(context, 2);
-                                      },
-                                      child: Container(
-                                        height: 80,
-                                        width: 80,
-                                        decoration:
-                                            BoxDecoration(border: Border.all()),
-                                        child: Container(
-                                          child: Image.memory(
-                                            base64Decode(_listImage![2]),
-                                            fit: BoxFit.fill,
-                                            width: double.infinity,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               )
                             ],
@@ -493,7 +477,7 @@ class _EditProductPage extends State {
         });
   }
 
-  void _showAlertSelectImage(BuildContext context, indexID) async {
+  void _showAlertSelectImage(BuildContext context) async {
     print('Show Alert Dialog Image !');
     return showDialog(
         context: context,
@@ -508,7 +492,7 @@ class _EditProductPage extends State {
                       child: GestureDetector(
                           child: Text('Gallery'),
                           onTap: () {
-                            _onGallery(indexID);
+                            _onGallery();
                           })),
                   SizedBox(
                     height: 10,
@@ -517,7 +501,7 @@ class _EditProductPage extends State {
                       child: GestureDetector(
                           child: Text('Camera'),
                           onTap: () {
-                            _onCamera(indexID);
+                            _onCamera();
                           })),
                 ],
               ),
@@ -526,20 +510,18 @@ class _EditProductPage extends State {
         });
   }
 
-  _onGallery(indexID) async {
+  _onGallery() async {
     print('Select Gallery');
     // ignore: deprecated_member_use
-    DataImageUpdate? dataImageUpdate;
     var _imageGallery = await ImagePicker()
         .getImage(source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
-        dataImageUpdate = DataImageUpdate(_resIdData[indexID], imageFile!);
+        _listImage!.insert(0, base64Encode(imageFile!.readAsBytesSync()));
+        _listAddImage.insert(0, imageFile);
       });
-      _listImage![indexID] = base64Encode(imageFile!.readAsBytesSync());
-      _listUpdateImage[indexID] = dataImageUpdate;
-      print("_listUpdateImage : ${_listUpdateImage}");
+      print("_listAddImage : ${_listAddImage}");
       Navigator.of(context).pop();
       return imageFile;
     } else {
@@ -547,20 +529,18 @@ class _EditProductPage extends State {
     }
   }
 
-  _onCamera(indexID) async {
+  _onCamera() async {
     print('Select Camera');
     // ignore: deprecated_member_use
-    DataImageUpdate? dataImageUpdate;
     var _imageGallery = await ImagePicker()
         .getImage(source: ImageSource.camera, maxHeight: 1920, maxWidth: 1080);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
-        dataImageUpdate = DataImageUpdate(_resIdData[indexID], imageFile!);
+        _listImage!.insert(0, base64Encode(imageFile!.readAsBytesSync()));
+        _listAddImage.insert(0, imageFile);
       });
-      _listImage![indexID] = base64Encode(imageFile!.readAsBytesSync());
-      _listUpdateImage[indexID] = dataImageUpdate;
-      print("_listUpdateImage : ${_listUpdateImage}");
+      print("_listAddImage : ${_listAddImage}");
       Navigator.of(context).pop();
       return imageFile;
     } else {
@@ -568,11 +548,68 @@ class _EditProductPage extends State {
     }
   }
 
+  _onDeleteImageShow(index, realIndex) {
+    print('Index on delete : ${index}');
+    print('Real Index on delete : ${realIndex}');
+    if (_listAddImage.length != 0) {
+      print("listAddItem != 0");
+      if (_resIdData.length != 0) {
+        setState(() {
+          _resIdData.removeAt(index);
+          _listImage!.removeAt(index);
+          _listAddImage.removeAt(index);
+        });
+      } else if (_resIdData.length == 0) {
+        setState(() {
+          _listImage!.removeAt(index);
+          _listAddImage.removeAt(index);
+        });
+      }
+    } else if (_listAddImage.length == 0) {
+      print("listAddItem == 0");
+      if (_resIdData.length != 0) {
+        setState(() {
+          _listDeleteImage.add(_resIdData[index]);
+          _resIdData.removeAt(index);
+          _listImage!.removeAt(index);
+        });
+      } else if (_resIdData.length == 0) {
+        setState(() {
+          _resIdData.removeAt(index);
+          _listImage!.removeAt(index);
+        });
+      }
+    }
+    print('list delete image : ${_listDeleteImage}');
+    print('list add image : ${_listAddImage}');
+  }
+
+  Future<List> getImage(_itemId) async {
+    await http.get(
+        Uri.parse('${urlGetImageByItemId.toString()}${_itemId.toString()}'),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+        }).then((res) {
+      print(res.body);
+      Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
+      var _statusData = jsonData['status'];
+      var _dataImage = jsonData['dataImages'];
+      if (_statusData == 1) {
+        _resImageData = _dataImage;
+        _resIdData = jsonData['dataId'];
+        //print("jsonData : ${_resData.toString()}");
+      }
+    });
+    return _resImageData;
+  }
+
   void updateItemData() {
-    print(itemData.nameItem);
-    print(price.toString());
-    print(itemData.dateBegin);
-    saveToDB();
+    if ((_listDeleteImage.length - _listImage!.length) ==
+        _listDeleteImage.length) {
+      ScaffoldMessenger.of(context).showSnackBar(snackBarNoHaveImage);
+    } else {
+      saveToDB();
+    }
   }
 
   void saveToDB() async {
@@ -602,7 +639,8 @@ class _EditProductPage extends State {
       var _resStatus = _resData['status'];
       setState(() {
         if (_resStatus == 1) {
-          upDateImage();
+          _checkListImageAdd();
+          _checkListImageDelete();
           ScaffoldMessenger.of(context).showSnackBar(snackBarOnSaveSuccess);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(snackBarSaveFail);
@@ -632,55 +670,51 @@ class _EditProductPage extends State {
     Navigator.of(context).pop();
   }
 
-  Future<List> getImage(_itemId) async {
-    await http.get(
-        Uri.parse('${urlGetImageByItemId.toString()}${_itemId.toString()}'),
-        headers: {
+  void _checkListImageAdd() {
+    if (_listAddImage.length != 0) {
+      print('list');
+      saveImage(itemData.itemID);
+    } else {
+      return print('No Have Image add');
+    }
+  }
+
+  void saveImage(_itemId) async {
+    print("ItemID : ${_itemId.toString()}");
+
+    _listAddImage.forEach((element) async {
+      print("save image Item ID : ${_itemId.toString()}");
+      print("Update image File : ${element}");
+
+      var request = http.MultipartRequest('POST', Uri.parse(urlSaveImage));
+
+      var _multipart =
+          await http.MultipartFile.fromPath('picture', element.path);
+      request.files.add(_multipart);
+
+      request.headers.addAll(
+          {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+      request.fields['itemId'] = _itemId.toString();
+      request.fields['marketId'] = marketID.toString();
+
+      await http.Response.fromStream(await request.send()).then((res) {
+        print(res.body);
+      });
+    });
+  }
+
+  void _checkListImageDelete() {
+    if (_listDeleteImage.length != 0) {
+      print('listDeleteImage : ${_listDeleteImage}');
+      _listDeleteImage.forEach((element) {
+        http.get(Uri.parse("${urlDeleteImageByImageId}${element}"), headers: {
           HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-        }).then((res) {
-      print(res.body);
-      Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      var _statusData = jsonData['status'];
-      var _dataImage = jsonData['dataImages'];
-      print(_resIdData);
-      if (_statusData == 1) {
-        _resImageData = _dataImage;
-        _resIdData = jsonData['dataId'];
-        //print("jsonData : ${_resData.toString()}");
-      }
-    });
-    print("_resData ${_resImageData.toString()}");
-    return _resImageData;
-  }
-
-  void upDateImage() async {
-    _listUpdateImage.forEach((element) async {
-      print("Update image ID : ${element.imageId}");
-      print("Update image File : ${element.image}");
-
-      if (element == 'null') {
-        print('No Have Image File !!!');
-      } else {
-        print('No Have Image File !!!');
-        var request = http.MultipartRequest(
-            'POST', Uri.parse("${urlUpdateImage}${element.imageId}"));
-        request.headers.addAll(
-            {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
-        var _multipart =
-            await http.MultipartFile.fromPath('picture', element.image.path);
-        request.files.add(_multipart);
-        request.fields['id'] = element.imageId.toString();
-        await http.Response.fromStream(await request.send()).then((res) {
-          print(res.body);
+        }).then((value) {
+          print(value.body);
         });
-      }
-    });
+      });
+    } else {
+      return print('No Have Image delete');
+    }
   }
-}
-
-class DataImageUpdate {
-  final int imageId;
-  final File image;
-
-  DataImageUpdate(this.imageId, this.image);
 }
