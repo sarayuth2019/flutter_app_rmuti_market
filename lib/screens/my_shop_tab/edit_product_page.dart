@@ -26,11 +26,14 @@ class _EditProductPage extends State {
   final itemData;
   final token;
 
-  var _resImageData;
-  var _resIdData;
-  List? _listImage;
-  List _listAddImage = [];
+  List? _resImageData;
+  List? _resIdData;
+  List? _listImageShow;
+  List _listFileAddImage = [];
+  List _listByteAddImage = [];
   List _listDeleteImage = [];
+  List _listDefaultImage = [];
+  bool? chekButton;
 
   int? marketID;
   String? nameItem;
@@ -74,7 +77,8 @@ class _EditProductPage extends State {
     getImage(itemData.itemID).then((value) {
       if (value.length != 0) {
         setState(() {
-          _listImage = value;
+          _listImageShow = value;
+          _listDefaultImage = value;
         });
       }
     });
@@ -106,7 +110,7 @@ class _EditProductPage extends State {
             child: Column(
               children: [
                 Container(
-                    child: _listImage != null
+                    child: _listImageShow != null
                         ? Column(
                             children: [
                               Container(
@@ -118,11 +122,11 @@ class _EditProductPage extends State {
                                       initialPage: 0,
                                       enlargeCenterPage: true,
                                       autoPlay: false),
-                                  itemCount: _listImage!.length,
+                                  itemCount: _listImageShow!.length,
                                   itemBuilder: (BuildContext context, int index,
                                       int realIndex) {
                                     return Container(
-                                        child: _listImage!.length == 0
+                                        child: _listImageShow!.length == 0
                                             ? Container(
                                                 child: Center(
                                                     child:
@@ -134,7 +138,8 @@ class _EditProductPage extends State {
                                                       width: double.infinity,
                                                       child: Image.memory(
                                                         base64Decode(
-                                                            _listImage![index]),
+                                                            _listImageShow![
+                                                                index]),
                                                         fit: BoxFit.fill,
                                                       )),
                                                   Positioned(
@@ -142,8 +147,8 @@ class _EditProductPage extends State {
                                                     right: 0,
                                                     child: IconButton(
                                                         onPressed: () {
-                                                          _onDeleteImageShow(
-                                                              index, realIndex);
+                                                          _onDeleteShowImageList(
+                                                              index);
                                                         },
                                                         icon: Icon(
                                                           Icons.remove_circle,
@@ -518,10 +523,15 @@ class _EditProductPage extends State {
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
-        _listImage!.insert(0, base64Encode(imageFile!.readAsBytesSync()));
-        _listAddImage.insert(0, imageFile);
+        _listImageShow!.insert(0, base64Encode(imageFile!.readAsBytesSync()));
+        _listByteAddImage.insert(0, base64Encode(imageFile!.readAsBytesSync()));
+        _listFileAddImage.insert(0, imageFile);
       });
-      print("_listAddImage : ${_listAddImage}");
+      chekButton = true;
+      print(chekButton);
+      print("_listByteAddImage : ${_listByteAddImage}");
+      print("_listFileAddImage : ${_listFileAddImage}");
+      print('_listImageShow length : ${_listImageShow!.length}');
       Navigator.of(context).pop();
       return imageFile;
     } else {
@@ -537,10 +547,15 @@ class _EditProductPage extends State {
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
-        _listImage!.insert(0, base64Encode(imageFile!.readAsBytesSync()));
-        _listAddImage.insert(0, imageFile);
+        _listImageShow!.insert(0, base64Encode(imageFile!.readAsBytesSync()));
+        _listByteAddImage.insert(0, base64Encode(imageFile!.readAsBytesSync()));
+        _listFileAddImage.insert(0, imageFile);
       });
-      print("_listAddImage : ${_listAddImage}");
+      chekButton = true;
+      print(chekButton);
+      print("_listByteAddImage : ${_listByteAddImage}");
+      print("_listFileAddImage : ${_listFileAddImage}");
+      print('_listImageShow length : ${_listImageShow!.length}');
       Navigator.of(context).pop();
       return imageFile;
     } else {
@@ -548,40 +563,38 @@ class _EditProductPage extends State {
     }
   }
 
-  _onDeleteImageShow(index, realIndex) {
-    print('Index on delete : ${index}');
-    print('Real Index on delete : ${realIndex}');
-    if (_listAddImage.length != 0) {
-      print("listAddItem != 0");
-      if (_resIdData.length != 0) {
+  _onDeleteShowImageList(index) {
+    print(index);
+    if (_listFileAddImage.length == 0) {
+      print("_listFileAddImage.length == 0");
+      if (index >= _listFileAddImage.length) {
+        print('รูปเดิม');
         setState(() {
-          _resIdData.removeAt(index);
-          _listImage!.removeAt(index);
-          _listAddImage.removeAt(index);
-        });
-      } else if (_resIdData.length == 0) {
-        setState(() {
-          _listImage!.removeAt(index);
-          _listAddImage.removeAt(index);
+          _listDeleteImage.add(_resIdData![index]);
+          _resIdData!.removeAt(index);
+          _listImageShow!.removeAt(index);
         });
       }
-    } else if (_listAddImage.length == 0) {
-      print("listAddItem == 0");
-      if (_resIdData.length != 0) {
+    } else if (_listFileAddImage.length != 0) {
+      print("_listFileAddImage.length != 0");
+      if (index <= _listFileAddImage.length - 1) {
+        print('รูปใหม่');
         setState(() {
-          _listDeleteImage.add(_resIdData[index]);
-          _resIdData.removeAt(index);
-          _listImage!.removeAt(index);
+          _listFileAddImage.removeAt(index);
+          _listImageShow!.removeAt(index);
         });
-      } else if (_resIdData.length == 0) {
+      } else if (index >= _listFileAddImage.length) {
+        print('รูปเดิม');
         setState(() {
-          _resIdData.removeAt(index);
-          _listImage!.removeAt(index);
+          _listDeleteImage.add(_resIdData![index - _listFileAddImage.length]);
+          _resIdData!.removeAt(index - _listFileAddImage.length);
+          _listImageShow!.removeAt(index);
         });
       }
     }
     print('list delete image : ${_listDeleteImage}');
-    print('list add image : ${_listAddImage}');
+    print('list add image : ${_listFileAddImage}');
+    print('list image show length : ${_listImageShow!.length}');
   }
 
   Future<List> getImage(_itemId) async {
@@ -600,11 +613,11 @@ class _EditProductPage extends State {
         //print("jsonData : ${_resData.toString()}");
       }
     });
-    return _resImageData;
+    return _resImageData!;
   }
 
   void updateItemData() {
-    if ((_listDeleteImage.length - _listImage!.length) ==
+    if ((_listDeleteImage.length - _listImageShow!.length) ==
         _listDeleteImage.length) {
       ScaffoldMessenger.of(context).showSnackBar(snackBarNoHaveImage);
     } else {
@@ -671,7 +684,7 @@ class _EditProductPage extends State {
   }
 
   void _checkListImageAdd() {
-    if (_listAddImage.length != 0) {
+    if (_listFileAddImage.length != 0) {
       print('list');
       saveImage(itemData.itemID);
     } else {
@@ -682,7 +695,7 @@ class _EditProductPage extends State {
   void saveImage(_itemId) async {
     print("ItemID : ${_itemId.toString()}");
 
-    _listAddImage.forEach((element) async {
+    _listFileAddImage.forEach((element) async {
       print("save image Item ID : ${_itemId.toString()}");
       print("Update image File : ${element}");
 
