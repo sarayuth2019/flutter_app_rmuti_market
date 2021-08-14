@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/main.dart';
-import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_up_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/main.dart';
+import 'package:flutter_app_rmuti_market/screens/account/sing_in_up/sing_up_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/adminMainPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -129,15 +130,26 @@ class _SingIn extends State {
       var _resStatus = resData['data'];
       var _resToken = resData['token'];
       var _resCustomerID = resData['marketId'];
+      var _resStatusMarket = resData['statusMarket'];
+
       setState(() {
         if (_resStatus == 1) {
+          print('status market : ${_resStatusMarket.toString()}');
           token = _resToken;
           marketID = _resCustomerID;
-          saveUserIDToDevice();
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage(token!,marketID!)),
-              (route) => false);
+          if(_resStatusMarket == "user"){
+            saveUserIDToDevice();
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage(token!,marketID!)),
+                    (route) => false);
+          }
+          else if (_resStatusMarket == "admin"){
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => AdminMainPage(token!,marketID!)),
+                    (route) => false);
+          }
         } else if (_resStatus == 0) {
           ScaffoldMessenger.of(context).showSnackBar(snackBarSingInFail);
         }

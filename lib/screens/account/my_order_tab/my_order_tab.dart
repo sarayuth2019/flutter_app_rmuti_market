@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/my_order_tab/manage_order.dart';
+import 'package:flutter_app_rmuti_market/screens/account/my_order_tab/manage_order.dart';
 import 'package:http/http.dart' as http;
 
 class MyOrderTab extends StatefulWidget {

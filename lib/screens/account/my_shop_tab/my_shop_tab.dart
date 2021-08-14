@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/my_shop_tab/edit_product_page.dart';
-import 'package:flutter_app_rmuti_market/screens/my_shop_tab/sell_products_tab.dart';
+import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/edit_product_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/sell_products_tab.dart';
 import 'package:http/http.dart' as http;
 
 class MyShop extends StatefulWidget {
