@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 class EditProductPage extends StatefulWidget {
   EditProductPage(this.itemData, this.token);
@@ -197,7 +198,9 @@ class _EditProductPage extends State {
                     children: [
                       Text('ชื่อสินค้า'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey[350]!),
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
                         child: Padding(
                             padding: const EdgeInsets.only(left: 8, right: 8),
                             child: TextField(
