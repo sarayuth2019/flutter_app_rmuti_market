@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Tab3 extends StatefulWidget{
+class AllUserPage extends StatefulWidget{
+  AllUserPage(this.token);
+  final token;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _Tab3();
+    return _AllUserPage(token);
   }
 }
-class _Tab3 extends State{
+class _AllUserPage extends State{
+  _AllUserPage(this.token);
+  final token;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

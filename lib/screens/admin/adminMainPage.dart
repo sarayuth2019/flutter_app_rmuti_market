@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/all_user/all_user_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/notify/notify_admin_tab.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/tab1/tab1.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/tab3/tab3.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/receipt/receipt_page.dart';
+
 
 class AdminMainPage extends StatefulWidget {
   AdminMainPage(this.token, this.marketId);
@@ -39,7 +40,7 @@ class _AdminMainPage extends State {
       body: PageView(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children: [Tab1(), NotifyAdminTab(token, marketId), Tab3()],
+        children: [ReceiptPage(token), NotifyAdminTab(token, marketId), AllUserPage(token)],
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.teal,
@@ -52,10 +53,10 @@ class _AdminMainPage extends State {
           });
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.receipt_long), label: "Receipt"),
           BottomNavigationBarItem(
               icon: Icon(Icons.notifications_active), label: "Notification"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "User"),
+          BottomNavigationBarItem(icon: Icon(Icons.supervisor_account_sharp), label: "All User"),
         ],
       ),
     );

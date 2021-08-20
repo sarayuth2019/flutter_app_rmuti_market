@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Tab1 extends StatefulWidget{
+class ReceiptPage extends StatefulWidget{
+  ReceiptPage(this.token);
+  final token;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _Tab1();
+    return _ReceiptPage(token);
   }
 }
-class _Tab1 extends State{
+class _ReceiptPage extends State{
+  _ReceiptPage(this.token);
+  final token;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
