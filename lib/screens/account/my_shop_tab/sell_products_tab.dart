@@ -81,7 +81,7 @@ class _SellProducts extends State {
                 Container(
                   height: 150,
                   width: double.infinity,
-                  decoration: BoxDecoration(border: Border.all()),
+                  decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                   child: listImageFile.length == 0
                       ? Container(
                           child: Column(
@@ -138,7 +138,7 @@ class _SellProducts extends State {
                         _showAlertSelectImage(context);
                       },
                       child: Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                         height: 50,
                         width: 120,
                         child: Center(
@@ -151,7 +151,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
+                    decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -168,7 +168,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
+                    decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -186,7 +186,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
+                    decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -204,7 +204,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
+                    decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -222,86 +222,80 @@ class _SellProducts extends State {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
-                    child: Column(
-                      children: [
-                        Text(
-                          "ระยะเวลาในการลงทะเบียน",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      _pickDealBegin(context);
-                                    },
-                                    icon: Icon(Icons.date_range)),
-                                Text("วันเริ่ม"),
-                                Text("${dealBegin ?? 'เลือกวันที่'}"),
-                              ],
-                            ),
-                            Icon(Icons.arrow_forward),
-                            Column(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      _pickDealFinal(context);
-                                    },
-                                    icon: Icon(Icons.date_range)),
-                                Text("วันสิ้นสุด"),
-                                Text("${dealFinal ?? 'เลือกวันที่'}"),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "ระยะเวลาในการลงทะเบียน",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    _pickDealBegin(context);
+                                  },
+                                  icon: Icon(Icons.date_range)),
+                              Text("วันเริ่ม"),
+                              Text("${dealBegin ?? 'เลือกวันที่'}"),
+                            ],
+                          ),
+                          Icon(Icons.arrow_forward),
+                          Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    _pickDealFinal(context);
+                                  },
+                                  icon: Icon(Icons.date_range)),
+                              Text("วันสิ้นสุด"),
+                              Text("${dealFinal ?? 'เลือกวันที่'}"),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
-                    child: Column(
-                      children: [
-                        Text(
-                          "ระยะเวลาในการใช้สิทธิ์ลดราคา",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      _pickDateBegin(context);
-                                    },
-                                    icon: Icon(Icons.date_range)),
-                                Text("วันเริ่ม"),
-                                Text('${dateBegin ?? 'เลือกวันที่'}'),
-                              ],
-                            ),
-                            Icon(Icons.arrow_forward),
-                            Column(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      _pickDateFinal(context);
-                                    },
-                                    icon: Icon(Icons.date_range)),
-                                Text("วันสิ้นสุด"),
-                                Text("${dateFinal ?? 'เลือกวันที่'}"),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "ระยะเวลาในการใช้สิทธิ์ลดราคา",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    _pickDateBegin(context);
+                                  },
+                                  icon: Icon(Icons.date_range)),
+                              Text("วันเริ่ม"),
+                              Text('${dateBegin ?? 'เลือกวันที่'}'),
+                            ],
+                          ),
+                          Icon(Icons.arrow_forward),
+                          Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    _pickDateFinal(context);
+                                  },
+                                  icon: Icon(Icons.date_range)),
+                              Text("วันสิ้นสุด"),
+                              Text("${dateFinal ?? 'เลือกวันที่'}"),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 Padding(

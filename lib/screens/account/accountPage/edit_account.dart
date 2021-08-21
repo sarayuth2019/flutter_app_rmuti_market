@@ -98,7 +98,7 @@ class _EditAccount extends State {
                     children: [
                       Text('ชื่อสินค้า'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                           child: TextField(
@@ -120,7 +120,7 @@ class _EditAccount extends State {
                     children: [
                       Text('ชื่อเจ้าของร้าน'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                           child: TextField(
@@ -142,7 +142,7 @@ class _EditAccount extends State {
                     children: [
                       Text('นามสกุล'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                           child: TextField(
@@ -164,7 +164,7 @@ class _EditAccount extends State {
                     children: [
                       Text('เบอร์โทร'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                           child: TextField(
@@ -188,7 +188,7 @@ class _EditAccount extends State {
                     children: [
                       Text('รายละเอียดที่ตั้งร้าน'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                           child: TextField(
