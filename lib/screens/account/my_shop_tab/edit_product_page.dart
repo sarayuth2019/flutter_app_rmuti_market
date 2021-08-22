@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import '';
 
 class EditProductPage extends StatefulWidget {
   EditProductPage(this.itemData, this.token);
@@ -60,6 +60,12 @@ class _EditProductPage extends State {
   final urlDeleteImage = "${Config.API_URL}/images/deleteItemId";
   final urlSaveImage = "${Config.API_URL}/images/save";
   final urlDeleteImageByImageId = "${Config.API_URL}/images/deleteId/";
+
+  BoxDecoration _boxDecorationGrey = BoxDecoration(
+      border: Border.all(color: Colors.grey[350]!),
+      borderRadius: BorderRadius.all(Radius.circular(5)));
+
+
 
   @override
   void initState() {
@@ -117,7 +123,7 @@ class _EditProductPage extends State {
                               Container(
                                 height: 150,
                                 width: double.infinity,
-                                decoration: BoxDecoration(border: Border.all()),
+                                decoration: _boxDecorationGrey,
                                 child: CarouselSlider.builder(
                                   options: CarouselOptions(
                                       initialPage: 0,
@@ -168,8 +174,7 @@ class _EditProductPage extends State {
                                     _showAlertSelectImage(context);
                                   },
                                   child: Container(
-                                    decoration:
-                                        BoxDecoration(border: Border.all()),
+                                    decoration: _boxDecorationGrey,
                                     height: 50,
                                     width: 120,
                                     child: Center(
@@ -188,7 +193,7 @@ class _EditProductPage extends State {
                         : Container(
                             height: 150,
                             width: double.infinity,
-                            decoration: BoxDecoration(border: Border.all()),
+                            decoration: _boxDecorationGrey,
                             child: Center(child: Text('กำลังโหลดภาพ...')),
                           )),
                 Padding(
@@ -198,9 +203,7 @@ class _EditProductPage extends State {
                     children: [
                       Text('ชื่อสินค้า'),
                       Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey[350]!),
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
                             padding: const EdgeInsets.only(left: 8, right: 8),
                             child: TextField(
@@ -222,7 +225,7 @@ class _EditProductPage extends State {
                     children: [
                       Text('ราคาลด'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                          decoration:_boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
@@ -247,7 +250,7 @@ class _EditProductPage extends State {
                     children: [
                       Text('ราคาปกติ'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
@@ -272,7 +275,7 @@ class _EditProductPage extends State {
                     children: [
                       Text('จำนวนคนที่ต้องการ'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
@@ -293,7 +296,6 @@ class _EditProductPage extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
                     child: Column(
                       children: [
                         Text(
@@ -335,7 +337,6 @@ class _EditProductPage extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all()),
                     child: Column(
                       children: [
                         Text(

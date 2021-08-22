@@ -30,6 +30,9 @@ class _EditAccount extends State {
   final snackBarEdit = SnackBar(content: Text("กำลังบันทึกการแก้ไข..."));
   final snackBarEditSuccess = SnackBar(content: Text("แก้ไขสำเร็จ"));
   final snackBarEditFall = SnackBar(content: Text("แก้ไขผิดพลาด"));
+  BoxDecoration _boxDecorationGrey = BoxDecoration(
+      border: Border.all(color: Colors.grey),
+      borderRadius: BorderRadius.circular(5));
 
   String? nameMarket;
   String? name;
@@ -96,13 +99,14 @@ class _EditAccount extends State {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('ชื่อสินค้า'),
+                      Text('ชื่อร้านค้า'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(
-                            decoration: InputDecoration(border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             controller: TextEditingController(text: nameMarket),
                             onChanged: (text) {
                               nameMarket = text;
@@ -120,11 +124,12 @@ class _EditAccount extends State {
                     children: [
                       Text('ชื่อเจ้าของร้าน'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(
-                            decoration: InputDecoration(border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             controller: TextEditingController(text: name),
                             onChanged: (text) {
                               name = text;
@@ -142,11 +147,12 @@ class _EditAccount extends State {
                     children: [
                       Text('นามสกุล'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(
-                            decoration: InputDecoration(border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             controller: TextEditingController(text: surname),
                             onChanged: (text) {
                               surname = text;
@@ -164,12 +170,13 @@ class _EditAccount extends State {
                     children: [
                       Text('เบอร์โทร'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(
                             keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             controller: TextEditingController(
                                 text: phoneNumber.toString()),
                             onChanged: (text) {
@@ -188,12 +195,13 @@ class _EditAccount extends State {
                     children: [
                       Text('รายละเอียดที่ตั้งร้าน'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(
                             maxLines: null,
-                            decoration: InputDecoration(border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             controller:
                                 TextEditingController(text: descriptionMarket),
                             onChanged: (text) {

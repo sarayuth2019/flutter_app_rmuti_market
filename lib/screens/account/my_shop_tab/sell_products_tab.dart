@@ -42,6 +42,10 @@ class _SellProducts extends State {
   bool checkText = false;
   String textPromotion = "เพิ่มโปรโมชันสินค้า";
 
+  BoxDecoration _boxDecorationGrey = BoxDecoration(
+      border: Border.all(color: Colors.grey[350]!),
+      borderRadius: BorderRadius.circular(5));
+
   String? nameMenu;
   int group = 1;
   int? price;
@@ -81,7 +85,7 @@ class _SellProducts extends State {
                 Container(
                   height: 150,
                   width: double.infinity,
-                  decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                  decoration: _boxDecorationGrey,
                   child: listImageFile.length == 0
                       ? Container(
                           child: Column(
@@ -99,7 +103,8 @@ class _SellProducts extends State {
                           child: CarouselSlider(
                             options: CarouselOptions(
                                 initialPage: 0,
-                                enlargeCenterPage: true, autoPlay: false),
+                                enlargeCenterPage: true,
+                                autoPlay: false),
                             items: listImageFile
                                 .map((e) => Stack(
                                       children: [
@@ -138,7 +143,7 @@ class _SellProducts extends State {
                         _showAlertSelectImage(context);
                       },
                       child: Container(
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                        decoration: _boxDecorationGrey,
                         height: 50,
                         width: 120,
                         child: Center(
@@ -151,7 +156,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                    decoration:_boxDecorationGrey,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -168,7 +173,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                    decoration: _boxDecorationGrey,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -186,7 +191,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                    decoration: _boxDecorationGrey,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -204,7 +209,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                    decoration: _boxDecorationGrey,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -417,7 +422,7 @@ class _SellProducts extends State {
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
-        listImageFile.insert(0,imageFile!);
+        listImageFile.insert(0, imageFile!);
       });
       Navigator.of(context).pop();
       return listImageFile;
@@ -433,7 +438,7 @@ class _SellProducts extends State {
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
-        listImageFile.insert(0,imageFile!);
+        listImageFile.insert(0, imageFile!);
       });
       Navigator.of(context).pop();
       return listImageFile;
