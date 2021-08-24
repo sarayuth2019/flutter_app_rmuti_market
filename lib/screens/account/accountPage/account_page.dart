@@ -153,11 +153,6 @@ class _AccountPage extends State {
         ));
   }
 
-  Future<void> _onRefresh() async {
-    setState(() {
-      sendAccountDataByUser();
-    });
-  }
 
   Future<MarketData> sendAccountDataByUser() async {
     await http.post(Uri.parse(urlSendAccountById), headers: {

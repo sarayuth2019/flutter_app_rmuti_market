@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
@@ -41,10 +42,6 @@ class _SellProducts extends State {
   final snackBarNoDateTime = SnackBar(content: Text("กรอกวันที่ให้ครบ"));
   bool checkText = false;
   String textPromotion = "เพิ่มโปรโมชันสินค้า";
-
-  BoxDecoration _boxDecorationGrey = BoxDecoration(
-      border: Border.all(color: Colors.grey[350]!),
-      borderRadius: BorderRadius.circular(5));
 
   String? nameMenu;
   int group = 1;
@@ -85,7 +82,7 @@ class _SellProducts extends State {
                 Container(
                   height: 150,
                   width: double.infinity,
-                  decoration: _boxDecorationGrey,
+                  decoration: boxDecorationGrey,
                   child: listImageFile.length == 0
                       ? Container(
                           child: Column(
@@ -143,7 +140,7 @@ class _SellProducts extends State {
                         _showAlertSelectImage(context);
                       },
                       child: Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         height: 50,
                         width: 120,
                         child: Center(
@@ -156,7 +153,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration:_boxDecorationGrey,
+                    decoration: boxDecorationGrey,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -173,7 +170,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: _boxDecorationGrey,
+                    decoration: boxDecorationGrey,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -191,7 +188,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: _boxDecorationGrey,
+                    decoration: boxDecorationGrey,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
@@ -209,7 +206,7 @@ class _SellProducts extends State {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: _boxDecorationGrey,
+                    decoration: boxDecorationGrey,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(

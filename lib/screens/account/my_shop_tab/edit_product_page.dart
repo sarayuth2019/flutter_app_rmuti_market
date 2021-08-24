@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import '';
@@ -61,9 +62,6 @@ class _EditProductPage extends State {
   final urlSaveImage = "${Config.API_URL}/images/save";
   final urlDeleteImageByImageId = "${Config.API_URL}/images/deleteId/";
 
-  BoxDecoration _boxDecorationGrey = BoxDecoration(
-      border: Border.all(color: Colors.grey[350]!),
-      borderRadius: BorderRadius.all(Radius.circular(5)));
 
 
 
@@ -123,7 +121,7 @@ class _EditProductPage extends State {
                               Container(
                                 height: 150,
                                 width: double.infinity,
-                                decoration: _boxDecorationGrey,
+                                decoration: boxDecorationGrey,
                                 child: CarouselSlider.builder(
                                   options: CarouselOptions(
                                       initialPage: 0,
@@ -174,7 +172,7 @@ class _EditProductPage extends State {
                                     _showAlertSelectImage(context);
                                   },
                                   child: Container(
-                                    decoration: _boxDecorationGrey,
+                                    decoration: boxDecorationGrey,
                                     height: 50,
                                     width: 120,
                                     child: Center(
@@ -193,7 +191,7 @@ class _EditProductPage extends State {
                         : Container(
                             height: 150,
                             width: double.infinity,
-                            decoration: _boxDecorationGrey,
+                            decoration: boxDecorationGrey,
                             child: Center(child: Text('กำลังโหลดภาพ...')),
                           )),
                 Padding(
@@ -203,7 +201,7 @@ class _EditProductPage extends State {
                     children: [
                       Text('ชื่อสินค้า'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                             padding: const EdgeInsets.only(left: 8, right: 8),
                             child: TextField(
@@ -225,7 +223,7 @@ class _EditProductPage extends State {
                     children: [
                       Text('ราคาลด'),
                       Container(
-                          decoration:_boxDecorationGrey,
+                          decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
@@ -250,7 +248,7 @@ class _EditProductPage extends State {
                     children: [
                       Text('ราคาปกติ'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
@@ -275,7 +273,7 @@ class _EditProductPage extends State {
                     children: [
                       Text('จำนวนคนที่ต้องการ'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
@@ -30,9 +31,7 @@ class _EditAccount extends State {
   final snackBarEdit = SnackBar(content: Text("กำลังบันทึกการแก้ไข..."));
   final snackBarEditSuccess = SnackBar(content: Text("แก้ไขสำเร็จ"));
   final snackBarEditFall = SnackBar(content: Text("แก้ไขผิดพลาด"));
-  BoxDecoration _boxDecorationGrey = BoxDecoration(
-      border: Border.all(color: Colors.grey),
-      borderRadius: BorderRadius.circular(5));
+
 
   String? nameMarket;
   String? name;
@@ -101,7 +100,7 @@ class _EditAccount extends State {
                     children: [
                       Text('ชื่อร้านค้า'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(
@@ -124,7 +123,7 @@ class _EditAccount extends State {
                     children: [
                       Text('ชื่อเจ้าของร้าน'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(
@@ -147,7 +146,7 @@ class _EditAccount extends State {
                     children: [
                       Text('นามสกุล'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(
@@ -170,7 +169,7 @@ class _EditAccount extends State {
                     children: [
                       Text('เบอร์โทร'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(
@@ -195,7 +194,7 @@ class _EditAccount extends State {
                     children: [
                       Text('รายละเอียดที่ตั้งร้าน'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: TextField(

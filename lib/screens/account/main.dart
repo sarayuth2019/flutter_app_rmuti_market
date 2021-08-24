@@ -63,7 +63,7 @@ class _HomePage extends State {
           });
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.add_business), label: "My Shop"),
           BottomNavigationBarItem(
               icon: Icon(Icons.notifications_active), label: "Notification"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "User"),
