@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
@@ -8,109 +7,316 @@ import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart
 import 'package:http/http.dart' as http;
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage(this.token);
+  PaymentPage(this.token, this.paymentData);
 
   final token;
+  final paymentData;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _PaymentPage(token);
+    return _PaymentPage(token, paymentData);
   }
 }
 
 class _PaymentPage extends State {
-  _PaymentPage(this.token);
+  _PaymentPage(this.token, this.paymentData);
 
   final token;
-  final String urlGetPayment = '${Config.API_URL}/Pay/list';
+  final paymentData;
+  final String urlGetPayImage = '${Config.API_URL}/ImagePay/listId';
+  final String urlGetPayData = '${Config.API_URL}/Pay/listId';
+  final String urlSavePay = '${Config.API_URL}/Pay/save';
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      body: FutureBuilder(
-        future: listPayment(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.data == null) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.data.length == 0) {
-            return Text(
-              'ไม่มีรายการการชำระเงิน',
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey),
-            );
-          } else {
-            return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                        decoration: boxDecorationGrey,
-                        child: ListTile(
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                        'ชำระเงินโดย UserId : ${snapshot.data[index].userId}'),
-                                    Icon(Icons.arrow_forward),
-                                    Text(
-                                        'MarketId : ${snapshot.data[index].marketId}')
-                                  ],
-                                ),
-                                Text('จำนวน : ${snapshot.data[index].amount} บาท')
-                              ],
+      appBar: AppBar(
+        title: Text(
+          'Payment Id : ${paymentData.payId}',
+          style: TextStyle(color: Colors.teal),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.teal),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+                decoration: boxDecorationGrey,
+                height: 400,
+                width: 250,
+                child: FutureBuilder(
+                  future: getImagePayment(paymentData.payId),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<dynamic> snapshotImage) {
+                    if (snapshotImage.data == null) {
+                      return Container(
+                          decoration: boxDecorationGrey,
+                          child: Center(child: Text('กำลังโหลดสลีป...')));
+                    } else {
+                      return Container(
+                          decoration: boxDecorationGrey,
+                          child: Image.memory(
+                            base64Decode(snapshotImage.data),
+                            fit: BoxFit.fill,
+                          ));
+                    }
+                  },
+                )),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: FutureBuilder(
+                  future: getPayData(paymentData.payId),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.data == null) {
+                      return Container(
+                          child: Center(child: CircularProgressIndicator()));
+                    } else {
+                      return Column(
+                        children: [
+                          Container(
+                            decoration: boxDecorationGrey,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'ชำระสินค้า : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('Item Id  ${snapshot.data.itemId} '),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'สินค้าของ : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                          'Market Id  ${snapshot.data.marketId} '),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'ชำระโดย : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('User Id ${snapshot.data.userId} '),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'ธนาคารที่โอน : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('${snapshot.data.bankTransfer}'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'ธนาคารที่รับ : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('${snapshot.data.bankReceive}'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'จำนวนเงิน : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('${snapshot.data.amount} บาท'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'วันที่โอน : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('${snapshot.data.date}'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'เวลาที่โอน : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('${snapshot.data.time}'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'เลขท้ายบัญชี 4 ตัว : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('${snapshot.data.lastNumber}'),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                            subtitle: Container(
-                                child:
-                                    snapshot.data[index].status == 'รอดำเนินการ'
-                                        ? ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                primary: Colors.teal),
-                                            onPressed: () {},
-                                            child: Text('ตรวจสอบการชำระเงิน'))
-                                        : Container()))),
-                  );
-                });
-          }
-        },
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Center(
+                            child: Container(
+                                child: snapshot.data.status == 'รอดำเนินการ'
+                                    ? ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.teal),
+                                        onPressed: () {
+                                          _showAlertSelectImage(context,snapshot.data);
+                                        },
+                                        child: Text('ได้รับเงินแล้ว'))
+                                    : Text('${snapshot.data.status}')),
+                          )
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Future<List<_Payment>> listPayment() async {
-    List<_Payment> _listPayment = [];
-    await http.get(Uri.parse(urlGetPayment), headers: {
+  void _showAlertSelectImage(BuildContext context,_paymentData) async {
+    print('Show Alert Dialog !');
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'ได้รับเงินถูกต้องตามจำนวน ?',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      child: GestureDetector(
+                          child: Text('ได้รับเงินแล้ว'), onTap: () {
+                        _saveStatusPayment(_paymentData);
+                        Navigator.pop(context);
+                      })),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      child: GestureDetector(
+                          child: Text('ยกเลิก'),
+                          onTap: () {
+                            Navigator.pop(context);
+                          })),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void _saveStatusPayment(_paymentData) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
+    String status = 'ชำระเงินสำเร็จ';
+    print('save pay ....');
+    Map params = Map();
+    params['payId'] = _paymentData.payId.toString();
+    params['userId'] = _paymentData.userId.toString();
+    params['marketId'] = _paymentData.marketId.toString();
+    params['itemId'] = _paymentData.itemId.toString();
+    params['bankTransfer'] = _paymentData.bankTransfer.toString();
+    params['bankReceive'] = _paymentData.bankReceive.toString();
+    params['date'] = _paymentData.date.toString();
+    params['time'] = _paymentData.time.toString();
+    params['amount'] = _paymentData.amount.toString();
+    params['lastNumber'] = _paymentData.lastNumber.toString();
+    params['status'] = status.toString();
+    await http.post(Uri.parse(urlSavePay), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
       print(res.body);
-      var resJson = jsonDecode(utf8.decode(res.bodyBytes));
-      var resData = resJson['data'];
-      for (var i in resData) {
-        _Payment _payment = _Payment(
-            i['payId'],
-            i['status'],
-            i['userId'],
-            i['marketId'],
-            i['itemId'],
-            i['amount'],
-            i['lastNumber'],
-            i['bankTransfer'],
-            i['bankReceive'],
-            i['date'],
-            i['time'],
-            i['dataTransfer']);
-        _listPayment.add(_payment);
+      var resData = jsonDecode(utf8.decode(res.bodyBytes));
+      var resStatus = resData['status'];
+      if (resStatus == 1) {
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ได้รับเงินครบตามจำนวน')));
+      }
+      else{
+        print('save fall !');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ชำระเงิน ผิดพลาด !')));
       }
     });
-    return _listPayment;
+  }
+
+  Future<void> getImagePayment(int payId) async {
+    var imagePay;
+    Map params = Map();
+    params['payId'] = payId.toString();
+    await http.post(Uri.parse(urlGetPayImage), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
+      var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
+      var imagePayData = jsonData['dataImages'];
+      imagePay = imagePayData;
+    });
+    return imagePay;
+  }
+
+  Future<void> getPayData(int payId) async {
+    var paymentData;
+    Map params = Map();
+    params['id'] = payId.toString();
+    await http.post(Uri.parse(urlGetPayData), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
+      var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
+      print(jsonData);
+      var _payData = jsonData['data'];
+      _Payment _payment = _Payment(
+          _payData['payId'],
+          _payData['status'],
+          _payData['userId'],
+          _payData['marketId'],
+          _payData['itemId'],
+          _payData['amount'],
+          _payData['lastNumber'],
+          _payData['bankTransfer'],
+          _payData['bankReceive'],
+          _payData['date'],
+          _payData['time'],
+          _payData['dataTransfer']);
+      paymentData = _payment;
+    });
+    return paymentData;
   }
 }
 
