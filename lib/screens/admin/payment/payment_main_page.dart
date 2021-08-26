@@ -29,85 +29,95 @@ class _PaymentMainPage extends State {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      body: FutureBuilder(
-        future: listPayment(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.data == null) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.data.length == 0) {
-            return Text(
-              'ไม่มีรายการการชำระเงิน',
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey),
-            );
-          } else {
-            return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                        decoration: boxDecorationGrey,
-                        child: ListTile(
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'payId : ${snapshot.data[index].payId}',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                        'ชำระเงินโดย User Id : ${snapshot.data[index].userId}'),
-                                    Icon(
-                                      Icons.arrow_forward,
-                                      color: Colors.teal,
-                                    ),
-                                    Text(
-                                        'Market Id : ${snapshot.data[index].marketId}')
-                                  ],
-                                ),
-                                Text(
-                                    'จำนวน : ${snapshot.data[index].amount} บาท')
-                              ],
-                            ),
-                            subtitle: Container(
-                                child: snapshot.data[index].status ==
-                                        'รอดำเนินการ'
-                                    ? ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.teal),
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PaymentPage(
-                                                          token,
-                                                          snapshot
-                                                              .data[index])));
-                                        },
-                                        child: Text('ตรวจสอบการชำระเงิน'))
-                                    : Container(
-                                        child: Center(
-                                          child: Text(
-                                              '${snapshot.data[index].status}',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green),),
-                                        ),
-                                      )))),
-                  );
-                });
-          }
-        },
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: Scaffold(
+        body: FutureBuilder(
+          future: listPayment(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.data == null) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.data.length == 0) {
+              return Text(
+                'ไม่มีรายการการชำระเงิน',
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey),
+              );
+            } else {
+              return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Container(
+                          decoration: boxDecorationGrey,
+                          child: ListTile(
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'payId : ${snapshot.data[index].payId}',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          'ชำระเงินโดย User Id : ${snapshot.data[index].userId}'),
+                                      Icon(
+                                        Icons.arrow_forward,
+                                        color: Colors.teal,
+                                      ),
+                                      Text(
+                                          'Market Id : ${snapshot.data[index].marketId}')
+                                    ],
+                                  ),
+                                  Text(
+                                      'จำนวน : ${snapshot.data[index].amount} บาท'),
+                                  Text('เลขท้ายบัญชี 4 ตัว : ${snapshot.data[index].lastNumber}'),
+                                ],
+                              ),
+                              subtitle: Container(
+                                  child: snapshot.data[index].status ==
+                                          'รอดำเนินการ'
+                                      ? ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              primary: Colors.teal),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PaymentPage(
+                                                            token,
+                                                            snapshot
+                                                                .data[index])));
+                                          },
+                                          child: Text('ตรวจสอบการชำระเงิน'))
+                                      : Container(
+                                          child: Center(
+                                            child: Text(
+                                                '${snapshot.data[index].status}',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green),),
+                                          ),
+                                        )))),
+                    );
+                  });
+            }
+          },
+        ),
       ),
     );
+  }
+
+  Future<void> _onRefresh()async{
+    setState(() {
+      listPayment();
+    });
   }
 
   Future<List<_Payment>> listPayment() async {

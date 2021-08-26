@@ -504,7 +504,6 @@ class _SellProducts extends State {
     params['dateFinal'] = dateFinal.toString();
     params['dealBegin'] = dealBegin.toString();
     params['dealFinal'] = dealFinal.toString();
-    //params['imageItems'] = imageFile.toString();
     http.post(Uri.parse(urlSellProducts), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {

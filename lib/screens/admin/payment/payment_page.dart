@@ -27,6 +27,20 @@ class _PaymentPage extends State {
   final String urlGetPayImage = '${Config.API_URL}/ImagePay/listId';
   final String urlGetPayData = '${Config.API_URL}/Pay/listId';
   final String urlSavePay = '${Config.API_URL}/Pay/save';
+  final String urlGetItemByItemId = '${Config.API_URL}/Item/list/item';
+  final String urlUpdateItem = '${Config.API_URL}/Item/update';
+
+  _Items? item;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getItemByUser(paymentData.itemId).then((value) {
+      item = value!;
+      print('Item Data : ${item}');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,10 +205,29 @@ class _PaymentPage extends State {
                                         style: ElevatedButton.styleFrom(
                                             primary: Colors.teal),
                                         onPressed: () {
-                                          _showAlertSelectImage(context,snapshot.data);
+                                          _showAlertGetMoney(
+                                              context, snapshot.data);
                                         },
                                         child: Text('ได้รับเงินแล้ว'))
-                                    : Text('${snapshot.data.status}')),
+                                    : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Container(
+                                          color: Colors.green,
+                                          height: 30,
+                                          width: double.infinity,
+                                          child: Center(
+                                            child: Text(
+                                                '${snapshot.data.status}',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                          ),
+                                        ),
+                                      ),
+                                    )),
                           )
                         ],
                       );
@@ -209,7 +242,7 @@ class _PaymentPage extends State {
     );
   }
 
-  void _showAlertSelectImage(BuildContext context,_paymentData) async {
+  void _showAlertGetMoney(BuildContext context, _paymentData) async {
     print('Show Alert Dialog !');
     return showDialog(
         context: context,
@@ -225,10 +258,11 @@ class _PaymentPage extends State {
                 children: [
                   Container(
                       child: GestureDetector(
-                          child: Text('ได้รับเงินแล้ว'), onTap: () {
-                        _saveStatusPayment(_paymentData);
-                        Navigator.pop(context);
-                      })),
+                          child: Text('ได้รับเงินแล้ว'),
+                          onTap: () {
+                            _saveStatusPayment(_paymentData);
+                            Navigator.pop(context);
+                          })),
                   SizedBox(
                     height: 10,
                   ),
@@ -246,7 +280,8 @@ class _PaymentPage extends State {
   }
 
   void _saveStatusPayment(_paymentData) async {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
     String status = 'ชำระเงินสำเร็จ';
     print('save pay ....');
     Map params = Map();
@@ -268,12 +303,48 @@ class _PaymentPage extends State {
       var resData = jsonDecode(utf8.decode(res.bodyBytes));
       var resStatus = resData['status'];
       if (resStatus == 1) {
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ได้รับเงินครบตามจำนวน')));
-      }
-      else{
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('ได้รับเงินครบตามจำนวน')));
+        updateItem();
+      } else {
         print('save fall !');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ชำระเงิน ผิดพลาด !')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('ชำระเงิน ผิดพลาด !')));
       }
+    });
+  }
+
+  void updateItem() async {
+    Map params = Map();
+    params['itemId'] = item!.itemId.toString();
+    params['marketId'] = item!.marketId.toString();
+    params['nameItems'] = item!.nameItem.toString();
+    params['groupItems'] = item!.groupItem.toString();
+    params['price'] = item!.price.toString();
+    params['priceSell'] = item!.priceSell.toString();
+    params['count'] = (item!.count + 1).toString();
+    params['countRequest'] = item!.countRequest.toString();
+    params['dateBegin'] = item!.dateBegin.toString();
+    params['dateFinal'] = item!.dateFinal.toString();
+    params['dealBegin'] = item!.dealBegin.toString();
+    params['dealFinal'] = item!.dealFinal.toString();
+    http.post(Uri.parse(urlUpdateItem), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
+      Navigator.of(context).pop();
+
+      Map _res = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
+      print(_res);
+      var _resStatus = _res['status'];
+      setState(() {
+        if (_resStatus == 1) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นสำเร็จ')));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นผิดพลาด')));
+        }
+      });
     });
   }
 
@@ -318,6 +389,37 @@ class _PaymentPage extends State {
     });
     return paymentData;
   }
+
+  Future<_Items?> getItemByUser(int itemId) async {
+    _Items? itemData;
+    Map params = Map();
+    params['id'] = itemId.toString();
+    await http.post(Uri.parse(urlGetItemByItemId), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
+      print("Get Item By Account Success");
+      Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
+      var _itemData = _jsonRes['data'];
+      print(_itemData);
+      _Items _items = _Items(
+        _itemData['itemId'],
+        _itemData['nameItems'],
+        _itemData['groupItems'],
+        _itemData['price'],
+        _itemData['priceSell'],
+        _itemData['count'],
+        _itemData['countRequest'],
+        _itemData['marketId'],
+        _itemData['dateBegin'],
+        _itemData['dateFinal'],
+        _itemData['dealBegin'],
+        _itemData['dealFinal'],
+        _itemData['createDate'],
+      );
+      itemData = _items;
+    });
+    return itemData;
+  }
 }
 
 class _Payment {
@@ -347,4 +449,35 @@ class _Payment {
       this.date,
       this.time,
       this.dataTransfer);
+}
+
+class _Items {
+  final int itemId;
+  final String nameItem;
+  final int groupItem;
+  final int price;
+  final int priceSell;
+  final int count;
+  final int countRequest;
+  final int marketId;
+  final String dateBegin;
+  final String dateFinal;
+  final String dealBegin;
+  final String dealFinal;
+  final String date;
+
+  _Items(
+      this.itemId,
+      this.nameItem,
+      this.groupItem,
+      this.price,
+      this.priceSell,
+      this.count,
+      this.countRequest,
+      this.marketId,
+      this.dateBegin,
+      this.dateFinal,
+      this.dealBegin,
+      this.dealFinal,
+      this.date);
 }
