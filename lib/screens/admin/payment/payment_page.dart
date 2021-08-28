@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/notify_method.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentPage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _PaymentPage extends State {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getItemByUser(paymentData.itemId).then((value) {
+    getItemByItemId(paymentData.itemId).then((value) {
       item = value!;
       print('Item Data : ${item}');
     });
@@ -45,201 +46,249 @@ class _PaymentPage extends State {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Payment Id : ${paymentData.payId}',
-          style: TextStyle(color: Colors.teal),
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Payment Id : ${paymentData.payId}',
+            style: TextStyle(color: Colors.teal),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.teal),
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.teal),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-                decoration: boxDecorationGrey,
-                height: 400,
-                width: 250,
-                child: FutureBuilder(
-                  future: getImagePayment(paymentData.payId),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<dynamic> snapshotImage) {
-                    if (snapshotImage.data == null) {
-                      return Container(
-                          decoration: boxDecorationGrey,
-                          child: Center(child: Text('กำลังโหลดสลีป...')));
-                    } else {
-                      return Container(
-                          decoration: boxDecorationGrey,
-                          child: Image.memory(
-                            base64Decode(snapshotImage.data),
-                            fit: BoxFit.fill,
-                          ));
-                    }
-                  },
-                )),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: FutureBuilder(
-                  future: getPayData(paymentData.payId),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                    if (snapshot.data == null) {
-                      return Container(
-                          child: Center(child: CircularProgressIndicator()));
-                    } else {
-                      return Column(
-                        children: [
-                          Container(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                  decoration: boxDecorationGrey,
+                  height: 400,
+                  width: 250,
+                  child: FutureBuilder(
+                    future: getImagePayment(paymentData.payId),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshotImage) {
+                      if (snapshotImage.data == null) {
+                        return Container(
                             decoration: boxDecorationGrey,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'ชำระสินค้า : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('Item Id  ${snapshot.data.itemId} '),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'สินค้าของ : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          'Market Id  ${snapshot.data.marketId} '),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'ชำระโดย : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('User Id ${snapshot.data.userId} '),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'ธนาคารที่โอน : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('${snapshot.data.bankTransfer}'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'ธนาคารที่รับ : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('${snapshot.data.bankReceive}'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'จำนวนเงิน : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('${snapshot.data.amount} บาท'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'วันที่โอน : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('${snapshot.data.date}'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'เวลาที่โอน : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('${snapshot.data.time}'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'เลขท้ายบัญชี 4 ตัว : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('${snapshot.data.lastNumber}'),
-                                    ],
-                                  ),
-                                ],
+                            child: Center(child: Text('กำลังโหลดสลีป...')));
+                      } else {
+                        return Container(
+                            decoration: boxDecorationGrey,
+                            child: Image.memory(
+                              base64Decode(snapshotImage.data),
+                              fit: BoxFit.fill,
+                            ));
+                      }
+                    },
+                  )),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: FutureBuilder(
+                    future: getPayData(paymentData.payId),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                      if (snapshot.data == null) {
+                        return Container(
+                            child: Center(child: CircularProgressIndicator()));
+                      } else {
+                        return Column(
+                          children: [
+                            Container(
+                              decoration: boxDecorationGrey,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'ชำระสินค้า : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text('Item Id  ${snapshot.data.itemId} '),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'สินค้าของ : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                            'Market Id  ${snapshot.data.marketId} '),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'ชำระโดย : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text('User Id ${snapshot.data.userId} '),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'ธนาคารที่โอน : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text('${snapshot.data.bankTransfer}'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'ธนาคารที่รับ : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text('${snapshot.data.bankReceive}'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'จำนวนเงิน : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text('${snapshot.data.amount} บาท'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'วันที่โอน : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text('${snapshot.data.date}'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'เวลาที่โอน : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text('${snapshot.data.time}'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'เลขท้ายบัญชี 4 ตัว : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text('${snapshot.data.lastNumber}'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'จำนวนผู้ลงทะเบียน : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                            '${item!.count}/${item!.countRequest}'),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Center(
-                            child: Container(
-                                child: snapshot.data.status == 'รอดำเนินการ'
-                                    ? ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.teal),
-                                        onPressed: () {
-                                          _showAlertGetMoney(
-                                              context, snapshot.data);
-                                        },
-                                        child: Text('ได้รับเงินแล้ว'))
-                                    : Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ClipRRect(
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                                child: item!.count == item!.countRequest
+                                    ? Container()
+                                    : Center(
+                                        child: Container(
+                                            child: snapshot.data.status ==
+                                                    'รอดำเนินการ'
+                                                ? ElevatedButton(
+                                                    style:
+                                                        ElevatedButton.styleFrom(
+                                                            primary: Colors.teal),
+                                                    onPressed: () {
+                                                      _showAlertGetMoney(
+                                                          context, snapshot.data);
+                                                    },
+                                                    child: Text('ได้รับเงินแล้ว'))
+                                                : Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      child: Container(
+                                                        color: Colors.green,
+                                                        height: 30,
+                                                        width: double.infinity,
+                                                        child: Center(
+                                                          child: Text(
+                                                            '${snapshot.data.status}',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color:
+                                                                    Colors.white),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )),
+                                      )),
+                            Container(
+                                child: item!.countRequest == item!.count
+                                    ? ClipRRect(
                                         borderRadius: BorderRadius.circular(5),
                                         child: Container(
-                                          color: Colors.green,
+                                          color: Colors.red,
                                           height: 30,
                                           width: double.infinity,
                                           child: Center(
-                                            child: Text(
-                                                '${snapshot.data.status}',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white),
-                                              ),
-                                          ),
+                                              child: Text(
+                                            'จำนวนผู้ลงทะเบียนครบแล้ว',
+                                            style: TextStyle(color: Colors.white),
+                                          )),
                                         ),
-                                      ),
-                                    )),
-                          )
-                        ],
-                      );
-                    }
-                  },
+                                      )
+                                    : Container()),
+                          ],
+                        );
+                      }
+                    },
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> _onRefresh()async{
+    setState(() {
+      getImagePayment(paymentData.payId);
+      getItemByItemId(paymentData.itemId);
+    });
   }
 
   void _showAlertGetMoney(BuildContext context, _paymentData) async {
@@ -305,7 +354,7 @@ class _PaymentPage extends State {
       if (resStatus == 1) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('ได้รับเงินครบตามจำนวน')));
-        updateItem();
+        updateItem(_paymentData);
       } else {
         print('save fall !');
         ScaffoldMessenger.of(context)
@@ -314,7 +363,7 @@ class _PaymentPage extends State {
     });
   }
 
-  void updateItem() async {
+  void updateItem(_paymentData) async {
     Map params = Map();
     params['itemId'] = item!.itemId.toString();
     params['marketId'] = item!.marketId.toString();
@@ -331,8 +380,6 @@ class _PaymentPage extends State {
     http.post(Uri.parse(urlUpdateItem), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
-      Navigator.of(context).pop();
-
       Map _res = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       print(_res);
       var _resStatus = _res['status'];
@@ -340,6 +387,9 @@ class _PaymentPage extends State {
         if (_resStatus == 1) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นสำเร็จ')));
+
+          String textStatus = 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์ที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
+          notifyMethod(context,token, _paymentData.userId, _paymentData.marketId, _paymentData.payId, _paymentData.amount, textStatus);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นผิดพลาด')));
@@ -390,7 +440,7 @@ class _PaymentPage extends State {
     return paymentData;
   }
 
-  Future<_Items?> getItemByUser(int itemId) async {
+  Future<_Items?> getItemByItemId(int itemId) async {
     _Items? itemData;
     Map params = Map();
     params['id'] = itemId.toString();
