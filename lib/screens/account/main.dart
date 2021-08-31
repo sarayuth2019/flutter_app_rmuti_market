@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/account/accountPage/account_page.dart';
-import 'package:flutter_app_rmuti_market/screens/account/my_order_tab/my_order_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
-import 'package:flutter_app_rmuti_market/screens/account/sing_in_up/sing_in_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/notify/notify_page.dart';
+import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() =>
@@ -48,11 +48,12 @@ class _HomePage extends State {
         physics: NeverScrollableScrollPhysics(),
         children: [
           MyShop(token,marketId),
-          MyOrderTab(token),
+          NotifyPage(token,marketId),
           AccountPage(token,marketId)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.teal,
         currentIndex: tabNum,
         backgroundColor: Colors.white,

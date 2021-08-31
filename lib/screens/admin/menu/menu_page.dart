@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/menu/search_payment_page.dart';
 
 class MenuPage extends StatefulWidget {
   MenuPage(this.token);
@@ -96,37 +97,42 @@ class _MenuPage extends State {
                 ),
               ),
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                height: 100,
-                width: 100,
-                color: Colors.teal,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.receipt_long,
-                            color: Colors.white,
-                            size: 50,
-                          ),
-                          Icon(
-                            Icons.search,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        'ค้นหา ใบเสร็จ',
-                        style: TextStyle(
-                          color: Colors.white,
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchPayment(token)));
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  color: Colors.teal,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.receipt_long,
+                              color: Colors.white,
+                              size: 50,
+                            ),
+                            Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        Text(
+                          'ค้นหา ใบเสร็จ',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

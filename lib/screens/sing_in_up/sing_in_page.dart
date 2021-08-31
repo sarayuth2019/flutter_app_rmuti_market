@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/main.dart';
-import 'package:flutter_app_rmuti_market/screens/account/sing_in_up/sing_up_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/adminMainPage.dart';
+import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_up_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

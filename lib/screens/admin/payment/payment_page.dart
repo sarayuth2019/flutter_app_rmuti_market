@@ -88,8 +88,8 @@ class _PaymentPage extends State {
                 child: Container(
                   child: FutureBuilder(
                     future: getPayData(paymentData.payId),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.data == null) {
                         return Container(
                             child: Center(child: CircularProgressIndicator()));
@@ -110,7 +110,8 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('Item Id  ${snapshot.data.itemId} '),
+                                        Text(
+                                            'Item Id  ${snapshot.data.itemId} '),
                                       ],
                                     ),
                                     Row(
@@ -131,7 +132,8 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('User Id ${snapshot.data.userId} '),
+                                        Text(
+                                            'User Id ${snapshot.data.marketId} '),
                                       ],
                                     ),
                                     Row(
@@ -220,17 +222,21 @@ class _PaymentPage extends State {
                                             child: snapshot.data.status ==
                                                     'รอดำเนินการ'
                                                 ? ElevatedButton(
-                                                    style:
-                                                        ElevatedButton.styleFrom(
-                                                            primary: Colors.teal),
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary:
+                                                                Colors.teal),
                                                     onPressed: () {
                                                       _showAlertGetMoney(
-                                                          context, snapshot.data);
+                                                          context,
+                                                          snapshot.data);
                                                     },
-                                                    child: Text('ได้รับเงินแล้ว'))
+                                                    child:
+                                                        Text('ได้รับเงินแล้ว'))
                                                 : Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -246,8 +252,8 @@ class _PaymentPage extends State {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                color:
-                                                                    Colors.white),
+                                                                color: Colors
+                                                                    .white),
                                                           ),
                                                         ),
                                                       ),
@@ -265,7 +271,8 @@ class _PaymentPage extends State {
                                           child: Center(
                                               child: Text(
                                             'จำนวนผู้ลงทะเบียนครบแล้ว',
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           )),
                                         ),
                                       )
@@ -284,7 +291,7 @@ class _PaymentPage extends State {
     );
   }
 
-  Future<void> _onRefresh()async{
+  Future<void> _onRefresh() async {
     setState(() {
       getImagePayment(paymentData.payId);
       getItemByItemId(paymentData.itemId);
@@ -388,8 +395,14 @@ class _PaymentPage extends State {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นสำเร็จ')));
 
-          String textStatus = 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์ที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
-          notifyMethod(context,token, _paymentData.userId, _paymentData.marketId, _paymentData.payId, _paymentData.amount, textStatus);
+          String textNotifyUser =
+              'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์ที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
+          notifyUserMethod(context, token, _paymentData.userId, _paymentData.payId,
+              _paymentData.amount, textNotifyUser);
+
+          String textNotifyMarket =
+              'ยืนยันการชำระเงินสำเร็จ จำนวนเงิน ';
+          notifyMarketMethod(context, token, _paymentData.marketId, _paymentData.payId, _paymentData.amount, textNotifyMarket);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นผิดพลาด')));

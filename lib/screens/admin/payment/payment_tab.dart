@@ -45,7 +45,6 @@ class _PaymentTab extends State {
                 child: Text(
                   'ไม่มีรายการการชำระเงิน',
                   style: TextStyle(
-                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey),
                 ),
@@ -71,7 +70,7 @@ class _PaymentTab extends State {
                                   Row(
                                     children: [
                                       Text(
-                                          'ชำระเงินโดย User Id : ${snapshot.data[index].userId}'),
+                                          'ชำระเงินโดย User Id : ${snapshot.data[index].marketId}'),
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 10.0, right: 10.0),
