@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/accountPage/edit_account.dart';
+import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/scan_qr_page.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,8 +93,7 @@ class _AccountPage extends State {
                               child: Text(
                                 "Market ID : ${snapshot.data.marketID}",
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -101,8 +101,7 @@ class _AccountPage extends State {
                               child: Text(
                                 "ชื่อร้าน : ${snapshot.data.nameMarket}",
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -110,8 +109,7 @@ class _AccountPage extends State {
                               child: Text(
                                 "ชื่อเจ้าของร้าน : ${snapshot.data.name} ${snapshot.data.surname}",
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -119,8 +117,7 @@ class _AccountPage extends State {
                               child: Text(
                                 "อีเมล : ${snapshot.data.email}",
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -128,8 +125,7 @@ class _AccountPage extends State {
                               child: Text(
                                 "เบอร์ติดต่อ : ${snapshot.data.phoneNumber}",
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -137,8 +133,7 @@ class _AccountPage extends State {
                               child: Text(
                                 "รายละเอียดที่อยู่ร้าน : ${snapshot.data.descriptionMarket}",
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
@@ -152,7 +147,6 @@ class _AccountPage extends State {
           },
         ));
   }
-
 
   Future<MarketData> sendAccountDataByUser() async {
     await http.post(Uri.parse(urlSendAccountById), headers: {

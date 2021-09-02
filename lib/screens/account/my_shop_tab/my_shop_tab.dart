@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/edit_product_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/sell_products_tab.dart';
+import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/scan_qr_page.dart';
 import 'package:http/http.dart' as http;
 
 class MyShop extends StatefulWidget {
@@ -57,6 +58,19 @@ class _MyShop extends State {
                 MaterialPageRoute(
                     builder: (context) => SellProducts(token, marketId)));
           },
+        ),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,elevation: 0,iconTheme: IconThemeData(color: Colors.teal),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ScannerQRCode(token)));
+                },
+                icon: Icon(Icons.qr_code_scanner))
+          ],
         ),
         body: RefreshIndicator(
           onRefresh: _onRefresh,
@@ -167,7 +181,9 @@ class _MyShop extends State {
                                                                   context,
                                                                   MaterialPageRoute(
                                                                       builder: (context) => EditProductPage(
-                                                                          snapshot.data[index],token)));
+                                                                          snapshot
+                                                                              .data[index],
+                                                                          token)));
                                                             },
                                                             child: Text(
                                                               "แก้ไข",

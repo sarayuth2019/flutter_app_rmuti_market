@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/account/accountPage/account_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/account/notify/notify_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/scan_qr_page.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,7 +50,8 @@ class _HomePage extends State {
         children: [
           MyShop(token,marketId),
           NotifyPage(token,marketId),
-          AccountPage(token,marketId)
+          AccountPage(token,marketId),
+          ScannerQRCode(token)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -67,7 +69,8 @@ class _HomePage extends State {
           BottomNavigationBarItem(icon: Icon(Icons.add_business), label: "My Shop"),
           BottomNavigationBarItem(
               icon: Icon(Icons.notifications_active), label: "Notification"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "User"),
+          BottomNavigationBarItem(icon: Icon(Icons.widgets), label: "Market"),
+          BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner), label: "Scan QR")
         ],
       ),
     );
