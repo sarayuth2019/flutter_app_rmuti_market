@@ -59,19 +59,6 @@ class _MyShop extends State {
                     builder: (context) => SellProducts(token, marketId)));
           },
         ),
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,elevation: 0,iconTheme: IconThemeData(color: Colors.teal),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ScannerQRCode(token)));
-                },
-                icon: Icon(Icons.qr_code_scanner))
-          ],
-        ),
         body: RefreshIndicator(
           onRefresh: _onRefresh,
           child: FutureBuilder(
@@ -149,24 +136,15 @@ class _MyShop extends State {
                                           ],
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8.0, right: 8.0),
+                                        padding: const EdgeInsets.only(top: 8.0,left: 8.0,right: 8.0),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.end,
                                           children: [
-                                            Text(
-                                              "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
                                             Container(
-                                                child: snapshot.data[index]
-                                                            .count !=
+                                                child: snapshot
+                                                            .data[index].count !=
                                                         0
                                                     ? Container()
                                                     : Container(
@@ -191,7 +169,25 @@ class _MyShop extends State {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
-                                                            ))))
+                                                            )))),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, right: 8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ],
                                         ),
                                       ),

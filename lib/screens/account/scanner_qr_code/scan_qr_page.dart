@@ -59,37 +59,50 @@ class _ScannerQRCode extends State {
               borderRadius: 8,
             ),
           ),
-          Positioned(
+         Positioned(
               bottom: 10,
               child: Container(
-                  child: paymentId == null
+                  child: _barcode == null
                       ? Container()
                       : Column(
                           children: [
-                            Text('${_barcode.toString()}'),
+                            Container(
+                                decoration: BoxDecoration(color: Colors.grey,borderRadius: BorderRadius.circular(5)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text('payment Id : ${_barcode!.code}',style: TextStyle(color: Colors.white),),
+                                )),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(primary: Colors.teal),
                                 onPressed: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              PaymentFormQRCode(paymentId)));
+                                              PaymentFormQRCode(token,paymentId)));
                                 },
                                 child: Text('ตรวจสอบ Payment')),
                           ],
                         )))
+
+
         ],
       ),
     );
   }
 
   void onQRViewCreated(QRViewController controller) {
-    setState(() => this.controller = controller);
-    controller.scannedDataStream.listen((dataScan) {
-      setState(() {
-        _barcode = dataScan;
-        paymentId = int.parse(dataScan.toString());
-      });
-    });
+   if(_barcode == null){
+     setState(() => this.controller = controller);
+     controller.scannedDataStream.listen((barCodeScan) {
+       return setState(() {
+         this._barcode = barCodeScan;
+         paymentId = int.parse(_barcode!.code);
+       });
+     });
+   }
+   else {
+     dispose();
+   }
   }
 }
