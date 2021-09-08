@@ -39,6 +39,9 @@ class _AccountPage extends State {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          leading: IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> ScannerQRCode(token)));
+          }, icon: Icon(Icons.qr_code_scanner,color: Colors.teal,)),
           actions: [
             TextButton(
                 onPressed: logout,

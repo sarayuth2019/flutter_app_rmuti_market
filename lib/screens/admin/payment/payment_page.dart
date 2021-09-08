@@ -87,7 +87,7 @@ class _PaymentPage extends State {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   child: FutureBuilder(
-                    future: getPayData(paymentData.payId),
+                    future: getPaymentData(paymentData.payId),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.data == null) {
@@ -164,6 +164,10 @@ class _PaymentPage extends State {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text('${snapshot.data.amount} บาท'),
+                                        Text('  :  '),
+                                        Text(
+                                          'ราคาสินค้า ${item!.priceSell.toString()} บาท'
+                                        ),
                                       ],
                                     ),
                                     Row(
@@ -397,12 +401,12 @@ class _PaymentPage extends State {
 
           String textNotifyUser =
               'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์ที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
-          notifyUserMethod(context, token, _paymentData.userId, _paymentData.payId,
-              _paymentData.amount, textNotifyUser);
+          notifyUserMethod(context, token, _paymentData.userId,
+              _paymentData.payId, _paymentData.amount, textNotifyUser);
 
-          String textNotifyMarket =
-              'ยืนยันการชำระเงินสำเร็จ จำนวนเงิน ';
-          notifyMarketMethod(context, token, _paymentData.marketId, _paymentData.payId, _paymentData.amount, textNotifyMarket);
+          String textNotifyMarket = 'ยืนยันการชำระเงินสำเร็จ จำนวนเงิน ';
+          notifyMarketMethod(context, token, _paymentData.marketId,
+              _paymentData.payId, _paymentData.amount, textNotifyMarket);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นผิดพลาด')));
@@ -425,7 +429,7 @@ class _PaymentPage extends State {
     return imagePay;
   }
 
-  Future<void> getPayData(int payId) async {
+  Future<void> getPaymentData(int payId) async {
     var paymentData;
     Map params = Map();
     params['id'] = payId.toString();

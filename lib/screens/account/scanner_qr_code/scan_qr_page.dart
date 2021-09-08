@@ -59,50 +59,59 @@ class _ScannerQRCode extends State {
               borderRadius: 8,
             ),
           ),
-         Positioned(
+          Positioned(
               bottom: 10,
               child: Container(
                   child: _barcode == null
                       ? Container()
                       : Column(
                           children: [
-                            Container(
-                                decoration: BoxDecoration(color: Colors.grey,borderRadius: BorderRadius.circular(5)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('payment Id : ${_barcode!.code}',style: TextStyle(color: Colors.white),),
-                                )),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(primary: Colors.teal),
+                           /* ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.teal),
                                 onPressed: () {
+                                  controller?.stopCamera();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              PaymentFormQRCode(token,paymentId)));
+                                              PaymentFormQRCode(
+                                                  token, paymentId!)));
                                 },
-                                child: Text('ตรวจสอบ Payment')),
+                                child: Text(
+                                    'ตรวจสอบ Payment Id ${paymentId.toString()}')),
+
+                            */
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.teal),
+                                onPressed: () {
+                                  controller?.resumeCamera();
+                                },
+                                child: Text('Scan New QR Code'))
                           ],
                         )))
-
-
         ],
       ),
     );
   }
 
   void onQRViewCreated(QRViewController controller) {
-   if(_barcode == null){
-     setState(() => this.controller = controller);
-     controller.scannedDataStream.listen((barCodeScan) {
-       return setState(() {
-         this._barcode = barCodeScan;
-         paymentId = int.parse(_barcode!.code);
-       });
-     });
-   }
-   else {
-     dispose();
-   }
+    if (_barcode == null) {
+      this.controller = controller;
+      controller.scannedDataStream.listen((barCodeScan) {
+        return setState(() {
+          this._barcode = barCodeScan;
+          controller.pauseCamera();
+          paymentId = int.parse(_barcode!.code);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PaymentFormQRCode(token, paymentId!)));
+        });
+      });
+    } else {
+      dispose();
+    }
   }
 }
