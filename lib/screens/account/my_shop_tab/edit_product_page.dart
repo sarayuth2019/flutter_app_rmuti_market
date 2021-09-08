@@ -62,9 +62,6 @@ class _EditProductPage extends State {
   final urlSaveImage = "${Config.API_URL}/images/save";
   final urlDeleteImageByImageId = "${Config.API_URL}/images/deleteId/";
 
-
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -223,7 +220,7 @@ class _EditProductPage extends State {
                     children: [
                       Text('ราคาลด'),
                       Container(
-                          decoration: boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
@@ -520,8 +517,8 @@ class _EditProductPage extends State {
   _onGallery() async {
     print('Select Gallery');
     // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker()
-        .getImage(source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
+    var _imageGallery = await ImagePicker().getImage(
+        source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
@@ -544,8 +541,8 @@ class _EditProductPage extends State {
   _onCamera() async {
     print('Select Camera');
     // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker()
-        .getImage(source: ImageSource.camera, maxHeight: 1920, maxWidth: 1080);
+    var _imageGallery = await ImagePicker().getImage(
+        source: ImageSource.camera, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);

@@ -415,7 +415,7 @@ class _SellProducts extends State {
   _onGallery() async {
     print('Select Gallery');
     var _imageGallery = await ImagePicker()
-        .getImage(source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
+        .getImage(source: ImageSource.gallery, maxWidth: 1000,imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
@@ -431,7 +431,7 @@ class _SellProducts extends State {
   _onCamera() async {
     print('Select Camera');
     var _imageGallery = await ImagePicker()
-        .getImage(source: ImageSource.camera, maxHeight: 1920, maxWidth: 1080);
+        .getImage(source: ImageSource.camera, maxWidth: 1000,imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
