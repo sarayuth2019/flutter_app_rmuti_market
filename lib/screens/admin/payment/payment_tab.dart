@@ -145,8 +145,8 @@ class _PaymentTab extends State {
     });
   }
 
-  Future<List<_Payment>> listPayment() async {
-    List<_Payment> _listPayment = [];
+  Future<List<Payment>> listPayment() async {
+    List<Payment> _listPayment = [];
     Map params = Map();
     params['status'] = tabStatus.toString();
     await http.post(Uri.parse(urlGetPaymentByStatusPayment),
@@ -158,7 +158,7 @@ class _PaymentTab extends State {
       print(resJson);
       var resData = resJson['dataId'];
       for (var i in resData) {
-        _Payment _payment = _Payment(
+        Payment _payment = Payment(
             i['payId'],
             i['status'],
             i['userId'],
@@ -178,7 +178,7 @@ class _PaymentTab extends State {
   }
 }
 
-class _Payment {
+class Payment {
   final int payId;
   final String status;
   final int userId;
@@ -192,7 +192,7 @@ class _Payment {
   final String time;
   final String dataTransfer;
 
-  _Payment(
+  Payment(
       this.payId,
       this.status,
       this.userId,

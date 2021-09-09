@@ -225,9 +225,9 @@ class _MyShop extends State {
     await Future.delayed(Duration(seconds: 3));
   }
 
-  Future<List<_Items>> listItemByUser() async {
+  Future<List<Items>> listItemByUser() async {
     Map params = Map();
-    List<_Items> listItem = [];
+    List<Items> listItem = [];
     params['market'] = marketId.toString();
     await http.post(Uri.parse(urlListItemByUser), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
@@ -237,7 +237,7 @@ class _MyShop extends State {
       var _itemData = _jsonRes['data'];
 
       for (var i in _itemData) {
-        _Items _items = _Items(
+        Items _items = Items(
           i['itemId'],
           i['nameItems'],
           i['groupItems'],
@@ -281,7 +281,7 @@ class _MyShop extends State {
   }
 }
 
-class _Items {
+class Items {
   final int itemID;
   final String nameItem;
   final int groupItems;
@@ -296,7 +296,7 @@ class _Items {
   final String dealFinal;
   final String date;
 
-  _Items(
+  Items(
       this.itemID,
       this.nameItem,
       this.groupItems,
