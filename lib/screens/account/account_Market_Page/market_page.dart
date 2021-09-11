@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/account/accountPage/edit_account.dart';
+import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/edit_account.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/scan_qr_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
@@ -11,8 +11,8 @@ import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AccountPage extends StatefulWidget {
-  AccountPage(this.token, this.marketId);
+class MarketPage extends StatefulWidget {
+  MarketPage(this.token, this.marketId);
 
   final token;
   final marketId;
@@ -20,12 +20,12 @@ class AccountPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _AccountPage(token, marketId);
+    return _MarketPage(token, marketId);
   }
 }
 
-class _AccountPage extends State {
-  _AccountPage(this.token, this.marketId);
+class _MarketPage extends State {
+  _MarketPage(this.token, this.marketId);
 
   final token;
   final marketId;
@@ -230,7 +230,7 @@ class _AccountPage extends State {
                                     child: Row(
                                       children: [
                                         Text(
-                                          "ระยะเวลาการใช้ส่วนลด : ${snapshot.data[index].dateBegin} - ${snapshot.data[index].dateFinal}",
+                                          "รวมเป็นเงิน : ${(snapshot.data[index].priceSell) * snapshot.data[index].count} บาท",
                                         )
                                       ],
                                     ),

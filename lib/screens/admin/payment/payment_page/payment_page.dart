@@ -3,7 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/item_data_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market_data_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/user_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_Image_payment_method.dart';
 import 'package:flutter_app_rmuti_market/screens/method/notify_method.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,7 +29,6 @@ class _PaymentPage extends State {
 
   final token;
   final paymentData;
-  final String urlGetPayImage = '${Config.API_URL}/ImagePay/listId';
   final String urlGetPayData = '${Config.API_URL}/Pay/listId';
   final String urlSavePay = '${Config.API_URL}/Pay/save';
   final String urlGetItemByItemId = '${Config.API_URL}/Item/list/item';
@@ -66,7 +69,7 @@ class _PaymentPage extends State {
                   height: 400,
                   width: 250,
                   child: FutureBuilder(
-                    future: getImagePayment(paymentData.payId),
+                    future: getImagePayment(token, paymentData.payId),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshotImage) {
                       if (snapshotImage.data == null) {
@@ -103,38 +106,94 @@ class _PaymentPage extends State {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'ชำระสินค้า : ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                            'Item Id  ${snapshot.data.itemId} '),
-                                      ],
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ItemDataPage(token, item)));
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'ชำระสินค้า : ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                              'Item Id  ${snapshot.data.itemId} '),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Icon(
+                                            Icons.search,
+                                            color: Colors.teal,
+                                            size: 20,
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'สินค้าของ : ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                            'Market Id  ${snapshot.data.marketId} '),
-                                      ],
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MarketDataPage(
+                                                        token,
+                                                        snapshot
+                                                            .data.marketId)));
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'สินค้าของ : ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                              'Market Id  ${snapshot.data.marketId} '),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Icon(
+                                            Icons.search,
+                                            color: Colors.teal,
+                                            size: 20,
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'ชำระโดย : ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                            'User Id ${snapshot.data.marketId} '),
-                                      ],
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UserDataPage(
+                                                        snapshot.data.userId,
+                                                        token)));
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'ชำระโดย : ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                              'User Id ${snapshot.data.userId} '),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Icon(
+                                            Icons.search,
+                                            color: Colors.teal,
+                                            size: 20,
+                                          )
+                                        ],
+                                      ),
                                     ),
                                     Row(
                                       children: [
@@ -166,8 +225,7 @@ class _PaymentPage extends State {
                                         Text('${snapshot.data.amount} บาท'),
                                         Text('  :  '),
                                         Text(
-                                          'ราคาสินค้า ${item!.priceSell.toString()} บาท'
-                                        ),
+                                            'ราคาสินค้า ${item!.priceSell.toString()} บาท'),
                                       ],
                                     ),
                                     Row(
@@ -297,7 +355,7 @@ class _PaymentPage extends State {
 
   Future<void> _onRefresh() async {
     setState(() {
-      getImagePayment(paymentData.payId);
+      getImagePayment(token, paymentData.payId);
       getItemByItemId(paymentData.itemId);
     });
   }
@@ -348,7 +406,7 @@ class _PaymentPage extends State {
     params['payId'] = _paymentData.payId.toString();
     params['userId'] = _paymentData.userId.toString();
     params['marketId'] = _paymentData.marketId.toString();
-    params['itemId'] = _paymentData.itemId.toString();
+    params['itemId'] = _paymentData.itemData.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
     params['date'] = _paymentData.date.toString();
@@ -415,20 +473,6 @@ class _PaymentPage extends State {
     });
   }
 
-  Future<void> getImagePayment(int payId) async {
-    var imagePay;
-    Map params = Map();
-    params['payId'] = payId.toString();
-    await http.post(Uri.parse(urlGetPayImage), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
-      var imagePayData = jsonData['dataImages'];
-      imagePay = imagePayData;
-    });
-    return imagePay;
-  }
-
   Future<void> getPaymentData(int payId) async {
     var paymentData;
     Map params = Map();
@@ -439,7 +483,7 @@ class _PaymentPage extends State {
       var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
       print(jsonData);
       var _payData = jsonData['data'];
-      _Payment _payment = _Payment(
+      Payment _payment = Payment(
           _payData['payId'],
           _payData['status'],
           _payData['userId'],
@@ -489,7 +533,7 @@ class _PaymentPage extends State {
   }
 }
 
-class _Payment {
+class Payment {
   final int payId;
   final String status;
   final int userId;
@@ -503,7 +547,7 @@ class _Payment {
   final String time;
   final String dataTransfer;
 
-  _Payment(
+  Payment(
       this.payId,
       this.status,
       this.userId,

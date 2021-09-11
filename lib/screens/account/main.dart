@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/account/accountPage/account_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/market_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/account/notify/notify_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/scan_qr_page.dart';
@@ -50,7 +50,7 @@ class _HomePage extends State {
         children: [
           MyShop(token,marketId),
           NotifyPage(token,marketId),
-          AccountPage(token,marketId),
+          MarketPage(token,marketId),
           ScannerQRCode(token)
         ],
       ),

@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/menu/menu_page.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/notify/notify_admin_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_main_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/search_payment/search_payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 
 class AdminMainPage extends StatefulWidget {
@@ -39,7 +38,10 @@ class _AdminMainPage extends State {
                     MaterialPageRoute(builder: (context) => SingIn()),
                     (route) => false);
               },
-              child: Text('logout',style: TextStyle(color: Colors.teal),))
+              child: Text(
+                'logout',
+                style: TextStyle(color: Colors.teal),
+              ))
         ],
         title: Text(
           'Admin Page',
@@ -51,11 +53,7 @@ class _AdminMainPage extends State {
       body: PageView(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children: [
-          PaymentMainPage(token),
-          NotifyAdminTab(token, marketId),
-          MenuPage(token)
-        ],
+        children: [PaymentMainPage(token), SearchPayment(token)],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -72,8 +70,7 @@ class _AdminMainPage extends State {
           BottomNavigationBarItem(
               icon: Icon(Icons.receipt_long), label: "Payment"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_active), label: "Notification"),
-          BottomNavigationBarItem(icon: Icon(Icons.widgets), label: "Menu"),
+              icon: Icon(Icons.search), label: "Search Payment"),
         ],
       ),
     );
