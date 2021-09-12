@@ -26,14 +26,15 @@ void notifyUserMethod(context, token, int userId, int payId, int amount,
   });
 }
 
-void notifyMarketMethod(context, token, int marketId, int payId, int amount,
+void notifyMarketMethod(context, token, int marketId, int payId, int count,int countRequest,
     String textStatus) async {
   print('Notify to user id ${marketId.toString()}');
   const String urlSaveMarketNotify = '${Config.API_URL}/MarketNotify/save';
   Map params = Map();
   params['marketId'] = marketId.toString();
   params['payId'] = payId.toString();
-  params['amount'] = amount.toString();
+  params['count'] = (count+1).toString();
+  params['countRequest'] = countRequest.toString();
   params['status'] = textStatus.toString();
   await http.post(Uri.parse(urlSaveMarketNotify), body: params, headers: {
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'

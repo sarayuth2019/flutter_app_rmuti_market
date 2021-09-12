@@ -1,30 +1,30 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
+
 class ItemDataPage extends StatefulWidget {
-  ItemDataPage(this.token, this.itemData);
+  ItemDataPage(this.token, this.itemId);
 
   final token;
-  final itemData;
+  final itemId;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _ItemDataPage(token, itemData);
+    return _ItemDataPage(token, itemId);
   }
 }
 
 class _ItemDataPage extends State {
-  _ItemDataPage(this.token, this.itemData);
+  _ItemDataPage(this.token, this.itemId);
 
   final token;
-  final itemData;
+  final itemId;
   final String urlGetItemDataByItemId = '${Config.API_URL}/Item/list/item';
   final String urlGetImageByItemId = "${Config.API_URL}/images/";
 
@@ -43,7 +43,7 @@ class _ItemDataPage extends State {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FutureBuilder(
-              future: getImage(itemData.itemId),
+              future: getImage(itemId),
               builder:
                   (BuildContext context, AsyncSnapshot<dynamic> snapshotImage) {
                 print(snapshotImage.data.runtimeType);
@@ -68,14 +68,14 @@ class _ItemDataPage extends State {
                         return Container(
                             child: snapshotImage.data.length == 0
                                 ? Container(
-                                child:
-                                Center(child: Text('กำลังโหลดภาพ...')))
+                                    child:
+                                        Center(child: Text('กำลังโหลดภาพ...')))
                                 : Container(
-                                height: 150,
-                                width: double.infinity,
-                                child: Image.memory(
-                                    base64Decode(snapshotImage.data[index]),
-                                    fit: BoxFit.fill)));
+                                    height: 150,
+                                    width: double.infinity,
+                                    child: Image.memory(
+                                        base64Decode(snapshotImage.data[index]),
+                                        fit: BoxFit.fill)));
                       },
                     ),
                   );
@@ -85,74 +85,90 @@ class _ItemDataPage extends State {
             SizedBox(
               height: 15,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: double.infinity,
-                decoration: boxDecorationGrey,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            FutureBuilder(
+              future: getItemData(itemId),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.data == null) {
+                  return CircularProgressIndicator();
+                } else {
+                  return Column(
                     children: [
-                      Text(
-                        itemData.nameItem,
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: boxDecorationGrey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  snapshot.data.nameItem,
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "ราคา ${snapshot.data.priceSell.toString()} บาท",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Text(
+                                  "ลดราคาจาก ${snapshot.data.price.toString()} บาท",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  "จำนวนคนที่ต้องการ ${snapshot.data.countRequest} คน",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  "มีผู้เข้าร่วมแล้ว ${snapshot.data.count} คน",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                      Text(
-                        "ราคา ${itemData.priceSell.toString()} บาท",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        "ลดราคาจาก ${itemData.price.toString()} บาท",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        "จำนวนคนที่ต้องการ ${itemData.countRequest} คน",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        "มีผู้เข้าร่วมแล้ว ${itemData.count} คน",
-                        style: TextStyle(fontSize: 16),
-                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: boxDecorationGrey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "ระยะเวลาลงทะเบียนเข้าร่วม",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "${snapshot.data.dealBegin} - ${snapshot.data.dealFinal}",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  "ระยะเวลาที่สามารถใช้สิทธิ์ได้",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "${snapshot.data.dateBegin} - ${snapshot.data.dateFinal}",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
                     ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: double.infinity,
-                decoration: boxDecorationGrey,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "ระยะเวลาลงทะเบียนเข้าร่วม",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "${itemData.dealBegin} - ${itemData.dealFinal}",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        "ระยะเวลาที่สามารถใช้สิทธิ์ได้",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "${itemData.dateBegin} - ${itemData.dateFinal}",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                  );
+                }
+              },
             ),
             SizedBox(
               height: 10,
@@ -163,32 +179,31 @@ class _ItemDataPage extends State {
     );
   }
 
-
-  Future<_Items?>getItemData( int itemId) async {
+  Future<_Items?> getItemData(int itemId) async {
     Map params = Map();
     _Items? _items;
     params['id'] = itemId.toString();
-    await http.post(Uri.parse(urlGetItemDataByItemId),body: params, headers: {
+    await http.post(Uri.parse(urlGetItemDataByItemId), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var itemData = _jsonRes['data'];
       print(itemData);
-        _items = _Items(
-          itemData['itemId'],
-          itemData['nameItems'],
-          itemData['groupItems'],
-          itemData['price'],
-          itemData['priceSell'],
-          itemData['count'],
-          itemData['countRequest'],
-          itemData['marketId'],
-          itemData['dateBegin'],
-          itemData['dateFinal'],
-          itemData['dealBegin'],
-          itemData['dealFinal'],
-          itemData['createDate'],
-        );
+      _items = _Items(
+        itemData['itemId'],
+        itemData['nameItems'],
+        itemData['groupItems'],
+        itemData['price'],
+        itemData['priceSell'],
+        itemData['count'],
+        itemData['countRequest'],
+        itemData['marketId'],
+        itemData['dateBegin'],
+        itemData['dateFinal'],
+        itemData['dealBegin'],
+        itemData['dealFinal'],
+        itemData['createDate'],
+      );
     });
     return _items;
   }
@@ -214,7 +229,6 @@ class _ItemDataPage extends State {
     return _resData;
   }
 }
-
 
 class _Items {
   final int itemId;

@@ -66,8 +66,8 @@ class _NotifyPage extends State {
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
-                      padding:
-                          const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8),
+                      padding: const EdgeInsets.only(
+                          right: 8.0, left: 8.0, bottom: 8),
                       child: Stack(
                         children: [
                           Container(
@@ -86,20 +86,42 @@ class _NotifyPage extends State {
                                   Row(
                                     children: [
                                       Text(
-                                        '${snapshot.data[index].status.split(" ")[0]}',
+                                        '${snapshot.data[index].status.split(' ')[0]}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
-                                        width: 10,
+                                        width: 8,
                                       ),
-                                      Container(
-                                          child: snapshot.data[index].amount == 0
-                                              ? Container()
-                                              : Text(
-                                                  'จำนวนเงิน : ${snapshot.data[index].amount} บาท'))
+                                      Text(
+                                        '${snapshot.data[index].status.split(' ')[1]}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        '${snapshot.data[index].status.split(' ')[2]}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        '${snapshot.data[index].status.split(' ')[3]}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        '${snapshot.data[index].status.split(' ')[4]}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ],
                                   ),
+                                  Text(
+                                    '${snapshot.data[index].status.split(' ')[5]}',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                      'จำนวนผู้ลงทะเบียน ${snapshot.data[index].count}/${snapshot.data[index].countRequest}'),
                                   SizedBox(
                                     width: 15,
                                   ),
@@ -107,7 +129,8 @@ class _NotifyPage extends State {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Text('${snapshot.data[index].createDate}'),
+                                      Text(
+                                          '${snapshot.data[index].createDate}'),
                                     ],
                                   ),
                                 ],
@@ -150,10 +173,10 @@ class _NotifyPage extends State {
             '${urlDeleteNotifyByNotifyId.toString()}/${notifyId.toString()}'),
         headers: {
           HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-        }).then((res){
-          setState(() {
-            print(res.body);
-          });
+        }).then((res) {
+      setState(() {
+        print(res.body);
+      });
     });
   }
 
@@ -180,8 +203,8 @@ class _NotifyPage extends State {
       var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
       var resData = jsonData['data'];
       for (var i in resData) {
-        _Notify _notify = _Notify(i['notifyId'], i['amount'], i['status'],
-            i['marketId'], i['payId'], i['createDate']);
+        _Notify _notify = _Notify(i['notifyId'], i['count'], i['countRequest'],
+            i['status'], i['marketId'], i['payId'], i['createDate']);
         listNotify.insert(0, _notify);
       }
     });
@@ -191,12 +214,13 @@ class _NotifyPage extends State {
 
 class _Notify {
   final int notifyId;
-  final int amount;
+  final int count;
+  final int countRequest;
   final String status;
   final int marketId;
   final int payId;
   final String createDate;
 
-  _Notify(this.notifyId, this.amount, this.status, this.marketId, this.payId,
-      this.createDate);
+  _Notify(this.notifyId, this.count, this.countRequest, this.status,
+      this.marketId, this.payId, this.createDate);
 }

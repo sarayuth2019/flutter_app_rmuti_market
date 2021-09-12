@@ -112,7 +112,7 @@ class _PaymentPage extends State {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ItemDataPage(token, item)));
+                                                    ItemDataPage(token, item!.itemId)));
                                       },
                                       child: Row(
                                         children: [
@@ -225,7 +225,7 @@ class _PaymentPage extends State {
                                         Text('${snapshot.data.amount} บาท'),
                                         Text('  :  '),
                                         Text(
-                                            'ราคาสินค้า ${item!.priceSell.toString()} บาท'),
+                                            'ราคาสินค้า ${item!.priceSell} บาท'),
                                       ],
                                     ),
                                     Row(
@@ -258,16 +258,38 @@ class _PaymentPage extends State {
                                         Text('${snapshot.data.lastNumber}'),
                                       ],
                                     ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'จำนวนผู้ลงทะเบียน : ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                            '${item!.count}/${item!.countRequest}'),
-                                      ],
+                                    FutureBuilder(
+                                      future:
+                                          getItemByItemId(paymentData.itemId),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<dynamic> snapshot) {
+                                        if (snapshot.data == null) {
+                                          return Row(
+                                            children: [
+                                              Text(
+                                                'จำนวนผู้ลงทะเบียน : ',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text('.../...'),
+                                            ],
+                                          );
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              Text(
+                                                'จำนวนผู้ลงทะเบียน : ',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                  '${item!.count}/${item!.countRequest}'),
+                                            ],
+                                          );
+                                        }
+                                      },
                                     )
                                   ],
                                 ),
@@ -406,7 +428,7 @@ class _PaymentPage extends State {
     params['payId'] = _paymentData.payId.toString();
     params['userId'] = _paymentData.userId.toString();
     params['marketId'] = _paymentData.marketId.toString();
-    params['itemId'] = _paymentData.itemData.toString();
+    params['itemId'] = _paymentData.itemId.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
     params['date'] = _paymentData.date.toString();
@@ -433,6 +455,15 @@ class _PaymentPage extends State {
   }
 
   void updateItem(_paymentData) async {
+    var _dateBegin =
+        '${item!.dateBegin.split('/')[1]}/${item!.dateBegin.split('/')[0]}/${item!.dateBegin.split('/')[2]}';
+    var _dateFinal =
+        '${item!.dateFinal.split('/')[1]}/${item!.dateFinal.split('/')[0]}/${item!.dateFinal.split('/')[2]}';
+    var _dealBegin =
+        '${item!.dealBegin.split('/')[1]}/${item!.dealBegin.split('/')[0]}/${item!.dealBegin.split('/')[2]}';
+    var _dealFinal =
+        '${item!.dealFinal.split('/')[1]}/${item!.dealFinal.split('/')[0]}/${item!.dealFinal.split('/')[2]}';
+
     Map params = Map();
     params['itemId'] = item!.itemId.toString();
     params['marketId'] = item!.marketId.toString();
@@ -442,10 +473,10 @@ class _PaymentPage extends State {
     params['priceSell'] = item!.priceSell.toString();
     params['count'] = (item!.count + 1).toString();
     params['countRequest'] = item!.countRequest.toString();
-    params['dateBegin'] = item!.dateBegin.toString();
-    params['dateFinal'] = item!.dateFinal.toString();
-    params['dealBegin'] = item!.dealBegin.toString();
-    params['dealFinal'] = item!.dealFinal.toString();
+    params['dateBegin'] = _dateBegin.toString();
+    params['dateFinal'] = _dateFinal.toString();
+    params['dealBegin'] = _dealBegin.toString();
+    params['dealFinal'] = _dealFinal.toString();
     http.post(Uri.parse(urlUpdateItem), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
@@ -462,9 +493,16 @@ class _PaymentPage extends State {
           notifyUserMethod(context, token, _paymentData.userId,
               _paymentData.payId, _paymentData.amount, textNotifyUser);
 
-          String textNotifyMarket = 'ยืนยันการชำระเงินสำเร็จ จำนวนเงิน ';
-          notifyMarketMethod(context, token, _paymentData.marketId,
-              _paymentData.payId, _paymentData.amount, textNotifyMarket);
+          String textNotifyMarket =
+              'ยืนยันการลงทะเบียนสินค้า Item Id : ${item!.itemId} ${item!.nameItem}';
+          notifyMarketMethod(
+              context,
+              token,
+              _paymentData.marketId,
+              _paymentData.payId,
+              item!.count,
+              item!.countRequest,
+              textNotifyMarket);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นผิดพลาด')));
@@ -529,6 +567,7 @@ class _PaymentPage extends State {
       );
       itemData = _items;
     });
+    item = itemData;
     return itemData;
   }
 }

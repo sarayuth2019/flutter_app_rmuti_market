@@ -64,7 +64,7 @@ class _PaymentFormQRCode extends State {
                                     '${snapshot.data.status}',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.amber),
+                                        color: Colors.blue),
                                   ),
                           )
                         ],
