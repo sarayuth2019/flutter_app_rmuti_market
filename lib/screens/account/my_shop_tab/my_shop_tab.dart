@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/edit_product_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/sell_products_tab.dart';
-import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/scan_qr_page.dart';
 import 'package:http/http.dart' as http;
 
 class MyShop extends StatefulWidget {
@@ -225,9 +224,9 @@ class _MyShop extends State {
     await Future.delayed(Duration(seconds: 3));
   }
 
-  Future<List<Items>> listItemByUser() async {
+  Future<List<Item>> listItemByUser() async {
     Map params = Map();
-    List<Items> listItem = [];
+    List<Item> listItem = [];
     params['market'] = marketId.toString();
     await http.post(Uri.parse(urlListItemByUser), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
@@ -237,7 +236,7 @@ class _MyShop extends State {
       var _itemData = _jsonRes['data'];
 
       for (var i in _itemData) {
-        Items _items = Items(
+        Item _items = Item(
           i['itemId'],
           i['nameItems'],
           i['groupItems'],
@@ -281,7 +280,7 @@ class _MyShop extends State {
   }
 }
 
-class Items {
+class Item {
   final int itemID;
   final String nameItem;
   final int groupItems;
@@ -296,7 +295,7 @@ class Items {
   final String dealFinal;
   final String date;
 
-  Items(
+  Item(
       this.itemID,
       this.nameItem,
       this.groupItems,

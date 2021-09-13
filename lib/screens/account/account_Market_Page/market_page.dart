@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/edit_account.dart';
-import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/payment_by_item_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/payment_of_item_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/scan_qr_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
@@ -194,7 +194,7 @@ class _MarketPage extends State {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PaymentByItemId(
+                                        builder: (context) => PaymentOfItemId(
                                             token,
                                             snapshot.data[index].itemID)));
                               },
@@ -287,9 +287,9 @@ class _MarketPage extends State {
     return _marketAccountData!;
   }
 
-  Future<List<Items>> listItemByUser() async {
+  Future<List<Item>> listItemByUser() async {
     Map params = Map();
-    List<Items> listItemSell = [];
+    List<Item> listItemSell = [];
     params['market'] = marketId.toString();
     await http.post(Uri.parse(urlListItemByMarketId), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
@@ -299,7 +299,7 @@ class _MarketPage extends State {
       var _itemData = _jsonRes['data'];
 
       for (var i in _itemData) {
-        Items _items = Items(
+        Item _items = Item(
           i['itemId'],
           i['nameItems'],
           i['groupItems'],
