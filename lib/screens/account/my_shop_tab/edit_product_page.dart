@@ -517,8 +517,7 @@ class _EditProductPage extends State {
   _onGallery() async {
     print('Select Gallery');
     // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker().getImage(
-        source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
+    var _imageGallery = await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
@@ -541,11 +540,10 @@ class _EditProductPage extends State {
   _onCamera() async {
     print('Select Camera');
     // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker().getImage(
-        source: ImageSource.camera, maxWidth: 1000, imageQuality: 100);
-    if (_imageGallery != null) {
+    var _imageCamera = await ImagePicker().pickImage(source: ImageSource.camera, maxWidth: 1000, imageQuality: 100);
+    if (_imageCamera != null) {
       setState(() {
-        imageFile = File(_imageGallery.path);
+        imageFile = File(_imageCamera.path);
         _listImageShow!.insert(0, base64Encode(imageFile!.readAsBytesSync()));
         _listByteAddImage.insert(0, base64Encode(imageFile!.readAsBytesSync()));
         _listFileAddImage.insert(0, imageFile);
