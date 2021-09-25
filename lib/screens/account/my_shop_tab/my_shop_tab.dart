@@ -135,43 +135,6 @@ class _MyShop extends State {
                                           ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8.0,left: 8.0,right: 8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                                child: snapshot
-                                                            .data[index].count !=
-                                                        0
-                                                    ? Container()
-                                                    : Container(
-                                                        height: 20,
-                                                        child: ElevatedButton(
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                    primary: Colors
-                                                                        .orange),
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) => EditProductPage(
-                                                                          snapshot
-                                                                              .data[index],
-                                                                          token)));
-                                                            },
-                                                            child: Text(
-                                                              "แก้ไข",
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            )))),
-                                          ],
-                                        ),
-                                      ),
                                       SizedBox(
                                         height: 8,
                                       ),
@@ -187,6 +150,34 @@ class _MyShop extends State {
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
+                                            Container(
+                                                child: snapshot
+                                                    .data[index].count !=
+                                                    0
+                                                    ? Container()
+                                                    : Container(
+                                                    height: 20,
+                                                    child: ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                            primary: Colors
+                                                                .orange),
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) => EditProductPage(
+                                                                      snapshot
+                                                                          .data[index],
+                                                                      token)));
+                                                        },
+                                                        child: Text(
+                                                          "แก้ไข",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold),
+                                                        )))),
                                           ],
                                         ),
                                       ),
