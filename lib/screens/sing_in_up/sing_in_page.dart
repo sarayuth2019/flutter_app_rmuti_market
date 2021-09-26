@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/account/main.dart';
+import 'package:flutter_app_rmuti_market/main.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/adminMainPage.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_up_page.dart';
 import 'package:http/http.dart' as http;
@@ -140,7 +140,7 @@ class _SingIn extends State {
           print('status market : ${_resStatusMarket.toString()}');
           token = _resToken;
           marketID = _resCustomerID;
-          if(_resStatusMarket == "user"){
+          if(_resStatusMarket == "market"){
             saveUserIDToDevice();
             Navigator.pushAndRemoveUntil(
                 context,

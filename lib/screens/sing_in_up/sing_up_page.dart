@@ -327,7 +327,6 @@ class _SingUp extends State {
   }
 
   void saveToDB() async {
-    String _statusMarket = "user";
     Map params = Map();
     params['imageMarket'] = imageData;
     params['email'] = email;
@@ -336,7 +335,6 @@ class _SingUp extends State {
     params['name'] = name;
     params['surname'] = surname;
     params['phoneNumber'] = number;
-    params['statusMarket'] = _statusMarket;
     params['descriptionMarket'] = marketAddress;
     http.post(Uri.parse(urlSingUp), body: params).then((res) {
       print(res.body);

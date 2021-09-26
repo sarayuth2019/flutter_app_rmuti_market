@@ -301,7 +301,7 @@ class _EditAccount extends State {
 
   void saveToDB() async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarEdit);
-    String _statusMarket = "user";
+    String _statusMarket = "market";
     Map params = Map();
     params['marketId'] = marketData.marketID.toString();
     params['imageMarket'] = imageMarket.toString();
