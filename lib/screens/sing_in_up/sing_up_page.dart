@@ -305,7 +305,7 @@ class _SingUp extends State {
   }
 
   void onSingUp() {
-    if(imageData == null){
+    if(imageFile == null){
       ScaffoldMessenger.of(context).showSnackBar(snackBarNoImage);
     }else
     if (_formKey.currentState!.validate()) {
@@ -318,39 +318,42 @@ class _SingUp extends State {
       print(name);
       print(number);
       print(marketAddress);
-      saveToDB();
+      _saveToDB();
     } else {
       setState(() {
         _checkText = true;
       });
     }
   }
+  void _saveToDB()async{
 
-  void saveToDB() async {
-    Map params = Map();
-    params['imageMarket'] = imageData;
-    params['email'] = email;
-    params['password'] = password;
-    params['nameMarket'] = nameMarket;
-    params['name'] = name;
-    params['surname'] = surname;
-    params['phoneNumber'] = number;
-    params['descriptionMarket'] = marketAddress;
-    http.post(Uri.parse(urlSingUp), body: params).then((res) {
-      print(res.body);
-      Map resBody = jsonDecode(res.body) as Map;
-      var _resStatus = resBody['status'];
-      print("Sing Up Status : ${_resStatus}");
+      var request = http.MultipartRequest('POST', Uri.parse(urlSingUp));
+      //request.headers.addAll({HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+      var _multipart = await http.MultipartFile.fromPath('marketImage', imageFile!.path);
+      request.files.add(_multipart);
 
-      setState(() {
-        if (_resStatus == 1) {
-          Navigator.pop(
-              context, MaterialPageRoute(builder: (context) => SingIn()));
-        } else if (_resStatus == 0) {
-          ScaffoldMessenger.of(context).showSnackBar(singUpFail);
-          //_snackBarKey.currentState.showSnackBar(singUpFail);
-        }
+      request.fields['email'] = email.toString();
+      request.fields['password'] = password.toString();
+      request.fields['nameMarket'] = nameMarket.toString();
+      request.fields['name'] = name.toString();
+      request.fields['surname'] = surname.toString();
+      request.fields['phoneNumber'] = number.toString();
+      request.fields['descriptionMarket'] = marketAddress.toString();
+
+      await http.Response.fromStream(await request.send()).then((res) {
+        print(res.body);
+
+        Map resBody = jsonDecode(res.body) as Map;
+        var _resStatus = resBody['status'];
+        print("Sing Up Status : ${_resStatus}");
+        setState(() {
+          if (_resStatus == 1) {
+            Navigator.pop(
+                context, MaterialPageRoute(builder: (context) => SingIn()));
+          } else if (_resStatus == 0) {
+            ScaffoldMessenger.of(context).showSnackBar(singUpFail);
+          }
+        });
       });
-    });
   }
 }

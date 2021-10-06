@@ -35,6 +35,7 @@ class _MarketPage extends State {
   final String urlGetPaymentByMarketId = '${Config.API_URL}/Pay/market';
   final urlListItemByMarketId = "${Config.API_URL}/Item/find/market";
   MarketData? _marketAccountData;
+  var _imageMarket;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,7 @@ class _MarketPage extends State {
                       children: [
                         Container(
                           child: Image.memory(
-                            base64Decode(snapshot.data.imageMarket),
+                           base64Decode(_imageMarket),
                             fit: BoxFit.fill,
                           ),
                           color: Colors.blueGrey,
@@ -263,12 +264,15 @@ class _MarketPage extends State {
     await http.post(Uri.parse(urlSendAccountById), headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
+      print(res.body);
       print("Send Market Data...");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      var _dataAccount = _jsonRes['data'];
+      var _dataAccount = _jsonRes['dataId'];
+       _imageMarket = _jsonRes['dataImages'];
       print(_dataAccount);
       print("data Market : ${_dataAccount.toString()}");
       print(_dataAccount);
+
       _marketAccountData = MarketData(
         _dataAccount['marketId'],
         _dataAccount['password'],

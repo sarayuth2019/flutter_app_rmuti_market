@@ -533,12 +533,10 @@ class _SellProducts extends State {
 
       var request = http.MultipartRequest('POST', Uri.parse(urlSaveImage));
 
-      var _multipart =
-          await http.MultipartFile.fromPath('picture', element.path);
+      var _multipart = await http.MultipartFile.fromPath('picture', element.path);
       request.files.add(_multipart);
 
-      request.headers.addAll(
-          {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+      request.headers.addAll({HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
       request.fields['itemId'] = _itemId.toString();
       request.fields['marketId'] = marketID.toString();
 

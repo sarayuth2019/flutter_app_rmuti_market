@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_main_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/search_payment/search_payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminMainPage extends StatefulWidget {
   AdminMainPage(this.token, this.marketId);
@@ -33,6 +34,7 @@ class _AdminMainPage extends State {
         actions: [
           TextButton(
               onPressed: () {
+                logout();
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => SingIn()),
@@ -82,5 +84,12 @@ class _AdminMainPage extends State {
       tabNum = numPageView;
       print(tabNum);
     });
+  }
+  Future logout() async {
+    final SharedPreferences _tokenIDInDevice = await SharedPreferences.getInstance();
+    _tokenIDInDevice.clear();
+    print("account logout ! ${_tokenIDInDevice.toString()}");
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
   }
 }

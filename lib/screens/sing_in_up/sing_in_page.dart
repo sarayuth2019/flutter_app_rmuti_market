@@ -61,8 +61,10 @@ class _SingIn extends State {
                       ),
                       GestureDetector(
                         onDoubleTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => SingUp()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SingUp()));
                         },
                         child: Center(
                           child: Icon(
@@ -91,8 +93,8 @@ class _SingIn extends State {
                 leading: Icon(Icons.account_circle_outlined),
                 title: TextField(
                   controller: email,
-                  decoration:
-                      InputDecoration(hintText: "Email", border: InputBorder.none),
+                  decoration: InputDecoration(
+                      hintText: "Email", border: InputBorder.none),
                 ),
               )),
               Card(
@@ -140,18 +142,20 @@ class _SingIn extends State {
           print('status market : ${_resStatusMarket.toString()}');
           token = _resToken;
           marketID = _resCustomerID;
-          if(_resStatusMarket == "market"){
-            saveUserIDToDevice();
+          if (_resStatusMarket == "market") {
+            saveUserIDToDevice(token, marketID, _resStatusMarket);
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage(token!,marketID!)),
-                    (route) => false);
-          }
-          else if (_resStatusMarket == "admin"){
+                MaterialPageRoute(
+                    builder: (context) => HomePage(token!, marketID!)),
+                (route) => false);
+          } else if (_resStatusMarket == "admin") {
+            saveUserIDToDevice(token, marketID, _resStatusMarket);
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => AdminMainPage(token!,marketID!)),
-                    (route) => false);
+                MaterialPageRoute(
+                    builder: (context) => AdminMainPage(token!, marketID!)),
+                (route) => false);
           }
         } else if (_resStatus == 0) {
           ScaffoldMessenger.of(context).showSnackBar(snackBarSingInFail);
@@ -160,10 +164,12 @@ class _SingIn extends State {
     });
   }
 
-  Future saveUserIDToDevice() async {
+  Future saveUserIDToDevice(
+      String token, int marketId, String statusMarket) async {
     final SharedPreferences _dataID = await SharedPreferences.getInstance();
-    _dataID.setString('tokenIDInDevice', token!);
-    _dataID.setInt('marketIDInDevice', marketID!);
+    _dataID.setString('tokenIDInDevice', token);
+    _dataID.setInt('marketIDInDevice', marketId);
+    _dataID.setString('statusMarket', statusMarket);
     print("save accountID to device : aid ${_dataID.toString()}");
   }
 
@@ -171,17 +177,33 @@ class _SingIn extends State {
     final SharedPreferences _dataID = await SharedPreferences.getInstance();
     final _tokenIDInDevice = _dataID.getString('tokenIDInDevice');
     final _userIDInDevice = _dataID.getInt('marketIDInDevice');
+    final _statusMarketInDevice = _dataID.getString('statusMarket');
     if (_tokenIDInDevice != null) {
-      setState(() {
-        token = _tokenIDInDevice;
-        print("account login future: token ${token.toString()}");
-        marketID = _userIDInDevice;
-        print("account login future: CustomerID ${token.toString()}");
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage(token!,marketID!)),
-            (route) => false);
-      });
+      if (_statusMarketInDevice == 'market') {
+        setState(() {
+          token = _tokenIDInDevice;
+          print("account login future: token ${token.toString()}");
+          marketID = _userIDInDevice;
+          print("account login future: CustomerID ${token.toString()}");
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage(token!, marketID!)),
+              (route) => false);
+        });
+      } else if (_statusMarketInDevice == 'admin') {
+        setState(() {
+          token = _tokenIDInDevice;
+          print("account login future: token ${token.toString()}");
+          marketID = _userIDInDevice;
+          print("account login future: CustomerID ${token.toString()}");
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AdminMainPage(token!, marketID!)),
+              (route) => false);
+        });
+      }
     } else {
       print("No user login");
     }
