@@ -81,7 +81,7 @@ class _SingIn extends State {
               Padding(
                 padding: const EdgeInsets.only(bottom: 30),
                 child: Text(
-                  "RMUTI Market",
+                  "PowerGroup Market",
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,

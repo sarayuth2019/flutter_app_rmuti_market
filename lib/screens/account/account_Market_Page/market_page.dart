@@ -74,7 +74,7 @@ class _MarketPage extends State {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        EditAccount(_marketAccountData, token)));
+                        EditAccount(_marketAccountData,_imageMarket, token)));
           },
         ),
         body: Column(
