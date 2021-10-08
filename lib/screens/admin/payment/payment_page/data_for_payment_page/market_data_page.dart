@@ -27,7 +27,7 @@ class _MarketDataPage extends State {
 
   final token;
   final int marketId;
-
+  var imageMarket;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -52,7 +52,7 @@ class _MarketDataPage extends State {
                       children: [
                         Container(
                           child: Image.memory(
-                            base64Decode(snapshot.data.imageMarket),
+                            base64Decode(imageMarket),
                             fit: BoxFit.fill,
                           ),
                           color: Colors.blueGrey,
@@ -230,7 +230,8 @@ class _MarketDataPage extends State {
     }).then((res) {
       print("Send Market Data...");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      var _dataAccount = _jsonRes['data'];
+      var _dataAccount = _jsonRes['dataId'];
+      imageMarket = _jsonRes['dataImages'];
       print(_dataAccount);
       print("data Market : ${_dataAccount.toString()}");
       print(_dataAccount);
@@ -263,7 +264,6 @@ class _MarketDataPage extends State {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
-
       for (var i in _itemData) {
         Item _items = Item(
           i['itemId'],

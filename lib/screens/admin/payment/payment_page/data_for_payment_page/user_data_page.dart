@@ -25,8 +25,7 @@ class _UserDataPage extends State {
 
   final userID;
   final token;
-
-  final String urlSendAccountById = "${Config.API_URL}/User/list/id";
+  var imageUser;
   UserData? _userData;
   String _status = 'รับสินค้าสำเร็จ';
 
@@ -43,7 +42,7 @@ class _UserDataPage extends State {
         body: Column(
           children: [
             FutureBuilder(
-              future: sendDataMarketByUser(userID),
+              future: sendDataUserByUserId(userID),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.data == null) {
                   print('snapshotData : ${snapshot.data}');
@@ -67,7 +66,7 @@ class _UserDataPage extends State {
                                       color: Colors.grey,
                                     )
                                   : Image.memory(
-                                      base64Decode(snapshot.data.image!),
+                                      base64Decode(imageUser),
                                       fit: BoxFit.fill,
                                     ),
                             ),
@@ -197,8 +196,9 @@ class _UserDataPage extends State {
         ));
   }
 
-  Future<UserData> sendDataMarketByUser(int userId) async {
+  Future<UserData> sendDataUserByUserId(int userId) async {
     print("Send user Data...");
+    final String urlSendAccountById = "${Config.API_URL}/User/list/id";
     Map params = Map();
     params['id'] = userId.toString();
     await http.post(Uri.parse(urlSendAccountById),body: params, headers: {
@@ -206,7 +206,9 @@ class _UserDataPage extends State {
     }).then((res) {
       print(res.body);
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      var _dataUser = _jsonRes['data'];
+      var _dataUser = _jsonRes['dataId'];
+      imageUser = _jsonRes['dataImages'];
+
       print("data User : ${_dataUser.toString()}");
       _userData = UserData(
           _dataUser['userId'],
