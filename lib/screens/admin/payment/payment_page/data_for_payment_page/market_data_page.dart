@@ -28,6 +28,7 @@ class _MarketDataPage extends State {
   final token;
   final int marketId;
   var imageMarket;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
