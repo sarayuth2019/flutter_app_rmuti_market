@@ -158,28 +158,44 @@ class _MyShop extends State {
                                                     : Container(
                                                         height: 20,
                                                         child: GestureDetector(
-                                                            onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) => EditProductPage(
-                                                                    snapshot
-                                                                        .data[index],
-                                                                    token)));
-                                                            },
-                                                            child: ClipRRect(
-                                                              borderRadius: BorderRadius.circular(5),
-                                                              child: Container(
-                                                        color:
-                                                              Colors.orange,
-                                                        child:
-                                                              Padding(
-                                                                padding: const EdgeInsets.only(left: 5.0,right: 5.0),
-                                                                child: Text('แก้ไข',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-                                                              ),
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) => EditProductPage(
+                                                                        snapshot
+                                                                            .data[index],
+                                                                        token)));
+                                                          },
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                            child: Container(
+                                                              color:
+                                                                  Colors.orange,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            5.0,
+                                                                        right:
+                                                                            5.0),
+                                                                child: Text(
+                                                                  'แก้ไข',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ))),
+                                                          ),
+                                                        ))),
                                           ],
                                         ),
                                       ),

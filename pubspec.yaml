@@ -27,6 +27,7 @@ dependencies:
   image_picker:
   carousel_slider:
   qr_code_scanner: 0.4.0
+  flutter_rating_bar:
   #flutter_launcher_icons: ^0.9.2
 
 #flutter_icons:

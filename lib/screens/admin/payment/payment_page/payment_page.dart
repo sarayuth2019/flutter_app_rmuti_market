@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/item_data_page.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market_data_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market__data_page/market_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/user_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_Image_payment_method.dart';

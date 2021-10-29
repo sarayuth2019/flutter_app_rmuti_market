@@ -7,8 +7,11 @@ import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/edi
 import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/payment_of_item_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/scan_qr_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market__data_page/show_review_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/review_market_method.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -160,8 +163,59 @@ class _MarketPage extends State {
                 }
               },
             ),
-            SizedBox(
-              height: 8,
+            FutureBuilder(
+              future: listReviewByMarketId(token, marketId),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.data == null) {
+                  return Text('กำลังโหลด...');
+                } else {
+                  var _sumRating = snapshot.data
+                      .map((r) => r.rating)
+                      .reduce((value, element) => value + element);
+                  var _countRating = snapshot.data.length;
+
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ShowReviewPage(
+                                    snapshot.data,
+                                    (_sumRating / _countRating),
+                                    _countRating)));
+                      },
+                      child: Container(
+                          decoration: boxDecorationGrey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'รีวิวของทางร้าน : ${(_sumRating / _countRating).toStringAsFixed(1)}',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                RatingBar.builder(
+                                    itemSize: 30,
+                                    ignoreGestures: true,
+                                    allowHalfRating: true,
+                                    itemCount: 5,
+                                    initialRating: _sumRating / _countRating,
+                                    itemBuilder: (context, r) {
+                                      return Icon(
+                                        Icons.star_rounded,
+                                        color: Colors.amber,
+                                      );
+                                    },
+                                    onRatingUpdate: (value) {}),
+                              ],
+                            ),
+                          )),
+                    ),
+                  );
+                }
+              },
             ),
             Text(
               'ประวัติการขาย',
