@@ -112,7 +112,8 @@ class _PaymentPage extends State {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ItemDataPage(token, item!.itemId)));
+                                                    ItemDataPage(
+                                                        token, item!.itemId)));
                                       },
                                       child: Row(
                                         children: [
@@ -299,8 +300,39 @@ class _PaymentPage extends State {
                               height: 10,
                             ),
                             Container(
+                                child: paymentData.status != 'รอดำเนินการ'
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Container(
+                                          color: Colors.blue,
+                                          height: 30,
+                                          width: double.infinity,
+                                          child: Center(
+                                              child: Text(
+                                            '${paymentData.status}',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                        ),
+                                      )
+                                    : Container()),
+                            SizedBox(height: 10),
+                            Container(
                                 child: item!.count == item!.countRequest
-                                    ? Container()
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Container(
+                                          color: Colors.orange,
+                                          height: 30,
+                                          width: double.infinity,
+                                          child: Center(
+                                              child: Text(
+                                            'จำนวนผู้ลงทะเบียนครบแล้ว',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                        ),
+                                      )
                                     : Center(
                                         child: Container(
                                             child: snapshot.data.status ==
@@ -317,50 +349,8 @@ class _PaymentPage extends State {
                                                     },
                                                     child:
                                                         Text('ได้รับเงินแล้ว'))
-                                                : Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      child: Container(
-                                                        color: Colors.green,
-                                                        height: 30,
-                                                        width: double.infinity,
-                                                        child: Center(
-                                                          child: Text(
-                                                            '${snapshot.data.status}',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )),
+                                                : Container()),
                                       )),
-                            Container(
-                                child: item!.countRequest == item!.count
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: Container(
-                                          color: Colors.red,
-                                          height: 30,
-                                          width: double.infinity,
-                                          child: Center(
-                                              child: Text(
-                                            'จำนวนผู้ลงทะเบียนครบแล้ว',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )),
-                                        ),
-                                      )
-                                    : Container()),
                           ],
                         );
                       }

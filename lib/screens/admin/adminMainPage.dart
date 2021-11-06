@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_main_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/search_payment/search_payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,7 +55,7 @@ class _AdminMainPage extends State {
       body: PageView(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children: [PaymentMainPage(token), SearchPayment(token)],
+        children: [PaymentTab(token, 'รอดำเนินการ'), SearchPayment(token)],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
