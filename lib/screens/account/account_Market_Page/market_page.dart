@@ -77,7 +77,7 @@ class _MarketPage extends State {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        EditAccount(_marketAccountData,_imageMarket, token)));
+                        EditAccount(_marketAccountData, _imageMarket, token)));
           },
         ),
         body: Column(
@@ -95,7 +95,7 @@ class _MarketPage extends State {
                       children: [
                         Container(
                           child: Image.memory(
-                           base64Decode(_imageMarket),
+                            base64Decode(_imageMarket),
                             fit: BoxFit.fill,
                           ),
                           color: Colors.blueGrey,
@@ -165,14 +165,27 @@ class _MarketPage extends State {
             ),
             FutureBuilder(
               future: listReviewByMarketId(token, marketId),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.data == null) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<dynamic> snapshotReview) {
+                print('snapshotReview : ${snapshotReview.data}');
+                if (snapshotReview.data == null) {
                   return Text('กำลังโหลด...');
+                } else if (snapshotReview.data.length == 0) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        width: double.infinity,
+                        decoration: boxDecorationGrey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('ยังไม่มีการรีวิวร้านค้า',style: TextStyle(fontWeight: FontWeight.bold),),
+                        )),
+                  );
                 } else {
-                  var _sumRating = snapshot.data
+                  var _sumRating = snapshotReview.data
                       .map((r) => r.rating)
                       .reduce((value, element) => value + element);
-                  var _countRating = snapshot.data.length;
+                  var _countRating = snapshotReview.data.length;
 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -182,7 +195,7 @@ class _MarketPage extends State {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ShowReviewPage(
-                                    snapshot.data,
+                                    snapshotReview.data,
                                     (_sumRating / _countRating),
                                     _countRating)));
                       },
@@ -322,7 +335,7 @@ class _MarketPage extends State {
       print("Send Market Data...");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _dataAccount = _jsonRes['dataId'];
-       _imageMarket = _jsonRes['dataImages'];
+      _imageMarket = _jsonRes['dataImages'];
       print(_dataAccount);
       print("data Market : ${_dataAccount.toString()}");
       print(_dataAccount);
