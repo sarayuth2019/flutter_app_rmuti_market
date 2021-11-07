@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/item_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 
@@ -104,15 +105,34 @@ class _PaymentFormQRCode extends State {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'ชำระสินค้า : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('Item Id  ${snapshot.data.itemId} '),
-                                    ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ItemDataPage(
+                                                      token, snapshot.data.itemId)));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'ชำระสินค้า : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                            'Item Id  ${snapshot.data.itemId} '),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Icon(
+                                          Icons.search,
+                                          color: Colors.teal,
+                                          size: 20,
+                                        )
+                                      ],
+                                    ),
                                   ),
                                   Row(
                                     children: [

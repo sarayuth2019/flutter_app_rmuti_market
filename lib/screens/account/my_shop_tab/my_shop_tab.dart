@@ -119,10 +119,10 @@ class _MyShop extends State {
                                             top: 3.0, left: 8.0, right: 8.0),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              "${snapshot.data[index].nameItem}",
+                                              "itemId : ${snapshot.data[index].itemID}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold),
@@ -132,6 +132,22 @@ class _MyShop extends State {
                                               style: TextStyle(
                                                   color: Colors.white),
                                             )
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 3.0, left: 8.0, right: 8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "${snapshot.data[index].nameItem}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ],
                                         ),
                                       ),
