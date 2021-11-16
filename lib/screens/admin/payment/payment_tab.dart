@@ -62,7 +62,7 @@ class _PaymentTab extends State {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'payId : ${snapshot.data[index].payId}',
+                                    'PaymentId : ${snapshot.data[index].payId}',
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
