@@ -107,6 +107,7 @@ class _PaymentOfItemId extends State {
             i['status'],
             i['userId'],
             i['marketId'],
+            i['number'],
             i['itemId'],
             i['amount'],
             i['lastNumber'],

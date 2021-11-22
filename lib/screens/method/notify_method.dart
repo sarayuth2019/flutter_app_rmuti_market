@@ -33,7 +33,7 @@ void notifyMarketMethod(context, token, int marketId, int payId, int count,int c
   Map params = Map();
   params['marketId'] = marketId.toString();
   params['payId'] = payId.toString();
-  params['count'] = (count+1).toString();
+  params['count'] = count.toString();
   params['countRequest'] = countRequest.toString();
   params['status'] = textStatus.toString();
   await http.post(Uri.parse(urlSaveMarketNotify), body: params, headers: {

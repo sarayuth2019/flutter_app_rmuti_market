@@ -135,6 +135,12 @@ class _PaymentPage extends State {
                                         ],
                                       ),
                                     ),
+                                    Row(
+                                      children: [
+                                        Text('จำนวนของสินค้า : ',style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text('${snapshot.data.number}'),
+                                      ],
+                                    ),
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -219,14 +225,11 @@ class _PaymentPage extends State {
                                     Row(
                                       children: [
                                         Text(
-                                          'จำนวนเงิน : ',
+                                          'จำนวนเงินที่โอน : ',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text('${snapshot.data.amount} บาท'),
-                                        Text('  :  '),
-                                        Text(
-                                            'ราคาสินค้า ${item!.priceSell} บาท'),
                                       ],
                                     ),
                                     Row(
@@ -337,18 +340,42 @@ class _PaymentPage extends State {
                                         child: Container(
                                             child: snapshot.data.status ==
                                                     'รอดำเนินการ'
-                                                ? ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            primary:
-                                                                Colors.teal),
-                                                    onPressed: () {
-                                                      _showAlertGetMoney(
-                                                          context,
-                                                          snapshot.data);
-                                                    },
-                                                    child:
-                                                        Text('ได้รับเงินแล้ว'))
+                                                ? Column(
+                                                    children: [
+                                                      ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  primary: Colors
+                                                                      .teal),
+                                                          onPressed: () {
+                                                            String
+                                                                _statusPayment =
+                                                                'ชำระเงินสำเร็จ';
+                                                            _showAlertGetMoney(
+                                                                context,
+                                                                snapshot.data,
+                                                                _statusPayment);
+                                                          },
+                                                          child: Text(
+                                                              'ชำระเงินสำเร็จ')),
+                                                      ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  primary: Colors
+                                                                      .deepOrange),
+                                                          onPressed: () {
+                                                            String
+                                                                _statusPayment =
+                                                                'จำนวนเงินผิดพลาด';
+                                                            _showAlertGetMoney(
+                                                                context,
+                                                                snapshot.data,
+                                                                _statusPayment);
+                                                          },
+                                                          child: Text(
+                                                              'จำนวนเงินผิดพลาด')),
+                                                    ],
+                                                  )
                                                 : Container()),
                                       )),
                           ],
@@ -372,14 +399,15 @@ class _PaymentPage extends State {
     });
   }
 
-  void _showAlertGetMoney(BuildContext context, _paymentData) async {
+  void _showAlertGetMoney(
+      BuildContext context, _paymentData, statusPayment) async {
     print('Show Alert Dialog !');
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(
-              'ได้รับเงินถูกต้องตามจำนวน ?',
+              '${statusPayment.toString()} ?',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             content: SingleChildScrollView(
@@ -388,9 +416,9 @@ class _PaymentPage extends State {
                 children: [
                   Container(
                       child: GestureDetector(
-                          child: Text('ได้รับเงินแล้ว'),
+                          child: Text(statusPayment),
                           onTap: () {
-                            _saveStatusPayment(_paymentData);
+                            _saveStatusPayment(_paymentData, statusPayment);
                             Navigator.pop(context);
                           })),
                   SizedBox(
@@ -409,7 +437,7 @@ class _PaymentPage extends State {
         });
   }
 
-  void _saveStatusPayment(_paymentData) async {
+  void _saveStatusPayment(_paymentData, statusPayment) async {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
     String status = 'ชำระเงินสำเร็จ';
@@ -418,6 +446,7 @@ class _PaymentPage extends State {
     params['payId'] = _paymentData.payId.toString();
     params['userId'] = _paymentData.userId.toString();
     params['marketId'] = _paymentData.marketId.toString();
+    params['number'] = _paymentData.number.toString();
     params['itemId'] = _paymentData.itemId.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
@@ -461,7 +490,7 @@ class _PaymentPage extends State {
     params['groupItems'] = item!.groupItem.toString();
     params['price'] = item!.price.toString();
     params['priceSell'] = item!.priceSell.toString();
-    params['count'] = (item!.count + 1).toString();
+    params['count'] = (item!.count + _paymentData.number).toString();
     params['countRequest'] = item!.countRequest.toString();
     params['dateBegin'] = _dateBegin.toString();
     params['dateFinal'] = _dateFinal.toString();
@@ -477,7 +506,6 @@ class _PaymentPage extends State {
         if (_resStatus == 1) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นสำเร็จ')));
-
           String textNotifyUser =
               'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์ที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
           notifyUserMethod(context, token, _paymentData.userId,
@@ -485,14 +513,18 @@ class _PaymentPage extends State {
 
           String textNotifyMarket =
               'ยืนยันการลงทะเบียนสินค้า Item Id : ${item!.itemId} ${item!.nameItem}';
+          int _count = (item!.count+_paymentData.number).toInt();
           notifyMarketMethod(
               context,
               token,
               _paymentData.marketId,
               _paymentData.payId,
-              item!.count,
+              _count,
               item!.countRequest,
               textNotifyMarket);
+          if(item!.countRequest == (item!.count+_paymentData.number)){
+            print('Notify All user get item');
+          }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นผิดพลาด')));
@@ -516,6 +548,7 @@ class _PaymentPage extends State {
           _payData['status'],
           _payData['userId'],
           _payData['marketId'],
+          _payData['number'],
           _payData['itemId'],
           _payData['amount'],
           _payData['lastNumber'],
@@ -567,6 +600,7 @@ class Payment {
   final String status;
   final int userId;
   final int marketId;
+  final int number;
   final int itemId;
   final int amount;
   final int lastNumber;
@@ -581,6 +615,7 @@ class Payment {
       this.status,
       this.userId,
       this.marketId,
+      this.number,
       this.itemId,
       this.amount,
       this.lastNumber,
