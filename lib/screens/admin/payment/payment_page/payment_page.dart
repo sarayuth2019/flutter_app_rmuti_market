@@ -366,7 +366,7 @@ class _PaymentPage extends State {
                                                           onPressed: () {
                                                             String
                                                                 _statusPayment =
-                                                                'จำนวนเงินผิดพลาด';
+                                                                'ชำระเงินผิดพลาด';
                                                             _showAlertGetMoney(
                                                                 context,
                                                                 snapshot.data,
@@ -440,7 +440,7 @@ class _PaymentPage extends State {
   void _saveStatusPayment(_paymentData, statusPayment) async {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
-    String status = 'ชำระเงินสำเร็จ';
+    //String status = 'ชำระเงินสำเร็จ';
     print('save pay ....');
     Map params = Map();
     params['payId'] = _paymentData.payId.toString();
@@ -454,7 +454,7 @@ class _PaymentPage extends State {
     params['time'] = _paymentData.time.toString();
     params['amount'] = _paymentData.amount.toString();
     params['lastNumber'] = _paymentData.lastNumber.toString();
-    params['status'] = status.toString();
+    params['status'] = statusPayment.toString();
     await http.post(Uri.parse(urlSavePay), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {

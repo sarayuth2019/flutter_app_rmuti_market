@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/edit_product_page.dart';
-import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/sell_products_tab.dart';
+import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/sell_products/sell_products_tab.dart';
+import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/sell_products/showAlertSelectTypeSell.dart';
 import 'package:http/http.dart' as http;
 
 class MyShop extends StatefulWidget {
@@ -52,10 +53,7 @@ class _MyShop extends State {
             Icons.add,
           ),
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SellProducts(token, marketId)));
+            showAlertSelectType1(context, token, marketId);
           },
         ),
         body: RefreshIndicator(
