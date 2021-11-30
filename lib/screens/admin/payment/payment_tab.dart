@@ -45,8 +45,7 @@ class _PaymentTab extends State {
                 child: Text(
                   'ไม่มีรายการการชำระเงิน',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
+                      fontWeight: FontWeight.bold, color: Colors.grey),
                 ),
               );
             } else {
@@ -163,6 +162,7 @@ class _PaymentTab extends State {
             i['status'],
             i['userId'],
             i['marketId'],
+            i['number'],
             i['itemId'],
             i['amount'],
             i['lastNumber'],
@@ -183,6 +183,7 @@ class Payment {
   final String status;
   final int userId;
   final int marketId;
+  final int number;
   final int itemId;
   final int amount;
   final int lastNumber;
@@ -197,6 +198,7 @@ class Payment {
       this.status,
       this.userId,
       this.marketId,
+      this.number,
       this.itemId,
       this.amount,
       this.lastNumber,

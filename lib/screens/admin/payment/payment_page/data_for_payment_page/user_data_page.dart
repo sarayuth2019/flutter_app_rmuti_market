@@ -27,7 +27,7 @@ class _UserDataPage extends State {
   final token;
   var imageUser;
   UserData? _userData;
-  String _status = 'รับสินค้าสำเร็จ';
+  String _status = 'ประวัติการซื้อ';
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +201,7 @@ class _UserDataPage extends State {
     final String urlSendAccountById = "${Config.API_URL}/User/list/id";
     Map params = Map();
     params['id'] = userId.toString();
-    await http.post(Uri.parse(urlSendAccountById),body: params, headers: {
+    await http.post(Uri.parse(urlSendAccountById), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
       print(res.body);
@@ -254,10 +254,19 @@ class _UserDataPage extends State {
             i['dataTransfer']);
         listPayment.add(_payment);
       }
-      listPaymentWait = listPayment
-          .where((element) =>
-              element.status.toLowerCase().contains(status.toLowerCase()))
-          .toList();
+      if (status == 'ประวัติการซื้อ') {
+        List<Payment> _listPaymentWait1 = listPayment
+            .where((element) => element.status
+                .toLowerCase()
+                .contains('รับสินค้าสำเร็จ'.toLowerCase()))
+            .toList();
+        List<Payment> _listPaymentWait2 = listPayment
+            .where((element) => element.status
+                .toLowerCase()
+                .contains('รีวิวสำเร็จ'.toLowerCase()))
+            .toList();
+        listPaymentWait = _listPaymentWait1 + _listPaymentWait2;
+      }
     });
     return listPaymentWait;
   }

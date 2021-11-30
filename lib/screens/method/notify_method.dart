@@ -48,3 +48,8 @@ void notifyMarketMethod(context, token, int marketId, int payId, int count,int c
     }
   });
 }
+
+void notifyAllUserMethod(context, token, int userId, int payId, int amount,
+    String textStatus){
+
+}

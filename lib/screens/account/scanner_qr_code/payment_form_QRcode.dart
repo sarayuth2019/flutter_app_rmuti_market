@@ -27,7 +27,7 @@ class _PaymentFormQRCode extends State {
   final token;
   final int paymentId;
   final String urlGetPayData = '${Config.API_URL}/Pay/listId';
-  final String urlGetPayImage = '${Config.API_URL}/ImagePay/listId';
+  final String urlGetPayImage = '${Config.API_URL}/ImagePay/payId';
   final String urlSavePay = '${Config.API_URL}/Pay/save';
 
   @override
@@ -88,7 +88,7 @@ class _PaymentFormQRCode extends State {
                               return Container(
                                   decoration: boxDecorationGrey,
                                   child: Image.memory(
-                                    base64Decode(snapshotImage.data),
+                                    base64Decode(snapshotImage.data[0]),
                                     fit: BoxFit.fill,
                                   ));
                             }
@@ -111,8 +111,8 @@ class _PaymentFormQRCode extends State {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  ItemDataPage(
-                                                      token, snapshot.data.itemId)));
+                                                  ItemDataPage(token,
+                                                      snapshot.data.itemId)));
                                     },
                                     child: Row(
                                       children: [
@@ -133,6 +133,17 @@ class _PaymentFormQRCode extends State {
                                         )
                                       ],
                                     ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'จำนวน : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                          '${snapshot.data.number} '),
+                                    ],
                                   ),
                                   Row(
                                     children: [
@@ -231,7 +242,8 @@ class _PaymentFormQRCode extends State {
                                           style: ElevatedButton.styleFrom(
                                               primary: Colors.teal),
                                           onPressed: () {
-                                           _showAlertGetMoney(context, snapshot.data);
+                                            _showAlertGetMoney(
+                                                context, snapshot.data);
                                           },
                                           child: Text('ส่งมอบสินค้า')),
                                     )
@@ -295,6 +307,7 @@ class _PaymentFormQRCode extends State {
     params['payId'] = _paymentData.payId.toString();
     params['userId'] = _paymentData.userId.toString();
     params['marketId'] = _paymentData.marketId.toString();
+    params['number'] = _paymentData.number.toString();
     params['itemId'] = _paymentData.itemId.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
@@ -317,7 +330,7 @@ class _PaymentFormQRCode extends State {
       } else {
         print('save fall !');
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('ชำระเงิน ผิดพลาด !')));
+            .showSnackBar(SnackBar(content: Text('รับสินค้า ผิดพลาด !')));
       }
     });
   }
@@ -351,6 +364,7 @@ class _PaymentFormQRCode extends State {
           _payData['status'],
           _payData['userId'],
           _payData['marketId'],
+          _payData['number'],
           _payData['itemId'],
           _payData['amount'],
           _payData['lastNumber'],
@@ -370,6 +384,7 @@ class _Payment {
   final String status;
   final int userId;
   final int marketId;
+  final int number;
   final int itemId;
   final int amount;
   final int lastNumber;
@@ -384,6 +399,7 @@ class _Payment {
       this.status,
       this.userId,
       this.marketId,
+      this.number,
       this.itemId,
       this.amount,
       this.lastNumber,

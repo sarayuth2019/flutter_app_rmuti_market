@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/edit_product_page.dart';
-import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/sell_products/sell_products_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/sell_products/showAlertSelectTypeSell.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,6 +34,8 @@ class _MyShop extends State {
       SnackBar(content: Text("ลบสินค้า สำเร็จ"));
   final snackBarOnDeleteProductsFall = SnackBar(content: Text("ผิดพลาด !"));
   var image;
+
+  var _fontSize = 12.0;
 
   @override
   void initState() {
@@ -116,41 +117,50 @@ class _MyShop extends State {
                                         padding: const EdgeInsets.only(
                                             top: 3.0, left: 8.0, right: 8.0),
                                         child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              "itemId : ${snapshot.data[index].itemID}",
+                                              "${snapshot.data[index].itemID} : ",
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: _fontSize),
                                             ),
-                                            Text(
-                                              "${snapshot.data[index].dealBegin} - ${snapshot.data[index].dealFinal}",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 3.0, left: 8.0, right: 8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
                                             Text(
                                               "${snapshot.data[index].nameItem}",
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: _fontSize),
                                             ),
+                                            SizedBox(width: 8,),
+                                            Container(
+                                                child: snapshot.data[index]
+                                                            .groupItems ==
+                                                        1
+                                                    ? Text(
+                                                        "(สินค้าพร้อมขาย)",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                _fontSize),
+                                                      )
+                                                    : Text(
+                                                        "(สินค้า Pre order)",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                _fontSize),
+                                                      ))
+                                            /*
+                                            Text(
+                                              "${snapshot.data[index].dealBegin} - ${snapshot.data[index].dealFinal}",
+                                              style: TextStyle(
+                                                  color: Colors.white,fontSize: _fontSize),
+                                            )
+
+                                             */
                                           ],
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 8,
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -162,7 +172,8 @@ class _MyShop extends State {
                                             Text(
                                               "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.white,
+                                                  fontSize: _fontSize),
                                             ),
                                             Container(
                                                 child: snapshot.data[index]
@@ -221,7 +232,8 @@ class _MyShop extends State {
                                             Text(
                                               "ระยะเวลาการใช้ส่วนลด : ${snapshot.data[index].dateBegin} - ${snapshot.data[index].dateFinal}",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.white,
+                                                  fontSize: _fontSize),
                                             )
                                           ],
                                         ),

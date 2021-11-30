@@ -80,7 +80,7 @@ class _PaymentPage extends State {
                         return Container(
                             decoration: boxDecorationGrey,
                             child: Image.memory(
-                              base64Decode(snapshotImage.data),
+                              base64Decode(snapshotImage.data[0]),
                               fit: BoxFit.fill,
                             ));
                       }
@@ -137,7 +137,11 @@ class _PaymentPage extends State {
                                     ),
                                     Row(
                                       children: [
-                                        Text('จำนวนของสินค้า : ',style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text(
+                                          'จำนวนของสินค้า : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                         Text('${snapshot.data.number}'),
                                       ],
                                     ),
@@ -303,8 +307,22 @@ class _PaymentPage extends State {
                               height: 10,
                             ),
                             Container(
-                                child: paymentData.status != 'รอดำเนินการ'
+                                child: paymentData.status == 'ชำระเงินผิดพลาด'
                                     ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Container(
+                                          color: Colors.red,
+                                          height: 30,
+                                          width: double.infinity,
+                                          child: Center(
+                                              child: Text(
+                                            '${paymentData.status}',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                        ),
+                                      )
+                                    : ClipRRect(
                                         borderRadius: BorderRadius.circular(5),
                                         child: Container(
                                           color: Colors.blue,
@@ -317,8 +335,7 @@ class _PaymentPage extends State {
                                                 TextStyle(color: Colors.white),
                                           )),
                                         ),
-                                      )
-                                    : Container()),
+                                      )),
                             SizedBox(height: 10),
                             Container(
                                 child: item!.count == item!.countRequest
@@ -463,8 +480,13 @@ class _PaymentPage extends State {
       var resStatus = resData['status'];
       if (resStatus == 1) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('ได้รับเงินครบตามจำนวน')));
-        updateItem(_paymentData);
+            .showSnackBar(SnackBar(content: Text('บันทึกสถานะสำเร็จ')));
+        if (statusPayment == 'ชำระเงินสำเร็จ') {
+          int _number = _paymentData.number;
+          updateItem(_paymentData, _number, statusPayment);
+        } else {
+          updateItem(_paymentData, 0, statusPayment);
+        }
       } else {
         print('save fall !');
         ScaffoldMessenger.of(context)
@@ -473,7 +495,7 @@ class _PaymentPage extends State {
     });
   }
 
-  void updateItem(_paymentData) async {
+  void updateItem(_paymentData, int number, status) async {
     var _dateBegin =
         '${item!.dateBegin.split('/')[1]}/${item!.dateBegin.split('/')[0]}/${item!.dateBegin.split('/')[2]}';
     var _dateFinal =
@@ -490,7 +512,7 @@ class _PaymentPage extends State {
     params['groupItems'] = item!.groupItem.toString();
     params['price'] = item!.price.toString();
     params['priceSell'] = item!.priceSell.toString();
-    params['count'] = (item!.count + _paymentData.number).toString();
+    params['count'] = (item!.count + number).toString();
     params['countRequest'] = item!.countRequest.toString();
     params['dateBegin'] = _dateBegin.toString();
     params['dateFinal'] = _dateFinal.toString();
@@ -503,28 +525,39 @@ class _PaymentPage extends State {
       print(_res);
       var _resStatus = _res['status'];
       setState(() {
-        if (_resStatus == 1) {
+        if (_resStatus == 1 && status == 'ชำระเงินสำเร็จ') {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นสำเร็จ')));
+
+          if (item!.countRequest == (item!.count + _paymentData.number)) {
+            print('Notify All user get item');
+            String textStatus =
+                'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
+            notifyAllUserMethod(context, token, _paymentData.userId,
+                _paymentData.payId, _paymentData.amount, textStatus);
+          } else {
+            String textNotifyUser =
+                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
+            notifyUserMethod(context, token, _paymentData.userId,
+                _paymentData.payId, _paymentData.amount, textNotifyUser);
+
+            String textNotifyMarket =
+                'ยืนยันการลงทะเบียนสินค้า Item Id : ${item!.itemId} ${item!.nameItem}';
+            int _count = (item!.count + _paymentData.number).toInt();
+            notifyMarketMethod(
+                context,
+                token,
+                _paymentData.marketId,
+                _paymentData.payId,
+                _count,
+                item!.countRequest,
+                textNotifyMarket);
+          }
+        } else if (_resStatus == 1 && status == 'ชำระเงินผิดพลาด') {
           String textNotifyUser =
-              'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์ที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
+              'ยืนยันการชำระเงินผิดพลาด กรุณาตรวจสอบการชำระเงินในหน้า รถเข็น/รอตรวจสอบ';
           notifyUserMethod(context, token, _paymentData.userId,
               _paymentData.payId, _paymentData.amount, textNotifyUser);
-
-          String textNotifyMarket =
-              'ยืนยันการลงทะเบียนสินค้า Item Id : ${item!.itemId} ${item!.nameItem}';
-          int _count = (item!.count+_paymentData.number).toInt();
-          notifyMarketMethod(
-              context,
-              token,
-              _paymentData.marketId,
-              _paymentData.payId,
-              _count,
-              item!.countRequest,
-              textNotifyMarket);
-          if(item!.countRequest == (item!.count+_paymentData.number)){
-            print('Notify All user get item');
-          }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นผิดพลาด')));

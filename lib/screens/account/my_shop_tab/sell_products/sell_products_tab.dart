@@ -52,7 +52,6 @@ class _SellProducts extends State {
   bool _showAddDetails = false;
 
   String? nameMenu;
-  int group = 1;
   int? price;
   int? priceSell;
   int count = 0;
@@ -240,6 +239,10 @@ class _SellProducts extends State {
                 ),
                 Text(
                   'รายละเดียดเพิ่มเติม',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '(สำหรับการขายเสื้อแบบกลุ่มหรืออื่นๆ)',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Container(
@@ -789,7 +792,7 @@ class _SellProducts extends State {
     Map params = Map();
     params['marketId'] = marketID.toString();
     params['nameItems'] = nameMenu.toString();
-    params['groupItems'] = group.toString();
+    params['groupItems'] = typeItemSell.toString();
     params['price'] = price.toString();
     params['priceSell'] = priceSell.toString();
     params['count'] = count.toString();

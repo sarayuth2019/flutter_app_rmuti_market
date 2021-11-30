@@ -103,11 +103,22 @@ class _ItemDataPage extends State {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  snapshot.data.nameItem,
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
+                                Row(
+                                  children: [
+                                    Text(
+                                      snapshot.data.nameItem,
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Container(
+                                        child: snapshot.data.groupItems == 1
+                                            ? Text('(สินค้าพร้อมขาย)')
+                                            : Text('(สินค้า Pre order)'))
+                                  ],
                                 ),
                                 Text(
                                   "ราคา ${snapshot.data.priceSell.toString()} บาท",
@@ -233,7 +244,7 @@ class _ItemDataPage extends State {
 class _Items {
   final int itemId;
   final String nameItem;
-  final int groupItem;
+  final int groupItems;
   final int price;
   final int priceSell;
   final int count;
@@ -248,7 +259,7 @@ class _Items {
   _Items(
       this.itemId,
       this.nameItem,
-      this.groupItem,
+      this.groupItems,
       this.price,
       this.priceSell,
       this.count,

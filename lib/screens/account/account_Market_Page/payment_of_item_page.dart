@@ -60,21 +60,23 @@ class _PaymentOfItemId extends State {
                           Text(
                               'ผู้ชำระเงิน User Id : ${snapshot.data[index].payId}'),
                           Text(
+                              'จำนวนสินค้า : ${snapshot.data[index].number}'),
+                          Text(
                               'จำนวนเงิน : ${snapshot.data[index].amount} บาท'),
                           Row(
                             children: [
                               Text('สถานะ : '),
                               Container(
                                   child: snapshot.data[index].status ==
-                                          'รับสินค้าสำเร็จ'
+                                          'ชำระเงินสำเร็จ'
                                       ? Text(
-                                          '${snapshot.data[index].status}',
-                                          style: TextStyle(color: Colors.blue),
+                                          '${snapshot.data[index].status} (ยังไม่มารับสินค้า)',
+                                          style: TextStyle(color: Colors.green),
                                         )
                                       : Text(
-                                          '${snapshot.data[index].status}  (ยังไม่มารับสินค้า)',
+                                          '${snapshot.data[index].status}',
                                           style:
-                                              TextStyle(color: Colors.green)))
+                                              TextStyle(color: Colors.blue)))
                             ],
                           ),
                         ],
