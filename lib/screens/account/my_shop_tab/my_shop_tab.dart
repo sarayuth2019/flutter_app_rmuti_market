@@ -130,7 +130,7 @@ class _MyShop extends State {
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: _fontSize),
+                                                  fontSize: 14),
                                             ),
                                             SizedBox(width: 8,),
                                             Container(

@@ -77,12 +77,34 @@ class _PaymentPage extends State {
                             decoration: boxDecorationGrey,
                             child: Center(child: Text('กำลังโหลดสลีป...')));
                       } else {
-                        return Container(
-                            decoration: boxDecorationGrey,
-                            child: Image.memory(
-                              base64Decode(snapshotImage.data[0]),
-                              fit: BoxFit.fill,
-                            ));
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 310,
+                            width: double.infinity,
+                            child: ListView.builder(
+                              //shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshotImage.data.length,
+                              itemBuilder:
+                                  (BuildContext context, int index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 4.0, left: 4.0),
+                                  child: Container(
+                                    height: 300,
+                                    width: 240,
+                                    child: Image.memory(
+                                      base64Decode(
+                                          snapshotImage.data[index]),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
                       }
                     },
                   )),
@@ -307,35 +329,41 @@ class _PaymentPage extends State {
                               height: 10,
                             ),
                             Container(
-                                child: paymentData.status == 'ชำระเงินผิดพลาด'
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: Container(
-                                          color: Colors.red,
-                                          height: 30,
-                                          width: double.infinity,
-                                          child: Center(
-                                              child: Text(
-                                            '${paymentData.status}',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )),
-                                        ),
-                                      )
-                                    : ClipRRect(
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: Container(
-                                          color: Colors.blue,
-                                          height: 30,
-                                          width: double.infinity,
-                                          child: Center(
-                                              child: Text(
-                                            '${paymentData.status}',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )),
-                                        ),
-                                      )),
+                                child: paymentData.status == 'รอดำเนินการ'
+                                    ? Container()
+                                    : Container(
+                                        child: paymentData.status ==
+                                                'ชำระเงินผิดพลาด'
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                child: Container(
+                                                  color: Colors.red,
+                                                  height: 30,
+                                                  width: double.infinity,
+                                                  child: Center(
+                                                      child: Text(
+                                                    '${paymentData.status}',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  )),
+                                                ),
+                                              )
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                child: Container(
+                                                  color: Colors.blue,
+                                                  height: 30,
+                                                  width: double.infinity,
+                                                  child: Center(
+                                                      child: Text(
+                                                    '${paymentData.status}',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  )),
+                                                ),
+                                              ))),
                             SizedBox(height: 10),
                             Container(
                                 child: item!.count == item!.countRequest
