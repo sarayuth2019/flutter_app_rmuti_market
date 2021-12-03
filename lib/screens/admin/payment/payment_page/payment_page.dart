@@ -561,7 +561,7 @@ class _PaymentPage extends State {
             print('Notify All user get item');
             String textStatus =
                 'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
-            notifyAllUserMethod(context, token, _paymentData.userId,
+            notifyAllUserMethod(context, token,_paymentData.itemId, _paymentData.userId,
                 _paymentData.payId, _paymentData.amount, textStatus);
           } else {
             String textNotifyUser =

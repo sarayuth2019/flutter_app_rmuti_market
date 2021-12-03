@@ -26,8 +26,8 @@ void notifyUserMethod(context, token, int userId, int payId, int amount,
   });
 }
 
-void notifyMarketMethod(context, token, int marketId, int payId, int count,int countRequest,
-    String textStatus) async {
+void notifyMarketMethod(context, token, int marketId, int payId, int count,
+    int countRequest, String textStatus) async {
   print('Notify to user id ${marketId.toString()}');
   const String urlSaveMarketNotify = '${Config.API_URL}/MarketNotify/save';
   Map params = Map();
@@ -49,7 +49,23 @@ void notifyMarketMethod(context, token, int marketId, int payId, int count,int c
   });
 }
 
-void notifyAllUserMethod(context, token, int userId, int payId, int amount,
-    String textStatus){
+void notifyAllUserMethod(context, token, int itemId, int userId, int payId,
+    int amount, String textStatus)async {
+  const String urlListPaymentByItemId = '${Config.API_URL}/Pay/listItemIdByUserId';
+ //const String urlSaveUserNotify = '${Config.API_URL}/UserNotify/save';
+  Map params = Map();
+  params['itemId'] = itemId.toString();
+ await http.post(Uri.parse(urlListPaymentByItemId), body: params, headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+  }).then((res) {
+    print(res.body);
+    var resData = jsonDecode(utf8.decode(res.bodyBytes));
 
+   /* resData.forEach((element) {
+      notifyUserMethod(context, token,element, payId, amount, textStatus);
+    });
+
+    
+    */
+  });
 }

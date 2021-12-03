@@ -342,6 +342,8 @@ class _MarketDataPage extends State {
           i['price'],
           i['priceSell'],
           i['count'],
+          i['size'],
+          i['colors'],
           i['countRequest'],
           i['marketId'],
           i['dateBegin'],

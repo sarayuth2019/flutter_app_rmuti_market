@@ -65,6 +65,8 @@ class _SellProducts extends State {
   String? dateFinal;
   List listSize = [];
   List listColor = [];
+  String? textListSize;
+  String? textListColors;
 
   @override
   Widget build(BuildContext context) {
@@ -297,7 +299,7 @@ class _SellProducts extends State {
                                                           child: Row(
                                                             children: [
                                                               Text(
-                                                                  '${listSize[index].nameSize} : +${listSize[index].priceSize}'),
+                                                                  '${listSize[index].split(':')[0]} : +${listSize[index].split(':')[1]}'),
                                                               GestureDetector(
                                                                   onTap: () {
                                                                     setState(
@@ -350,36 +352,35 @@ class _SellProducts extends State {
                                                         border:
                                                             InputBorder.none),
                                                   )),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 8.0, right: 8.0),
-                                                child: ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            primary:
-                                                                Colors.teal),
-                                                    onPressed: () {
-                                                      String _textSizeName =
-                                                          textSizeName.text
-                                                              .toString();
-                                                      int _textSizePrice =
-                                                          int.parse(
-                                                              textSizePrice
-                                                                  .text);
-                                                      setState(() {
-                                                        listSize.add(SizeItem(
-                                                            _textSizeName,
-                                                            _textSizePrice));
-                                                        print(
-                                                            "Size : ${_textSizeName}");
-                                                        print(
-                                                            "Price : ${_textSizePrice}");
-                                                        print(listSize.length);
-                                                      });
-                                                    },
-                                                    child: Text('เพิ่ม')),
-                                              )
                                             ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0, right: 8.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors.teal),
+                                                  onPressed: () {
+                                                    String _textSizeName =
+                                                        textSizeName.text
+                                                            .toString();
+                                                    int _textSizePrice =
+                                                        int.parse(
+                                                            textSizePrice.text);
+                                                    setState(() {
+                                                      listSize.add(
+                                                          '${_textSizeName}:${_textSizePrice}');
+                                                      String _textListSize = listSize.toString();
+                                                      textListSize = _textListSize.substring(1,_textListSize.length -1);
+                                                      print(listSize);
+                                                      print(textListSize);
+                                                    });
+                                                  },
+                                                  child: Text('เพิ่ม')),
+                                            ),
                                           )
                                         ],
                                       ),
@@ -418,7 +419,7 @@ class _SellProducts extends State {
                                                           child: Row(
                                                             children: [
                                                               Text(
-                                                                  '${listColor[index].nameColor} : +${listColor[index].priceColor}'),
+                                                                  '${listColor[index].split(':')[0]} : +${listColor[index].split(':')[1]}'),
                                                               GestureDetector(
                                                                   onTap: () {
                                                                     setState(
@@ -472,32 +473,35 @@ class _SellProducts extends State {
                                                         border:
                                                             InputBorder.none),
                                                   )),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 8.0, right: 8.0),
-                                                child: ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            primary:
-                                                                Colors.teal),
-                                                    onPressed: () {
-                                                      String _textColorName =
-                                                          textColorName.text
-                                                              .toString();
-                                                      int _textColorPrice =
-                                                          int.parse(
-                                                              textColorPrice
-                                                                  .text);
-                                                      setState(() {
-                                                        listColor.add(ColorItem(
-                                                            _textColorName,
-                                                            _textColorPrice));
-                                                        print(listColor.length);
-                                                      });
-                                                    },
-                                                    child: Text('เพิ่ม')),
-                                              )
                                             ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0, right: 8.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors.teal),
+                                                  onPressed: () {
+                                                    String _textColorName =
+                                                        textColorName.text
+                                                            .toString();
+                                                    int _textColorPrice =
+                                                        int.parse(textColorPrice
+                                                            .text);
+                                                    setState(() {
+                                                      listColor.add(
+                                                          '${_textColorName}:${_textColorPrice}');
+                                                      String _textListColors = listColor.toString();
+                                                      textListColors = _textListColors.substring(1,_textListColors.length -1);
+                                                      print(listColor);
+                                                      print(textListColors);
+                                                    });
+                                                  },
+                                                  child: Text('เพิ่ม')),
+                                            ),
                                           )
                                         ],
                                       ),
@@ -801,6 +805,8 @@ class _SellProducts extends State {
     params['dateFinal'] = dateFinal.toString();
     params['dealBegin'] = dealBegin.toString();
     params['dealFinal'] = dealFinal.toString();
+    params['size'] = textListSize.toString();
+    params['colors'] = textListColors.toString();
     http.post(Uri.parse(urlSellProducts), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
@@ -844,18 +850,4 @@ class _SellProducts extends State {
       });
     });
   }
-}
-
-class SizeItem {
-  SizeItem(this.nameSize, this.priceSize);
-
-  final String nameSize;
-  final int priceSize;
-}
-
-class ColorItem {
-  ColorItem(this.nameColor, this.priceColor);
-
-  final String nameColor;
-  final int priceColor;
 }

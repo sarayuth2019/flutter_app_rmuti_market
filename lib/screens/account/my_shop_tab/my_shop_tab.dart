@@ -278,6 +278,8 @@ class _MyShop extends State {
           i['price'],
           i['priceSell'],
           i['count'],
+          i['size'],
+          i['colors'],
           i['countRequest'],
           i['marketId'],
           i['dateBegin'],
@@ -322,6 +324,8 @@ class Item {
   final int price;
   final int priceSell;
   final int count;
+  final List size;
+  final List colors;
   final int countRequest;
   final int marketID;
   final String dateBegin;
@@ -330,18 +334,6 @@ class Item {
   final String dealFinal;
   final String date;
 
-  Item(
-      this.itemID,
-      this.nameItem,
-      this.groupItems,
-      this.price,
-      this.priceSell,
-      this.count,
-      this.countRequest,
-      this.marketID,
-      this.dateBegin,
-      this.dateFinal,
-      this.dealBegin,
-      this.dealFinal,
-      this.date);
+  Item(this.itemID, this.nameItem, this.groupItems, this.price, this.priceSell, this.count, this.size, this.colors, this.countRequest, this.marketID, this.dateBegin, this.dateFinal, this.dealBegin, this.dealFinal, this.date
+      );
 }

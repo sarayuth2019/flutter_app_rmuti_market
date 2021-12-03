@@ -16,7 +16,7 @@ void showAlertSelectType1(BuildContext context, token, marketId) async {
               children: [
                 Container(
                     child: GestureDetector(
-                        child: Text('สินค้า พร้อมขาย'),
+                        child: Text('1.สินค้า พร้อมขาย'),
                         onTap: () {
                           var typeItemSell = 1;
                           Navigator.push(
@@ -30,7 +30,7 @@ void showAlertSelectType1(BuildContext context, token, marketId) async {
                 ),
                 Container(
                     child: GestureDetector(
-                        child: Text('สินค้า Pre order'),
+                        child: Text('2.สินค้า Pre order'),
                         onTap: () {
                           var typeItemSell = 2;
                           Navigator.push(
