@@ -245,6 +245,7 @@ class _UserDataPage extends State {
             i['marketId'],
             i['number'],
             i['itemId'],
+            i['detail'],
             i['amount'],
             i['lastNumber'],
             i['bankTransfer'],

@@ -86,8 +86,7 @@ class _PaymentPage extends State {
                               //shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemCount: snapshotImage.data.length,
-                              itemBuilder:
-                                  (BuildContext context, int index) {
+                              itemBuilder: (BuildContext context, int index) {
                                 return Padding(
                                   padding: const EdgeInsets.only(
                                       right: 4.0, left: 4.0),
@@ -95,8 +94,7 @@ class _PaymentPage extends State {
                                     height: 300,
                                     width: 240,
                                     child: Image.memory(
-                                      base64Decode(
-                                          snapshotImage.data[index]),
+                                      base64Decode(snapshotImage.data[index]),
                                       fit: BoxFit.fill,
                                     ),
                                   ),
@@ -320,7 +318,33 @@ class _PaymentPage extends State {
                                           );
                                         }
                                       },
-                                    )
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'รายละเอียดสินค้า : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Container(
+                                            child: snapshot.data.detail
+                                                        .split(',')[0] ==
+                                                    'null'
+                                                ? Container()
+                                                : Text(
+                                                    'ขนาด : ${(snapshot.data.detail.split(',')[0]).split(':')[0]}')),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Container(
+                                            child: snapshot.data.detail
+                                                        .split(',')[1] ==
+                                                    'null'
+                                                ? Container()
+                                                : Text(
+                                                    'สี : ${(snapshot.data.detail.split(',')[1]).split(':')[0]}')),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -493,6 +517,7 @@ class _PaymentPage extends State {
     params['marketId'] = _paymentData.marketId.toString();
     params['number'] = _paymentData.number.toString();
     params['itemId'] = _paymentData.itemId.toString();
+    params['detail'] = _paymentData.detail.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
     params['date'] = _paymentData.date.toString();
@@ -533,6 +558,12 @@ class _PaymentPage extends State {
     var _dealFinal =
         '${item!.dealFinal.split('/')[1]}/${item!.dealFinal.split('/')[0]}/${item!.dealFinal.split('/')[2]}';
 
+    String _textListSize = item!.size.toString();
+    String textListSize = _textListSize.substring(1, _textListSize.length - 1);
+    String _textListColor = item!.color.toString();
+    String textListColor =
+        _textListColor.substring(1, _textListColor.length - 1);
+
     Map params = Map();
     params['itemId'] = item!.itemId.toString();
     params['marketId'] = item!.marketId.toString();
@@ -546,6 +577,8 @@ class _PaymentPage extends State {
     params['dateFinal'] = _dateFinal.toString();
     params['dealBegin'] = _dealBegin.toString();
     params['dealFinal'] = _dealFinal.toString();
+    params['size'] = textListSize.toString();
+    params['colors'] = textListColor.toString();
     http.post(Uri.parse(urlUpdateItem), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
@@ -561,8 +594,14 @@ class _PaymentPage extends State {
             print('Notify All user get item');
             String textStatus =
                 'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
-            notifyAllUserMethod(context, token,_paymentData.itemId, _paymentData.userId,
-                _paymentData.payId, _paymentData.amount, textStatus);
+            notifyAllUserMethod(
+                context,
+                token,
+                _paymentData.itemId,
+                _paymentData.userId,
+                _paymentData.payId,
+                _paymentData.amount,
+                textStatus);
           } else {
             String textNotifyUser =
                 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
@@ -611,6 +650,7 @@ class _PaymentPage extends State {
           _payData['marketId'],
           _payData['number'],
           _payData['itemId'],
+          _payData['detail'],
           _payData['amount'],
           _payData['lastNumber'],
           _payData['bankTransfer'],
@@ -641,6 +681,8 @@ class _PaymentPage extends State {
         _itemData['price'],
         _itemData['priceSell'],
         _itemData['count'],
+        _itemData['size'],
+        _itemData['colors'],
         _itemData['countRequest'],
         _itemData['marketId'],
         _itemData['dateBegin'],
@@ -663,6 +705,7 @@ class Payment {
   final int marketId;
   final int number;
   final int itemId;
+  final detail;
   final int amount;
   final int lastNumber;
   final String bankTransfer;
@@ -678,6 +721,7 @@ class Payment {
       this.marketId,
       this.number,
       this.itemId,
+      this.detail,
       this.amount,
       this.lastNumber,
       this.bankTransfer,
@@ -694,6 +738,8 @@ class _Items {
   final int price;
   final int priceSell;
   final int count;
+  final List size;
+  final List color;
   final int countRequest;
   final int marketId;
   final String dateBegin;
@@ -709,6 +755,8 @@ class _Items {
       this.price,
       this.priceSell,
       this.count,
+      this.size,
+      this.color,
       this.countRequest,
       this.marketId,
       this.dateBegin,

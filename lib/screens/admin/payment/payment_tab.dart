@@ -164,6 +164,7 @@ class _PaymentTab extends State {
             i['marketId'],
             i['number'],
             i['itemId'],
+            i['detail'],
             i['amount'],
             i['lastNumber'],
             i['bankTransfer'],
@@ -185,6 +186,7 @@ class Payment {
   final int marketId;
   final int number;
   final int itemId;
+  final detail;
   final int amount;
   final int lastNumber;
   final String bankTransfer;
@@ -200,6 +202,7 @@ class Payment {
       this.marketId,
       this.number,
       this.itemId,
+      this.detail,
       this.amount,
       this.lastNumber,
       this.bankTransfer,

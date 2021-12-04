@@ -7,7 +7,6 @@ import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import '';
 
 class EditProductPage extends StatefulWidget {
   EditProductPage(this.itemData, this.token);
@@ -62,20 +61,45 @@ class _EditProductPage extends State {
   final urlSaveImage = "${Config.API_URL}/images/save";
   final urlDeleteImageByImageId = "${Config.API_URL}/images/deleteId/";
 
+  TextEditingController textSizeName = TextEditingController();
+  TextEditingController textSizePrice = TextEditingController();
+  TextEditingController textColorName = TextEditingController();
+  TextEditingController textColorPrice = TextEditingController();
+  bool _showAddDetails = false;
+  List listSize = [];
+  List listColor = [];
+  String? textListSize;
+  String? textListColors;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    String _textListSize = itemData.size.toString();
+    String _textListColors = itemData.colors.toString();
+    var _dateBegin =
+        '${itemData.dateBegin.split('/')[1]}/${itemData.dateBegin.split('/')[0]}/${itemData.dateBegin.split('/')[2]}';
+    var _dateFinal =
+        '${itemData.dateFinal.split('/')[1]}/${itemData.dateFinal.split('/')[0]}/${itemData.dateFinal.split('/')[2]}';
+    var _dealBegin =
+        '${itemData.dealBegin.split('/')[1]}/${itemData.dealBegin.split('/')[0]}/${itemData.dealBegin.split('/')[2]}';
+    var _dealFinal =
+        '${itemData.dealFinal.split('/')[1]}/${itemData.dealFinal.split('/')[0]}/${itemData.dealFinal.split('/')[2]}';
+
     marketID = itemData.marketID;
     nameItem = itemData.nameItem;
     price = itemData.price;
     priceSell = itemData.priceSell;
     count = itemData.count;
     countRequest = itemData.countRequest;
-    dealBegin = itemData.dealBegin;
-    dealFinal = itemData.dealFinal;
-    dateBegin = itemData.dateBegin;
-    dateFinal = itemData.dateFinal;
+    dealBegin = _dealBegin;
+    dealFinal = _dealFinal;
+    dateBegin = _dateBegin;
+    dateFinal = _dateFinal;
+    listSize = itemData.size;
+    listColor = itemData.colors;
+    textListSize = _textListSize.substring(1, _textListSize.length - 1);
+    textListColors = _textListColors.substring(1, _textListColors.length - 1);
     getImage(itemData.itemID).then((value) {
       if (value.length != 0) {
         setState(() {
@@ -288,6 +312,300 @@ class _EditProductPage extends State {
                     ],
                   ),
                 ),
+                Text(
+                  'รายละเดียดเพิ่มเติม',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '(สำหรับการขายเสื้อแบบกลุ่มหรืออื่นๆ)',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Container(
+                    child: _showAddDetails == false
+                        ? IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _showAddDetails = true;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.add_circle,
+                              color: Colors.teal,
+                            ))
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: boxDecorationGrey,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      color: Colors.transparent,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'ขนาด',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Container(
+                                            height: 40,
+                                            width: double.infinity,
+                                            child: listSize.length == 0
+                                                ? Text('ไม่มีข้อมูลขนาด')
+                                                : ListView.builder(
+                                                    shrinkWrap: true,
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    itemCount: listSize.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            index) {
+                                                      return Card(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Row(
+                                                            children: [
+                                                              Text(
+                                                                  '${listSize[index].split(':')[0]} : +${listSize[index].split(':')[1]}'),
+                                                              GestureDetector(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      listSize.removeAt(
+                                                                          index);
+                                                                      print(
+                                                                          'listSing length : ${listSize.length}');
+                                                                    });
+                                                                  },
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .highlight_remove,
+                                                                    size: 15,
+                                                                    color: Colors
+                                                                        .red,
+                                                                  ))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text('ขนาด : '),
+                                              Container(
+                                                  decoration: boxDecorationGrey,
+                                                  height: 30,
+                                                  width: 50,
+                                                  child: TextField(
+                                                    controller: textSizeName,
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            InputBorder.none),
+                                                  )),
+                                              SizedBox(
+                                                width: 15,
+                                              ),
+                                              Text('ราคาบวกเพิ่ม : '),
+                                              Container(
+                                                  decoration: boxDecorationGrey,
+                                                  height: 30,
+                                                  width: 50,
+                                                  child: TextField(
+                                                    controller: textSizePrice,
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            InputBorder.none),
+                                                  )),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0, right: 8.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors.teal),
+                                                  onPressed: () {
+                                                    String _textSizeName =
+                                                        textSizeName.text
+                                                            .toString();
+                                                    int _textSizePrice =
+                                                        int.parse(
+                                                            textSizePrice.text);
+                                                    setState(() {
+                                                      listSize.add(
+                                                          '${_textSizeName}:${_textSizePrice}');
+                                                      String _textListSize =
+                                                          listSize.toString();
+                                                      textListSize =
+                                                          _textListSize.substring(
+                                                              1,
+                                                              _textListSize
+                                                                      .length -
+                                                                  1);
+                                                      print(listSize);
+                                                      print(textListSize);
+                                                    });
+                                                  },
+                                                  child: Text('เพิ่ม')),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'สี',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Container(
+                                            height: 40,
+                                            width: double.infinity,
+                                            child: listColor.length == 0
+                                                ? Text('ไม่มีข้อมูลสี')
+                                                : ListView.builder(
+                                                    shrinkWrap: true,
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    itemCount: listColor.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            index) {
+                                                      return Card(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Row(
+                                                            children: [
+                                                              Text(
+                                                                  '${listColor[index].split(':')[0]} : +${listColor[index].split(':')[1]}'),
+                                                              GestureDetector(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      listColor
+                                                                          .removeAt(
+                                                                              index);
+                                                                      print(
+                                                                          'listSing length : ${listColor.length}');
+                                                                    });
+                                                                  },
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .highlight_remove,
+                                                                    size: 15,
+                                                                    color: Colors
+                                                                        .red,
+                                                                  ))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text('สี : '),
+                                              Container(
+                                                  decoration: boxDecorationGrey,
+                                                  height: 30,
+                                                  width: 50,
+                                                  child: TextField(
+                                                    controller: textColorName,
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            InputBorder.none),
+                                                  )),
+                                              SizedBox(
+                                                width: 15,
+                                              ),
+                                              Text('ราคาบวกเพิ่ม : '),
+                                              Container(
+                                                  decoration: boxDecorationGrey,
+                                                  height: 30,
+                                                  width: 50,
+                                                  child: TextField(
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    controller: textColorPrice,
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            InputBorder.none),
+                                                  )),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0, right: 8.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors.teal),
+                                                  onPressed: () {
+                                                    String _textColorName =
+                                                        textColorName.text
+                                                            .toString();
+                                                    int _textColorPrice =
+                                                        int.parse(textColorPrice
+                                                            .text);
+                                                    setState(() {
+                                                      listColor.add(
+                                                          '${_textColorName}:${_textColorPrice}');
+                                                      String _textListColors =
+                                                          listColor.toString();
+                                                      textListColors =
+                                                          _textListColors.substring(
+                                                              1,
+                                                              _textListColors
+                                                                      .length -
+                                                                  1);
+                                                      print(listColor);
+                                                      print(textListColors);
+                                                    });
+                                                  },
+                                                  child: Text('เพิ่ม')),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _showAddDetails = false;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          Icons.arrow_drop_up_outlined,
+                                          color: Colors.teal,
+                                        ))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -517,7 +835,8 @@ class _EditProductPage extends State {
   _onGallery() async {
     print('Select Gallery');
     // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
+    var _imageGallery = await ImagePicker().pickImage(
+        source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
@@ -540,7 +859,8 @@ class _EditProductPage extends State {
   _onCamera() async {
     print('Select Camera');
     // ignore: deprecated_member_use
-    var _imageCamera = await ImagePicker().pickImage(source: ImageSource.camera, maxWidth: 1000, imageQuality: 100);
+    var _imageCamera = await ImagePicker().pickImage(
+        source: ImageSource.camera, maxWidth: 1000, imageQuality: 100);
     if (_imageCamera != null) {
       setState(() {
         imageFile = File(_imageCamera.path);
@@ -632,12 +952,13 @@ class _EditProductPage extends State {
     params['price'] = price.toString();
     params['priceSell'] = priceSell.toString();
     params['count'] = count.toString();
+    params['size'] = textListSize.toString();
+    params['colors'] = textListColors.toString();
     params['countRequest'] = countRequest.toString();
     params['dateBegin'] = dateBegin.toString();
     params['dateFinal'] = dateFinal.toString();
     params['dealBegin'] = dealBegin.toString();
     params['dealFinal'] = dealFinal.toString();
-    // params['imageItems'] = imageData.toString();
 
     http.post(Uri.parse(urlSellProducts), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'

@@ -800,13 +800,13 @@ class _SellProducts extends State {
     params['price'] = price.toString();
     params['priceSell'] = priceSell.toString();
     params['count'] = count.toString();
+    params['size'] = textListSize.toString();
+    params['colors'] = textListColors.toString();
     params['countRequest'] = countRequest.toString();
     params['dateBegin'] = dateBegin.toString();
     params['dateFinal'] = dateFinal.toString();
     params['dealBegin'] = dealBegin.toString();
     params['dealFinal'] = dealFinal.toString();
-    params['size'] = textListSize.toString();
-    params['colors'] = textListColors.toString();
     http.post(Uri.parse(urlSellProducts), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {

@@ -132,7 +132,9 @@ class _MyShop extends State {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14),
                                             ),
-                                            SizedBox(width: 8,),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
                                             Container(
                                                 child: snapshot.data[index]
                                                             .groupItems ==
@@ -334,6 +336,20 @@ class Item {
   final String dealFinal;
   final String date;
 
-  Item(this.itemID, this.nameItem, this.groupItems, this.price, this.priceSell, this.count, this.size, this.colors, this.countRequest, this.marketID, this.dateBegin, this.dateFinal, this.dealBegin, this.dealFinal, this.date
-      );
+  Item(
+      this.itemID,
+      this.nameItem,
+      this.groupItems,
+      this.price,
+      this.priceSell,
+      this.count,
+      this.size,
+      this.colors,
+      this.countRequest,
+      this.marketID,
+      this.dateBegin,
+      this.dateFinal,
+      this.dealBegin,
+      this.dealFinal,
+      this.date);
 }

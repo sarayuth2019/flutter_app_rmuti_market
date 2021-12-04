@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/item_data_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/payment_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 
@@ -165,6 +166,32 @@ class _PaymentFormQRCode extends State {
                                       ),
                                       Text(
                                           '${snapshot.data.number} '),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'รายละเอียดสินค้า : ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Container(
+                                          child: snapshot.data.detail
+                                              .split(',')[0] ==
+                                              'null'
+                                              ? Container()
+                                              : Text(
+                                              'ขนาด : ${(snapshot.data.detail.split(',')[0]).split(':')[0]}')),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Container(
+                                          child: snapshot.data.detail
+                                              .split(',')[1] ==
+                                              'null'
+                                              ? Container()
+                                              : Text(
+                                              'สี : ${(snapshot.data.detail.split(',')[1]).split(':')[0]}')),
                                     ],
                                   ),
                                   Row(
@@ -331,6 +358,7 @@ class _PaymentFormQRCode extends State {
     params['marketId'] = _paymentData.marketId.toString();
     params['number'] = _paymentData.number.toString();
     params['itemId'] = _paymentData.itemId.toString();
+    params['detail'] = _paymentData.detail.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
     params['date'] = _paymentData.date.toString();
@@ -381,13 +409,14 @@ class _PaymentFormQRCode extends State {
       var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
       print(jsonData);
       var _payData = jsonData['data'];
-      _Payment _payment = _Payment(
+      Payment _payment = Payment(
           _payData['payId'],
           _payData['status'],
           _payData['userId'],
           _payData['marketId'],
           _payData['number'],
           _payData['itemId'],
+          _payData['detail'],
           _payData['amount'],
           _payData['lastNumber'],
           _payData['bankTransfer'],
@@ -401,33 +430,4 @@ class _PaymentFormQRCode extends State {
   }
 }
 
-class _Payment {
-  final int payId;
-  final String status;
-  final int userId;
-  final int marketId;
-  final int number;
-  final int itemId;
-  final int amount;
-  final int lastNumber;
-  final String bankTransfer;
-  final String bankReceive;
-  final String date;
-  final String time;
-  final String dataTransfer;
 
-  _Payment(
-      this.payId,
-      this.status,
-      this.userId,
-      this.marketId,
-      this.number,
-      this.itemId,
-      this.amount,
-      this.lastNumber,
-      this.bankTransfer,
-      this.bankReceive,
-      this.date,
-      this.time,
-      this.dataTransfer);
-}
