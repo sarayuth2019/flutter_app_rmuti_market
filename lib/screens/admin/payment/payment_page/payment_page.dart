@@ -591,6 +591,23 @@ class _PaymentPage extends State {
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นสำเร็จ')));
 
           if (item!.countRequest == (item!.count + _paymentData.number)) {
+            String textNotifyUser =
+                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
+            notifyUserMethod(context, token, _paymentData.userId,
+                _paymentData.payId, _paymentData.amount, textNotifyUser);
+
+            String textNotifyMarket =
+                'ยืนยันการลงทะเบียนสินค้า Item Id : ${item!.itemId} ${item!.nameItem}';
+            int _count = (item!.count + _paymentData.number).toInt();
+            notifyMarketMethod(
+                context,
+                token,
+                _paymentData.marketId,
+                _paymentData.payId,
+                _count,
+                item!.countRequest,
+                textNotifyMarket);
+
             print('Notify All user get item');
             String textStatus =
                 'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
@@ -602,6 +619,7 @@ class _PaymentPage extends State {
                 _paymentData.payId,
                 _paymentData.amount,
                 textStatus);
+
           } else {
             String textNotifyUser =
                 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';

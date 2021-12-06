@@ -50,22 +50,25 @@ void notifyMarketMethod(context, token, int marketId, int payId, int count,
 }
 
 void notifyAllUserMethod(context, token, int itemId, int userId, int payId,
-    int amount, String textStatus)async {
-  const String urlListPaymentByItemId = '${Config.API_URL}/Pay/listItemIdByUserId';
- //const String urlSaveUserNotify = '${Config.API_URL}/UserNotify/save';
+    int amount, String textStatus) async {
+  const String urlListPaymentByItemId =
+      '${Config.API_URL}/Pay/listItemIdByUserId';
   Map params = Map();
   params['itemId'] = itemId.toString();
- await http.post(Uri.parse(urlListPaymentByItemId), body: params, headers: {
+  await http.post(Uri.parse(urlListPaymentByItemId), body: params, headers: {
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
   }).then((res) {
     print(res.body);
-    var resData = jsonDecode(utf8.decode(res.bodyBytes));
+    var _res = jsonDecode(utf8.decode(res.bodyBytes));
+    var resUserIdNotify = _res['data1'];
 
-   /* resData.forEach((element) {
-      notifyUserMethod(context, token,element, payId, amount, textStatus);
+    //List _listUserIdNotify = resData.toSet().toList();
+    //print(_listUserIdNotify);
+
+    resUserIdNotify.forEach((element) {
+      print('userId : ${element[0]} payId : ${element[1]}');
+      notifyUserMethod(
+          context, token, element[0], element[1], amount, textStatus);
     });
-
-    
-    */
   });
 }

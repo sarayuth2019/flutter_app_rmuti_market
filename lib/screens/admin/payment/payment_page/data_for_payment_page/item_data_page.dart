@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,6 +28,14 @@ class _ItemDataPage extends State {
   final itemId;
   final String urlGetItemDataByItemId = '${Config.API_URL}/Item/list/item';
   final String urlGetImageByItemId = "${Config.API_URL}/images/";
+
+  var size;
+  int _sizePrice = 0;
+  bool _checkSelectSize = false;
+  var color;
+  int _colorPrice = 0;
+  bool _checkSelectColor = false;
+  var textStyle = TextStyle(fontSize: 12);
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +103,193 @@ class _ItemDataPage extends State {
                   return Column(
                     children: [
                       Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: Container(
+                            child: snapshot.data.size[0] == 'null'
+                                ? Container()
+                                : Container(
+                                    child: _checkSelectSize == false
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _checkSelectSize =
+                                                    !_checkSelectSize;
+                                              });
+                                            },
+                                            child: Container(
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                      child: size == null
+                                                          ? Container(
+                                                              child: Text(
+                                                                  'เลือกขนาด '),
+                                                            )
+                                                          : Container(
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                    'ขนาด : ${size.split(':')[0].toString()}',
+                                                                    style:
+                                                                        textStyle,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 8,
+                                                                  ),
+                                                                  Text(
+                                                                    '+${size.split(':')[1].toString()} บาท',
+                                                                    style:
+                                                                        textStyle,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )),
+                                                  Icon(
+                                                    Icons.arrow_right_outlined,
+                                                    color: Colors.teal,
+                                                    size: 35,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : Container(
+                                            decoration: boxDecorationGrey,
+                                            height: 40,
+                                            width: double.infinity,
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount:
+                                                  snapshot.data.size.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      size = snapshot
+                                                          .data.size[index];
+                                                      _sizePrice = int.parse(
+                                                          snapshot
+                                                              .data.size[index]
+                                                              .split(':')[1]);
+                                                      _checkSelectSize =
+                                                          !_checkSelectSize;
+                                                    });
+                                                  },
+                                                  child: Card(
+                                                      child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      '${snapshot.data.size[index]}',
+                                                      style: textStyle,
+                                                    ),
+                                                  )),
+                                                );
+                                              },
+                                            ),
+                                          ))),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: Container(
+                            child: snapshot.data.colors[0] == 'null'
+                                ? Container()
+                                : Container(
+                                    child: _checkSelectColor == false
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _checkSelectColor =
+                                                    !_checkSelectColor;
+                                              });
+                                            },
+                                            child: Container(
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                      child: color == null
+                                                          ? Container(
+                                                              child: Text(
+                                                                  'เลือกสี'),
+                                                            )
+                                                          : Container(
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                    'สี : ${color.split(':')[0].toString()}',
+                                                                    style:
+                                                                        textStyle,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 8,
+                                                                  ),
+                                                                  Text(
+                                                                    '+${color.split(':')[1].toString()} บาท',
+                                                                    style:
+                                                                        textStyle,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )),
+                                                  Icon(
+                                                    Icons.arrow_right_outlined,
+                                                    color: Colors.teal,
+                                                    size: 35,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : Container(
+                                            decoration: boxDecorationGrey,
+                                            height: 40,
+                                            width: double.infinity,
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount:
+                                                  snapshot.data.colors.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      color = snapshot
+                                                          .data.colors[index];
+                                                      _colorPrice = int.parse(
+                                                          snapshot.data
+                                                              .colors[index]
+                                                              .split(':')[1]);
+                                                      _checkSelectColor =
+                                                          !_checkSelectColor;
+                                                    });
+                                                  },
+                                                  child: Card(
+                                                      child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      '${snapshot.data.colors[index]}',
+                                                      style: textStyle,
+                                                    ),
+                                                  )),
+                                                );
+                                              },
+                                            ),
+                                          ))),
+                      ),
+                      Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           width: double.infinity,
@@ -121,11 +317,11 @@ class _ItemDataPage extends State {
                                   ],
                                 ),
                                 Text(
-                                  "ราคา ${snapshot.data.priceSell.toString()} บาท",
+                                  "ราคา ${snapshot.data.priceSell+_sizePrice+_colorPrice} บาท",
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
-                                  "ลดราคาจาก ${snapshot.data.price.toString()} บาท",
+                                  "ลดราคาจาก ${snapshot.data.price+_sizePrice+_colorPrice} บาท",
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 Text(
@@ -190,9 +386,9 @@ class _ItemDataPage extends State {
     );
   }
 
-  Future<_Items?> getItemData(int itemId) async {
+  Future<Item?> getItemData(int itemId) async {
     Map params = Map();
-    _Items? _items;
+    Item? _items;
     params['id'] = itemId.toString();
     await http.post(Uri.parse(urlGetItemDataByItemId), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
@@ -200,13 +396,15 @@ class _ItemDataPage extends State {
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var itemData = _jsonRes['data'];
       print(itemData);
-      _items = _Items(
+      _items = Item(
         itemData['itemId'],
         itemData['nameItems'],
         itemData['groupItems'],
         itemData['price'],
         itemData['priceSell'],
         itemData['count'],
+        itemData['size'],
+        itemData['colors'],
         itemData['countRequest'],
         itemData['marketId'],
         itemData['dateBegin'],
@@ -239,35 +437,4 @@ class _ItemDataPage extends State {
     print("_resData ${_resData.toString()}");
     return _resData;
   }
-}
-
-class _Items {
-  final int itemId;
-  final String nameItem;
-  final int groupItems;
-  final int price;
-  final int priceSell;
-  final int count;
-  final int countRequest;
-  final int marketId;
-  final String dateBegin;
-  final String dateFinal;
-  final String dealBegin;
-  final String dealFinal;
-  final String date;
-
-  _Items(
-      this.itemId,
-      this.nameItem,
-      this.groupItems,
-      this.price,
-      this.priceSell,
-      this.count,
-      this.countRequest,
-      this.marketId,
-      this.dateBegin,
-      this.dateFinal,
-      this.dealBegin,
-      this.dealFinal,
-      this.date);
 }
