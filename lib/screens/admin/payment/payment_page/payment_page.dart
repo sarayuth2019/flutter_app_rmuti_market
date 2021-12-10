@@ -113,7 +113,7 @@ class _PaymentPage extends State {
                     future: getPaymentData(paymentData.payId),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.data == null) {
+                      if (snapshot.data == null || item == null) {
                         return Container(
                             child: Center(child: CircularProgressIndicator()));
                       } else {
@@ -132,8 +132,8 @@ class _PaymentPage extends State {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ItemDataPage(
-                                                        token, item!.itemId)));
+                                                    ItemDataPage(token,
+                                                        paymentData.itemId)));
                                       },
                                       child: Row(
                                         children: [
@@ -397,12 +397,17 @@ class _PaymentPage extends State {
                                           color: Colors.orange,
                                           height: 30,
                                           width: double.infinity,
-                                          child: Center(
-                                              child: Text(
-                                            'จำนวนผู้ลงทะเบียนครบแล้ว',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )),
+                                          child: Column(
+                                            children: [
+                                              Center(
+                                                  child: Text(
+                                                'จำนวนผู้ลงทะเบียนครบแล้ว',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                              //ElevatedButton(onPressed: (){}, child: Text('คืนเงิน'))
+                                            ],
+                                          ),
                                         ),
                                       )
                                     : Center(
@@ -619,7 +624,6 @@ class _PaymentPage extends State {
                 _paymentData.payId,
                 _paymentData.amount,
                 textStatus);
-
           } else {
             String textNotifyUser =
                 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
