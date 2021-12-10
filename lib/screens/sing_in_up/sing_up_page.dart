@@ -47,18 +47,20 @@ class _SingUp extends State {
       ),
       body: SingleChildScrollView(
         child: Form(
-          // ignore: deprecated_member_use
-          autovalidate: _checkText,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Text("กรุณากรอกข้อมูลให้ครบ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+                Text(
+                  "กรุณากรอกข้อมูลให้ครบ",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       _showAlertSelectImage(context);
                     },
                     child: Container(
@@ -70,7 +72,8 @@ class _SingUp extends State {
                                 width: 270,
                                 color: Colors.grey,
                                 child: Icon(
-                                  Icons.add,size: 40,
+                                  Icons.add,
+                                  size: 40,
                                   color: Colors.white,
                                 ),
                               ))
@@ -88,7 +91,10 @@ class _SingUp extends State {
                     ),
                   ),
                 ),
-                Text("รูปถ่ายร้าน",style: TextStyle(fontWeight: FontWeight.bold),),
+                Text(
+                  "รูปถ่ายร้าน",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 TextFormField(
                   decoration: InputDecoration(hintText: "Email"),
                   maxLength: 32,
@@ -147,7 +153,8 @@ class _SingUp extends State {
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(hintText: "รายละเอียดที่ตั้งของร้าน"),
+                  decoration:
+                      InputDecoration(hintText: "รายละเอียดที่ตั้งของร้าน"),
                   maxLength: 100,
                   maxLines: null,
                   validator: validateMarketAddress,
@@ -155,7 +162,7 @@ class _SingUp extends State {
                     marketAddress = _text;
                   },
                 ),
-               ElevatedButton(
+                ElevatedButton(
                   style: ElevatedButton.styleFrom(primary: Colors.teal),
                   onPressed: onSingUp,
                   child: Text(
@@ -204,6 +211,7 @@ class _SingUp extends State {
       return null;
     }
   }
+
   String? validateNameMarket(String? text) {
     if (text!.length == 0) {
       return "กรุณากรอกชื่อร้าน";
@@ -237,6 +245,7 @@ class _SingUp extends State {
       return null;
     }
   }
+
   String? validateMarketAddress(String? text) {
     if (text!.length == 0) {
       return "กรุณากรอกรายละเอียดที่ตั้งของร้าน";
@@ -275,7 +284,8 @@ class _SingUp extends State {
   _onGallery() async {
     print('Select Gallery');
     // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 1000,imageQuality: 100);
+    var _imageGallery = await ImagePicker().pickImage(
+        source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
@@ -291,7 +301,8 @@ class _SingUp extends State {
   _onCamera() async {
     print('Select Camera');
     // ignore: deprecated_member_use
-    var _imageCamera = await ImagePicker().pickImage(source: ImageSource.camera, maxWidth: 1000,imageQuality: 100);
+    var _imageCamera = await ImagePicker().pickImage(
+        source: ImageSource.camera, maxWidth: 1000, imageQuality: 100);
     if (_imageCamera != null) {
       setState(() {
         imageFile = File(_imageCamera.path);
@@ -305,10 +316,9 @@ class _SingUp extends State {
   }
 
   void onSingUp() {
-    if(imageFile == null){
+    if (imageFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(snackBarNoImage);
-    }else
-    if (_formKey.currentState!.validate()) {
+    } else if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(singUpSnackBar);
       //_snackBarKey.currentState.showSnackBar(singUpSnackBar);
       _formKey.currentState!.save();
@@ -325,35 +335,36 @@ class _SingUp extends State {
       });
     }
   }
-  void _saveToDB()async{
 
-      var request = http.MultipartRequest('POST', Uri.parse(urlSingUp));
-      //request.headers.addAll({HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
-      var _multipart = await http.MultipartFile.fromPath('marketImage', imageFile!.path);
-      request.files.add(_multipart);
+  void _saveToDB() async {
+    var request = http.MultipartRequest('POST', Uri.parse(urlSingUp));
+    //request.headers.addAll({HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+    var _multipart =
+        await http.MultipartFile.fromPath('marketImage', imageFile!.path);
+    request.files.add(_multipart);
 
-      request.fields['email'] = email.toString();
-      request.fields['password'] = password.toString();
-      request.fields['nameMarket'] = nameMarket.toString();
-      request.fields['name'] = name.toString();
-      request.fields['surname'] = surname.toString();
-      request.fields['phoneNumber'] = number.toString();
-      request.fields['descriptionMarket'] = marketAddress.toString();
+    request.fields['email'] = email.toString();
+    request.fields['password'] = password.toString();
+    request.fields['nameMarket'] = nameMarket.toString();
+    request.fields['name'] = name.toString();
+    request.fields['surname'] = surname.toString();
+    request.fields['phoneNumber'] = number.toString();
+    request.fields['descriptionMarket'] = marketAddress.toString();
 
-      await http.Response.fromStream(await request.send()).then((res) {
-        print(res.body);
+    await http.Response.fromStream(await request.send()).then((res) {
+      print(res.body);
 
-        Map resBody = jsonDecode(res.body) as Map;
-        var _resStatus = resBody['status'];
-        print("Sing Up Status : ${_resStatus}");
-        setState(() {
-          if (_resStatus == 1) {
-            Navigator.pop(
-                context, MaterialPageRoute(builder: (context) => SingIn()));
-          } else if (_resStatus == 0) {
-            ScaffoldMessenger.of(context).showSnackBar(singUpFail);
-          }
-        });
+      Map resBody = jsonDecode(res.body) as Map;
+      var _resStatus = resBody['status'];
+      print("Sing Up Status : ${_resStatus}");
+      setState(() {
+        if (_resStatus == 1) {
+          Navigator.pop(
+              context, MaterialPageRoute(builder: (context) => SingIn()));
+        } else if (_resStatus == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(singUpFail);
+        }
       });
+    });
   }
 }

@@ -90,8 +90,7 @@ class _SellProducts extends State {
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
-          // ignore: deprecated_member_use
-          autovalidate: checkText,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
