@@ -305,6 +305,9 @@ class _SellProducts extends State {
                                                                         () {
                                                                       listSize.removeAt(
                                                                           index);
+                                                                      String _textListSize = listColor.toString();
+                                                                      textListSize = _textListSize.substring(1,_textListSize.length -1);
+                                                                      print(textListSize);
                                                                       print(
                                                                           'listSing length : ${listSize.length}');
                                                                     });
@@ -328,7 +331,7 @@ class _SellProducts extends State {
                                               Container(
                                                   decoration: boxDecorationGrey,
                                                   height: 30,
-                                                  width: 50,
+                                                  width: 70,
                                                   child: TextField(
                                                     controller: textSizeName,
                                                     decoration: InputDecoration(
@@ -342,7 +345,7 @@ class _SellProducts extends State {
                                               Container(
                                                   decoration: boxDecorationGrey,
                                                   height: 30,
-                                                  width: 50,
+                                                  width: 70,
                                                   child: TextField(
                                                     controller: textSizePrice,
                                                     keyboardType:
@@ -426,6 +429,9 @@ class _SellProducts extends State {
                                                                       listColor
                                                                           .removeAt(
                                                                               index);
+                                                                      String _textListColors = listColor.toString();
+                                                                      textListColors = _textListColors.substring(1,_textListColors.length -1);
+                                                                      print(textListColors);
                                                                       print(
                                                                           'listSing length : ${listColor.length}');
                                                                     });
@@ -449,7 +455,7 @@ class _SellProducts extends State {
                                               Container(
                                                   decoration: boxDecorationGrey,
                                                   height: 30,
-                                                  width: 50,
+                                                  width: 70,
                                                   child: TextField(
                                                     controller: textColorName,
                                                     decoration: InputDecoration(
@@ -463,7 +469,7 @@ class _SellProducts extends State {
                                               Container(
                                                   decoration: boxDecorationGrey,
                                                   height: 30,
-                                                  width: 50,
+                                                  width: 70,
                                                   child: TextField(
                                                     keyboardType:
                                                         TextInputType.number,
