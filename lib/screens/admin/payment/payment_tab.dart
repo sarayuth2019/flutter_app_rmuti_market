@@ -69,7 +69,7 @@ class _PaymentTab extends State {
                                   Row(
                                     children: [
                                       Text(
-                                          'ชำระเงินโดย User Id : ${snapshot.data[index].marketId}'),
+                                          'ชำระเงินโดย User Id : ${snapshot.data[index].userId}'),
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 10.0, right: 10.0),
@@ -161,9 +161,8 @@ class _PaymentTab extends State {
             i['payId'],
             i['status'],
             i['userId'],
+            i['orderId'],
             i['marketId'],
-            i['number'],
-            i['itemId'],
             i['detail'],
             i['amount'],
             i['lastNumber'],
@@ -183,9 +182,8 @@ class Payment {
   final int payId;
   final String status;
   final int userId;
+  final int orderId;
   final int marketId;
-  final int number;
-  final int itemId;
   final detail;
   final int amount;
   final int lastNumber;
@@ -199,9 +197,8 @@ class Payment {
       this.payId,
       this.status,
       this.userId,
+      this.orderId,
       this.marketId,
-      this.number,
-      this.itemId,
       this.detail,
       this.amount,
       this.lastNumber,

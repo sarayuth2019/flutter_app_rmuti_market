@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/payment_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 
@@ -108,9 +108,8 @@ class _PaymentOfItemId extends State {
             i['payId'],
             i['status'],
             i['userId'],
+            i['orderId'],
             i['marketId'],
-            i['number'],
-            i['itemId'],
             i['detail'],
             i['amount'],
             i['lastNumber'],

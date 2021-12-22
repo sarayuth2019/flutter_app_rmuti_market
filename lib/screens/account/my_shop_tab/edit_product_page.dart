@@ -75,8 +75,14 @@ class _EditProductPage extends State {
   void initState() {
     // TODO: implement initState
     super.initState();
+    listSize = itemData.size;
+    listColor = itemData.colors;
     String _textListSize = itemData.size.toString();
     String _textListColors = itemData.colors.toString();
+
+    listSize.removeWhere((value) => value == 'null');
+    listColor.removeWhere((value) => value == 'null');
+
     var _dateBegin =
         '${itemData.dateBegin.split('/')[1]}/${itemData.dateBegin.split('/')[0]}/${itemData.dateBegin.split('/')[2]}';
     var _dateFinal =
@@ -96,10 +102,14 @@ class _EditProductPage extends State {
     dealFinal = _dealFinal;
     dateBegin = _dateBegin;
     dateFinal = _dateFinal;
-    listSize = itemData.size;
-    listColor = itemData.colors;
     textListSize = _textListSize.substring(1, _textListSize.length - 1);
     textListColors = _textListColors.substring(1, _textListColors.length - 1);
+
+
+    print('list size : ${listSize}');
+    print('list color : ${listColor}');
+
+
     getImage(itemData.itemID).then((value) {
       if (value.length != 0) {
         setState(() {
@@ -354,7 +364,8 @@ class _EditProductPage extends State {
                                           Container(
                                             height: 40,
                                             width: double.infinity,
-                                            child: listSize.length == 0
+                                            child: listSize.length == 0 ||
+                                                    textListSize == 'null'
                                                 ? Text('ไม่มีข้อมูลขนาด')
                                                 : ListView.builder(
                                                     shrinkWrap: true,
@@ -381,6 +392,16 @@ class _EditProductPage extends State {
                                                                           index);
                                                                       print(
                                                                           'listSing length : ${listSize.length}');
+                                                                      String
+                                                                          _textListSize =
+                                                                          listSize
+                                                                              .toString();
+                                                                      textListSize =
+                                                                          _textListSize.substring(
+                                                                              1,
+                                                                              _textListSize.length - 1);
+                                                                      print(
+                                                                          listSize);
                                                                     });
                                                                   },
                                                                   child: Icon(
@@ -402,7 +423,7 @@ class _EditProductPage extends State {
                                               Container(
                                                   decoration: boxDecorationGrey,
                                                   height: 30,
-                                                  width: 50,
+                                                  width: 70,
                                                   child: TextField(
                                                     controller: textSizeName,
                                                     decoration: InputDecoration(
@@ -416,7 +437,7 @@ class _EditProductPage extends State {
                                               Container(
                                                   decoration: boxDecorationGrey,
                                                   height: 30,
-                                                  width: 50,
+                                                  width: 70,
                                                   child: TextField(
                                                     controller: textSizePrice,
                                                     keyboardType:
@@ -480,7 +501,8 @@ class _EditProductPage extends State {
                                           Container(
                                             height: 40,
                                             width: double.infinity,
-                                            child: listColor.length == 0
+                                            child: listColor.length == 0 ||
+                                                    textListColors == 'null'
                                                 ? Text('ไม่มีข้อมูลสี')
                                                 : ListView.builder(
                                                     shrinkWrap: true,
@@ -508,6 +530,16 @@ class _EditProductPage extends State {
                                                                               index);
                                                                       print(
                                                                           'listSing length : ${listColor.length}');
+                                                                      String
+                                                                          _textListColor =
+                                                                          listColor
+                                                                              .toString();
+                                                                      textListColors =
+                                                                          _textListColor.substring(
+                                                                              1,
+                                                                              _textListColor.length - 1);
+                                                                      print(
+                                                                          listColor);
                                                                     });
                                                                   },
                                                                   child: Icon(
@@ -529,7 +561,7 @@ class _EditProductPage extends State {
                                               Container(
                                                   decoration: boxDecorationGrey,
                                                   height: 30,
-                                                  width: 50,
+                                                  width: 70,
                                                   child: TextField(
                                                     controller: textColorName,
                                                     decoration: InputDecoration(
@@ -543,7 +575,7 @@ class _EditProductPage extends State {
                                               Container(
                                                   decoration: boxDecorationGrey,
                                                   height: 30,
-                                                  width: 50,
+                                                  width: 70,
                                                   child: TextField(
                                                     keyboardType:
                                                         TextInputType.number,
@@ -920,7 +952,7 @@ class _EditProductPage extends State {
         headers: {
           HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
         }).then((res) {
-      print(res.body);
+      // print(res.body);
       Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _statusData = jsonData['status'];
       var _dataImage = jsonData['dataImages'];

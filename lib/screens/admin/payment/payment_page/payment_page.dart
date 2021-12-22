@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/item_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market__data_page/market_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/user_data_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_Image_payment_method.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_payment_by_payId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/notify_method.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,22 +29,29 @@ class _PaymentPage extends State {
   _PaymentPage(this.token, this.paymentData);
 
   final token;
-  final paymentData;
+  final Payment paymentData;
   final String urlGetPayData = '${Config.API_URL}/Pay/listId';
   final String urlSavePay = '${Config.API_URL}/Pay/save';
   final String urlGetItemByItemId = '${Config.API_URL}/Item/list/item';
   final String urlUpdateItem = '${Config.API_URL}/Item/update';
 
-  _Items? item;
-
+  //_Items? item;
+  List listDetail = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    /*
     getItemByItemId(paymentData.itemId).then((value) {
       item = value!;
       print('Item Data : ${item}');
     });
+     */
+    List _listDetail = paymentData.detail.substring(1,paymentData.detail.length-1).split(',');
+
+    print('listDetail : ${_listDetail}');
+    print('listDetail length : ${_listDetail.length}');
+    print('listDetail length data : ${_listDetail[5]}');
   }
 
   @override
@@ -110,10 +118,10 @@ class _PaymentPage extends State {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   child: FutureBuilder(
-                    future: getPaymentData(paymentData.payId),
+                    future: getPaymentByPayId(token, paymentData.payId),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.data == null || item == null) {
+                      if (snapshot.data == null) {
                         return Container(
                             child: Center(child: CircularProgressIndicator()));
                       } else {
@@ -126,35 +134,6 @@ class _PaymentPage extends State {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ItemDataPage(token,
-                                                        paymentData.itemId)));
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'ชำระสินค้า : ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                              'Item Id  ${snapshot.data.itemId} '),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Icon(
-                                            Icons.search,
-                                            color: Colors.teal,
-                                            size: 20,
-                                          )
-                                        ],
-                                      ),
-                                    ),
                                     Row(
                                       children: [
                                         Text(
@@ -162,7 +141,7 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('${snapshot.data.number}'),
+                                        // Text('${snapshot.data.number}'),
                                       ],
                                     ),
                                     GestureDetector(
@@ -286,6 +265,7 @@ class _PaymentPage extends State {
                                         Text('${snapshot.data.lastNumber}'),
                                       ],
                                     ),
+                                    /*
                                     FutureBuilder(
                                       future:
                                           getItemByItemId(paymentData.itemId),
@@ -312,13 +292,13 @@ class _PaymentPage extends State {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              Text(
-                                                  '${item!.count}/${item!.countRequest}'),
+                                              //Text('${item!.count}/${item!.countRequest}'),
                                             ],
                                           );
                                         }
                                       },
                                     ),
+                                    */
                                     Row(
                                       children: [
                                         Text(
@@ -326,6 +306,7 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
+                                        /*
                                         Container(
                                             child: snapshot.data.detail
                                                         .split(',')[0] ==
@@ -343,8 +324,28 @@ class _PaymentPage extends State {
                                                 ? Container()
                                                 : Text(
                                                     'สี : ${(snapshot.data.detail.split(',')[1]).split(':')[0]}')),
+                                        */
                                       ],
                                     ),
+                                    Container(
+                                      height: double.parse(
+                                          (listDetail.length * 12)
+                                              .toString()),
+                                      width: 400,
+                                      child: ListView.builder(
+                                        itemCount: listDetail.length,
+                                        itemBuilder: (BuildContext context,
+                                            int index) {
+                                          if (listDetail.length ==
+                                              0) {
+                                            return Container();
+                                          } else {
+                                            return Text(
+                                                '${listDetail}');
+                                          }
+                                        },
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
@@ -389,6 +390,7 @@ class _PaymentPage extends State {
                                                 ),
                                               ))),
                             SizedBox(height: 10),
+                            /*
                             Container(
                                 child: item!.count == item!.countRequest
                                     ? ClipRRect(
@@ -452,6 +454,8 @@ class _PaymentPage extends State {
                                                   )
                                                 : Container()),
                                       )),
+
+                             */
                           ],
                         );
                       }
@@ -469,7 +473,7 @@ class _PaymentPage extends State {
   Future<void> _onRefresh() async {
     setState(() {
       getImagePayment(token, paymentData.payId);
-      getItemByItemId(paymentData.itemId);
+      //getItemByItemId(paymentData.itemId);
     });
   }
 
@@ -541,9 +545,9 @@ class _PaymentPage extends State {
             .showSnackBar(SnackBar(content: Text('บันทึกสถานะสำเร็จ')));
         if (statusPayment == 'ชำระเงินสำเร็จ') {
           int _number = _paymentData.number;
-          updateItem(_paymentData, _number, statusPayment);
+          // updateItem(_paymentData, _number, statusPayment);
         } else {
-          updateItem(_paymentData, 0, statusPayment);
+          //updateItem(_paymentData, 0, statusPayment);
         }
       } else {
         print('save fall !');
@@ -553,31 +557,31 @@ class _PaymentPage extends State {
     });
   }
 
-  void updateItem(_paymentData, int number, status) async {
+  void updateItem(_paymentData, int number, status, itemData) async {
     var _dateBegin =
-        '${item!.dateBegin.split('/')[1]}/${item!.dateBegin.split('/')[0]}/${item!.dateBegin.split('/')[2]}';
+        '${itemData!.dateBegin.split('/')[1]}/${itemData!.dateBegin.split('/')[0]}/${itemData!.dateBegin.split('/')[2]}';
     var _dateFinal =
-        '${item!.dateFinal.split('/')[1]}/${item!.dateFinal.split('/')[0]}/${item!.dateFinal.split('/')[2]}';
+        '${itemData!.dateFinal.split('/')[1]}/${itemData!.dateFinal.split('/')[0]}/${itemData!.dateFinal.split('/')[2]}';
     var _dealBegin =
-        '${item!.dealBegin.split('/')[1]}/${item!.dealBegin.split('/')[0]}/${item!.dealBegin.split('/')[2]}';
+        '${itemData!.dealBegin.split('/')[1]}/${itemData!.dealBegin.split('/')[0]}/${itemData!.dealBegin.split('/')[2]}';
     var _dealFinal =
-        '${item!.dealFinal.split('/')[1]}/${item!.dealFinal.split('/')[0]}/${item!.dealFinal.split('/')[2]}';
+        '${itemData!.dealFinal.split('/')[1]}/${itemData!.dealFinal.split('/')[0]}/${itemData!.dealFinal.split('/')[2]}';
 
-    String _textListSize = item!.size.toString();
+    String _textListSize = itemData!.size.toString();
     String textListSize = _textListSize.substring(1, _textListSize.length - 1);
-    String _textListColor = item!.color.toString();
+    String _textListColor = itemData!.color.toString();
     String textListColor =
         _textListColor.substring(1, _textListColor.length - 1);
 
     Map params = Map();
-    params['itemId'] = item!.itemId.toString();
-    params['marketId'] = item!.marketId.toString();
-    params['nameItems'] = item!.nameItem.toString();
-    params['groupItems'] = item!.groupItem.toString();
-    params['price'] = item!.price.toString();
-    params['priceSell'] = item!.priceSell.toString();
-    params['count'] = (item!.count + number).toString();
-    params['countRequest'] = item!.countRequest.toString();
+    params['itemId'] = itemData!.itemId.toString();
+    params['marketId'] = itemData!.marketId.toString();
+    params['nameItems'] = itemData!.nameItem.toString();
+    params['groupItems'] = itemData!.groupItem.toString();
+    params['price'] = itemData!.price.toString();
+    params['priceSell'] = itemData!.priceSell.toString();
+    params['count'] = (itemData!.count + number).toString();
+    params['countRequest'] = itemData!.countRequest.toString();
     params['dateBegin'] = _dateBegin.toString();
     params['dateFinal'] = _dateFinal.toString();
     params['dealBegin'] = _dealBegin.toString();
@@ -595,27 +599,28 @@ class _PaymentPage extends State {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นสำเร็จ')));
 
-          if (item!.countRequest == (item!.count + _paymentData.number)) {
+          if (itemData!.countRequest ==
+              (itemData!.count + _paymentData.number)) {
             String textNotifyUser =
-                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
+                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData!.dateBegin} - ${itemData!.dateFinal}';
             notifyUserMethod(context, token, _paymentData.userId,
                 _paymentData.payId, _paymentData.amount, textNotifyUser);
 
             String textNotifyMarket =
-                'ยืนยันการลงทะเบียนสินค้า Item Id : ${item!.itemId} ${item!.nameItem}';
-            int _count = (item!.count + _paymentData.number).toInt();
+                'ยืนยันการลงทะเบียนสินค้า Item Id : ${itemData!.itemId} ${itemData!.nameItem}';
+            int _count = (itemData!.count + _paymentData.number).toInt();
             notifyMarketMethod(
                 context,
                 token,
                 _paymentData.marketId,
                 _paymentData.payId,
                 _count,
-                item!.countRequest,
+                itemData!.countRequest,
                 textNotifyMarket);
 
             print('Notify All user get item');
             String textStatus =
-                'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
+                'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData!.dateBegin} - ${itemData!.dateFinal}';
             notifyAllUserMethod(
                 context,
                 token,
@@ -626,20 +631,20 @@ class _PaymentPage extends State {
                 textStatus);
           } else {
             String textNotifyUser =
-                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${item!.dateBegin} - ${item!.dateFinal}';
+                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData!.dateBegin} - ${itemData!.dateFinal}';
             notifyUserMethod(context, token, _paymentData.userId,
                 _paymentData.payId, _paymentData.amount, textNotifyUser);
 
             String textNotifyMarket =
-                'ยืนยันการลงทะเบียนสินค้า Item Id : ${item!.itemId} ${item!.nameItem}';
-            int _count = (item!.count + _paymentData.number).toInt();
+                'ยืนยันการลงทะเบียนสินค้า Item Id : ${itemData!.itemId} ${itemData!.nameItem}';
+            int _count = (itemData!.count + _paymentData.number).toInt();
             notifyMarketMethod(
                 context,
                 token,
                 _paymentData.marketId,
                 _paymentData.payId,
                 _count,
-                item!.countRequest,
+                itemData!.countRequest,
                 textNotifyMarket);
           }
         } else if (_resStatus == 1 && status == 'ชำระเงินผิดพลาด') {
@@ -653,36 +658,6 @@ class _PaymentPage extends State {
         }
       });
     });
-  }
-
-  Future<void> getPaymentData(int payId) async {
-    var paymentData;
-    Map params = Map();
-    params['id'] = payId.toString();
-    await http.post(Uri.parse(urlGetPayData), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
-      print(jsonData);
-      var _payData = jsonData['data'];
-      Payment _payment = Payment(
-          _payData['payId'],
-          _payData['status'],
-          _payData['userId'],
-          _payData['marketId'],
-          _payData['number'],
-          _payData['itemId'],
-          _payData['detail'],
-          _payData['amount'],
-          _payData['lastNumber'],
-          _payData['bankTransfer'],
-          _payData['bankReceive'],
-          _payData['date'],
-          _payData['time'],
-          _payData['dataTransfer']);
-      paymentData = _payment;
-    });
-    return paymentData;
   }
 
   Future<_Items?> getItemByItemId(int itemId) async {
@@ -715,42 +690,9 @@ class _PaymentPage extends State {
       );
       itemData = _items;
     });
-    item = itemData;
+    //item = itemData;
     return itemData;
   }
-}
-
-class Payment {
-  final int payId;
-  final String status;
-  final int userId;
-  final int marketId;
-  final int number;
-  final int itemId;
-  final detail;
-  final int amount;
-  final int lastNumber;
-  final String bankTransfer;
-  final String bankReceive;
-  final String date;
-  final String time;
-  final String dataTransfer;
-
-  Payment(
-      this.payId,
-      this.status,
-      this.userId,
-      this.marketId,
-      this.number,
-      this.itemId,
-      this.detail,
-      this.amount,
-      this.lastNumber,
-      this.bankTransfer,
-      this.bankReceive,
-      this.date,
-      this.time,
-      this.dataTransfer);
 }
 
 class _Items {
@@ -786,4 +728,13 @@ class _Items {
       this.dealBegin,
       this.dealFinal,
       this.date);
+}
+
+class Detail {
+  Detail(this.item, this.size, this.color, this.price, this.number);
+  final String item;
+  final String size;
+  final String color;
+  final int price;
+  final int number;
 }
