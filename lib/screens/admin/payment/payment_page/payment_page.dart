@@ -7,6 +7,7 @@ import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/user_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/getDetailOrder.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_Image_payment_method.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_payment_by_payId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/notify_method.dart';
@@ -35,8 +36,6 @@ class _PaymentPage extends State {
   final String urlGetItemByItemId = '${Config.API_URL}/Item/list/item';
   final String urlUpdateItem = '${Config.API_URL}/Item/update';
 
-  //_Items? item;
-  List listDetail = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -47,11 +46,6 @@ class _PaymentPage extends State {
       print('Item Data : ${item}');
     });
      */
-    List _listDetail = paymentData.detail.substring(1,paymentData.detail.length-1).split(',');
-
-    print('listDetail : ${_listDetail}');
-    print('listDetail length : ${_listDetail.length}');
-    print('listDetail length data : ${_listDetail[5]}');
   }
 
   @override
@@ -120,8 +114,8 @@ class _PaymentPage extends State {
                   child: FutureBuilder(
                     future: getPaymentByPayId(token, paymentData.payId),
                     builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.data == null) {
+                        AsyncSnapshot<dynamic> snapshotPayment) {
+                      if (snapshotPayment.data == null) {
                         return Container(
                             child: Center(child: CircularProgressIndicator()));
                       } else {
@@ -152,7 +146,7 @@ class _PaymentPage extends State {
                                                 builder: (context) =>
                                                     MarketDataPage(
                                                         token,
-                                                        snapshot
+                                                        snapshotPayment
                                                             .data.marketId)));
                                       },
                                       child: Row(
@@ -163,7 +157,7 @@ class _PaymentPage extends State {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                              'Market Id  ${snapshot.data.marketId} '),
+                                              'Market Id  ${snapshotPayment.data.marketId} '),
                                           SizedBox(
                                             width: 10,
                                           ),
@@ -182,7 +176,8 @@ class _PaymentPage extends State {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     UserDataPage(
-                                                        snapshot.data.userId,
+                                                        snapshotPayment
+                                                            .data.userId,
                                                         token)));
                                       },
                                       child: Row(
@@ -193,7 +188,7 @@ class _PaymentPage extends State {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                              'User Id ${snapshot.data.userId} '),
+                                              'User Id ${snapshotPayment.data.userId} '),
                                           SizedBox(
                                             width: 10,
                                           ),
@@ -212,7 +207,8 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('${snapshot.data.bankTransfer}'),
+                                        Text(
+                                            '${snapshotPayment.data.bankTransfer}'),
                                       ],
                                     ),
                                     Row(
@@ -222,7 +218,8 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('${snapshot.data.bankReceive}'),
+                                        Text(
+                                            '${snapshotPayment.data.bankReceive}'),
                                       ],
                                     ),
                                     Row(
@@ -232,7 +229,8 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('${snapshot.data.amount} บาท'),
+                                        Text(
+                                            '${snapshotPayment.data.amount} บาท'),
                                       ],
                                     ),
                                     Row(
@@ -242,7 +240,7 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('${snapshot.data.date}'),
+                                        Text('${snapshotPayment.data.date}'),
                                       ],
                                     ),
                                     Row(
@@ -252,7 +250,7 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('${snapshot.data.time}'),
+                                        Text('${snapshotPayment.data.time}'),
                                       ],
                                     ),
                                     Row(
@@ -262,90 +260,177 @@ class _PaymentPage extends State {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('${snapshot.data.lastNumber}'),
+                                        Text(
+                                            '${snapshotPayment.data.lastNumber}'),
                                       ],
                                     ),
-                                    /*
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Container(
+                              decoration: boxDecorationGrey,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'รายละเอียดสินค้า',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                     FutureBuilder(
-                                      future:
-                                          getItemByItemId(paymentData.itemId),
+                                      future: getDetailOrder(
+                                          token, paymentData.orderId),
                                       builder: (BuildContext context,
-                                          AsyncSnapshot<dynamic> snapshot) {
-                                        if (snapshot.data == null) {
-                                          return Row(
-                                            children: [
-                                              Text(
-                                                'จำนวนผู้ลงทะเบียน : ',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Text('.../...'),
-                                            ],
-                                          );
+                                          AsyncSnapshot<dynamic>
+                                              snapshotDetailOrder) {
+                                        if (snapshotDetailOrder.data == null) {
+                                          return Text('กำลังโหลด...');
                                         } else {
-                                          return Row(
+                                          ////////จำนวนสินค้ารวมกัน////////////
+                                          int sumNumber = snapshotDetailOrder
+                                              .data
+                                              .map((Detail detail) =>
+                                                  detail.number)
+                                              .reduce((a, b) => a + b);
+                                          return Column(
                                             children: [
-                                              Text(
-                                                'จำนวนผู้ลงทะเบียน : ',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              //Text('${item!.count}/${item!.countRequest}'),
+                                              ListView.builder(
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  itemCount: snapshotDetailOrder
+                                                      .data.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return Row(
+                                                      children: [
+                                                        Text(
+                                                            '${snapshotDetailOrder.data[index].nameItem.split(':')[1]}'),
+                                                        Container(
+                                                          child: snapshotDetailOrder
+                                                                      .data[
+                                                                          index]
+                                                                      .size ==
+                                                                  'null'
+                                                              ? Container()
+                                                              : Text(
+                                                                  'ขนาด : ${snapshotDetailOrder.data[index].size}'),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Container(
+                                                          child: snapshotDetailOrder
+                                                                      .data[
+                                                                          index]
+                                                                      .color ==
+                                                                  'null'
+                                                              ? Container()
+                                                              : Text(
+                                                                  'สี : ${snapshotDetailOrder.data[index].color}'),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Text(
+                                                            'จำนวน : ${snapshotDetailOrder.data[index].number}'),
+                                                      ],
+                                                    );
+                                                  }),
+                                              SizedBox(height: 8,),
+                                              FutureBuilder(
+                                                future: getItemByItemId(
+                                                    token,
+                                                    int.parse(
+                                                        snapshotDetailOrder
+                                                            .data[0].nameItem
+                                                            .split(':')[0])),
+                                                builder: (BuildContext context,
+                                                    AsyncSnapshot<dynamic>
+                                                        snapshotItemData) {
+                                                  if (snapshotItemData.data ==
+                                                      null) {
+                                                    return Text('กำลังโหลด...');
+                                                  } else {
+                                                    return Column(
+                                                      children: [
+                                                        Text(
+                                                            'จำนวนผู้ลงทะเบียน : ${snapshotItemData.data.count}/${snapshotItemData.data.countRequest}'),
+                                                        Container(
+                                                            child: snapshotItemData
+                                                                        .data
+                                                                        .count ==
+                                                                    snapshotItemData
+                                                                        .data
+                                                                        .countRequest
+                                                                ? ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    child:
+                                                                        Container(
+                                                                      color: Colors
+                                                                          .orange,
+                                                                      height:
+                                                                          30,
+                                                                      width: double
+                                                                          .infinity,
+                                                                      child:
+                                                                          Column(
+                                                                        children: [
+                                                                          Center(
+                                                                              child: Text(
+                                                                            'จำนวนผู้ลงทะเบียนครบแล้ว',
+                                                                            style:
+                                                                                TextStyle(color: Colors.white),
+                                                                          )),
+                                                                          //ElevatedButton(onPressed: (){}, child: Text('คืนเงิน'))
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : Center(
+                                                                    child: Container(
+                                                                        child: snapshotPayment.data.status == 'รอดำเนินการ'
+                                                                            ? Column(
+                                                                                children: [
+                                                                                  ElevatedButton(
+                                                                                      style: ElevatedButton.styleFrom(primary: Colors.teal),
+                                                                                      onPressed: () {
+                                                                                        String _statusPayment = 'ชำระเงินสำเร็จ';
+                                                                                        _showAlertGetMoney(context, snapshotPayment.data, _statusPayment, snapshotItemData.data, sumNumber);
+                                                                                      },
+                                                                                      child: Text('ชำระเงินสำเร็จ')),
+                                                                                  ElevatedButton(
+                                                                                      style: ElevatedButton.styleFrom(primary: Colors.deepOrange),
+                                                                                      onPressed: () {
+                                                                                        String _statusPayment = 'ชำระเงินผิดพลาด';
+                                                                                        _showAlertGetMoney(context, snapshotPayment.data, _statusPayment, snapshotItemData.data, 0);
+                                                                                      },
+                                                                                      child: Text('จำนวนเงินผิดพลาด')),
+                                                                                ],
+                                                                              )
+                                                                            : Container()),
+                                                                  )),
+                                                      ],
+                                                    );
+                                                  }
+                                                },
+                                              )
                                             ],
                                           );
                                         }
                                       },
                                     ),
-                                    */
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'รายละเอียดสินค้า : ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        /*
-                                        Container(
-                                            child: snapshot.data.detail
-                                                        .split(',')[0] ==
-                                                    'null'
-                                                ? Container()
-                                                : Text(
-                                                    'ขนาด : ${(snapshot.data.detail.split(',')[0]).split(':')[0]}')),
-                                        SizedBox(
-                                          width: 8,
-                                        ),
-                                        Container(
-                                            child: snapshot.data.detail
-                                                        .split(',')[1] ==
-                                                    'null'
-                                                ? Container()
-                                                : Text(
-                                                    'สี : ${(snapshot.data.detail.split(',')[1]).split(':')[0]}')),
-                                        */
-                                      ],
-                                    ),
-                                    Container(
-                                      height: double.parse(
-                                          (listDetail.length * 12)
-                                              .toString()),
-                                      width: 400,
-                                      child: ListView.builder(
-                                        itemCount: listDetail.length,
-                                        itemBuilder: (BuildContext context,
-                                            int index) {
-                                          if (listDetail.length ==
-                                              0) {
-                                            return Container();
-                                          } else {
-                                            return Text(
-                                                '${listDetail}');
-                                          }
-                                        },
-                                      ),
-                                    )
                                   ],
                                 ),
                               ),
@@ -390,72 +475,6 @@ class _PaymentPage extends State {
                                                 ),
                                               ))),
                             SizedBox(height: 10),
-                            /*
-                            Container(
-                                child: item!.count == item!.countRequest
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: Container(
-                                          color: Colors.orange,
-                                          height: 30,
-                                          width: double.infinity,
-                                          child: Column(
-                                            children: [
-                                              Center(
-                                                  child: Text(
-                                                'จำนวนผู้ลงทะเบียนครบแล้ว',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              )),
-                                              //ElevatedButton(onPressed: (){}, child: Text('คืนเงิน'))
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    : Center(
-                                        child: Container(
-                                            child: snapshot.data.status ==
-                                                    'รอดำเนินการ'
-                                                ? Column(
-                                                    children: [
-                                                      ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary: Colors
-                                                                      .teal),
-                                                          onPressed: () {
-                                                            String
-                                                                _statusPayment =
-                                                                'ชำระเงินสำเร็จ';
-                                                            _showAlertGetMoney(
-                                                                context,
-                                                                snapshot.data,
-                                                                _statusPayment);
-                                                          },
-                                                          child: Text(
-                                                              'ชำระเงินสำเร็จ')),
-                                                      ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary: Colors
-                                                                      .deepOrange),
-                                                          onPressed: () {
-                                                            String
-                                                                _statusPayment =
-                                                                'ชำระเงินผิดพลาด';
-                                                            _showAlertGetMoney(
-                                                                context,
-                                                                snapshot.data,
-                                                                _statusPayment);
-                                                          },
-                                                          child: Text(
-                                                              'จำนวนเงินผิดพลาด')),
-                                                    ],
-                                                  )
-                                                : Container()),
-                                      )),
-
-                             */
                           ],
                         );
                       }
@@ -477,15 +496,15 @@ class _PaymentPage extends State {
     });
   }
 
-  void _showAlertGetMoney(
-      BuildContext context, _paymentData, statusPayment) async {
+  void _showAlertGetMoney(BuildContext context, _paymentData, statusPayment,
+      _Items itemData, int sumNumber) async {
     print('Show Alert Dialog !');
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(
-              '${statusPayment.toString()} ?',
+              '${statusPayment.toString()} ? ',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             content: SingleChildScrollView(
@@ -496,7 +515,8 @@ class _PaymentPage extends State {
                       child: GestureDetector(
                           child: Text(statusPayment),
                           onTap: () {
-                            _saveStatusPayment(_paymentData, statusPayment);
+                            _saveStatusPayment(
+                                _paymentData, statusPayment, itemData, sumNumber);
                             Navigator.pop(context);
                           })),
                   SizedBox(
@@ -515,7 +535,8 @@ class _PaymentPage extends State {
         });
   }
 
-  void _saveStatusPayment(_paymentData, statusPayment) async {
+  void _saveStatusPayment(
+      Payment _paymentData, statusPayment, _Items itemData, sumNumber) async {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
     //String status = 'ชำระเงินสำเร็จ';
@@ -523,10 +544,11 @@ class _PaymentPage extends State {
     Map params = Map();
     params['payId'] = _paymentData.payId.toString();
     params['userId'] = _paymentData.userId.toString();
+    params['orderId'] = _paymentData.orderId.toString();
     params['marketId'] = _paymentData.marketId.toString();
-    params['number'] = _paymentData.number.toString();
-    params['itemId'] = _paymentData.itemId.toString();
-    params['detail'] = _paymentData.detail.toString();
+    //params['number'] = _paymentData.number.toString();
+    //params['itemId'] = _paymentData.itemId.toString();
+    //params['detail'] = _paymentData.detail.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
     params['date'] = _paymentData.date.toString();
@@ -544,10 +566,10 @@ class _PaymentPage extends State {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('บันทึกสถานะสำเร็จ')));
         if (statusPayment == 'ชำระเงินสำเร็จ') {
-          int _number = _paymentData.number;
-          // updateItem(_paymentData, _number, statusPayment);
+          int _number = sumNumber;
+          updateItem(_paymentData, _number, statusPayment, itemData);
         } else {
-          //updateItem(_paymentData, 0, statusPayment);
+          updateItem(_paymentData, 0, statusPayment, itemData);
         }
       } else {
         print('save fall !');
@@ -557,31 +579,31 @@ class _PaymentPage extends State {
     });
   }
 
-  void updateItem(_paymentData, int number, status, itemData) async {
+  void updateItem(Payment _paymentData, int sumNumber, status, _Items itemData) async {
     var _dateBegin =
-        '${itemData!.dateBegin.split('/')[1]}/${itemData!.dateBegin.split('/')[0]}/${itemData!.dateBegin.split('/')[2]}';
+        '${itemData.dateBegin.split('/')[1]}/${itemData.dateBegin.split('/')[0]}/${itemData.dateBegin.split('/')[2]}';
     var _dateFinal =
-        '${itemData!.dateFinal.split('/')[1]}/${itemData!.dateFinal.split('/')[0]}/${itemData!.dateFinal.split('/')[2]}';
+        '${itemData.dateFinal.split('/')[1]}/${itemData.dateFinal.split('/')[0]}/${itemData.dateFinal.split('/')[2]}';
     var _dealBegin =
-        '${itemData!.dealBegin.split('/')[1]}/${itemData!.dealBegin.split('/')[0]}/${itemData!.dealBegin.split('/')[2]}';
+        '${itemData.dealBegin.split('/')[1]}/${itemData.dealBegin.split('/')[0]}/${itemData.dealBegin.split('/')[2]}';
     var _dealFinal =
-        '${itemData!.dealFinal.split('/')[1]}/${itemData!.dealFinal.split('/')[0]}/${itemData!.dealFinal.split('/')[2]}';
+        '${itemData.dealFinal.split('/')[1]}/${itemData.dealFinal.split('/')[0]}/${itemData.dealFinal.split('/')[2]}';
 
-    String _textListSize = itemData!.size.toString();
+    String _textListSize = itemData.size.toString();
     String textListSize = _textListSize.substring(1, _textListSize.length - 1);
-    String _textListColor = itemData!.color.toString();
+    String _textListColor = itemData.color.toString();
     String textListColor =
         _textListColor.substring(1, _textListColor.length - 1);
 
     Map params = Map();
-    params['itemId'] = itemData!.itemId.toString();
-    params['marketId'] = itemData!.marketId.toString();
-    params['nameItems'] = itemData!.nameItem.toString();
-    params['groupItems'] = itemData!.groupItem.toString();
-    params['price'] = itemData!.price.toString();
-    params['priceSell'] = itemData!.priceSell.toString();
-    params['count'] = (itemData!.count + number).toString();
-    params['countRequest'] = itemData!.countRequest.toString();
+    params['itemId'] = itemData.itemId.toString();
+    params['marketId'] = itemData.marketId.toString();
+    params['nameItems'] = itemData.nameItem.toString();
+    params['groupItems'] = itemData.groupItem.toString();
+    params['price'] = itemData.price.toString();
+    params['priceSell'] = itemData.priceSell.toString();
+    params['count'] = (itemData.count + sumNumber).toString();
+    params['countRequest'] = itemData.countRequest.toString();
     params['dateBegin'] = _dateBegin.toString();
     params['dateFinal'] = _dateFinal.toString();
     params['dealBegin'] = _dealBegin.toString();
@@ -599,52 +621,51 @@ class _PaymentPage extends State {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นสำเร็จ')));
 
-          if (itemData!.countRequest ==
-              (itemData!.count + _paymentData.number)) {
+          if (itemData.countRequest == (itemData.count + sumNumber)) {
             String textNotifyUser =
-                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData!.dateBegin} - ${itemData!.dateFinal}';
+                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';
             notifyUserMethod(context, token, _paymentData.userId,
                 _paymentData.payId, _paymentData.amount, textNotifyUser);
 
             String textNotifyMarket =
-                'ยืนยันการลงทะเบียนสินค้า Item Id : ${itemData!.itemId} ${itemData!.nameItem}';
-            int _count = (itemData!.count + _paymentData.number).toInt();
+                'ยืนยันการลงทะเบียนสินค้า Item Id : ${itemData.itemId} ${itemData.nameItem}';
+            int _count = (itemData.count + sumNumber).toInt();
             notifyMarketMethod(
                 context,
                 token,
                 _paymentData.marketId,
                 _paymentData.payId,
                 _count,
-                itemData!.countRequest,
+                itemData.countRequest,
                 textNotifyMarket);
 
             print('Notify All user get item');
             String textStatus =
-                'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData!.dateBegin} - ${itemData!.dateFinal}';
+                'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';
             notifyAllUserMethod(
                 context,
                 token,
-                _paymentData.itemId,
+                itemData.itemId,
                 _paymentData.userId,
                 _paymentData.payId,
                 _paymentData.amount,
                 textStatus);
           } else {
             String textNotifyUser =
-                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData!.dateBegin} - ${itemData!.dateFinal}';
+                'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';
             notifyUserMethod(context, token, _paymentData.userId,
                 _paymentData.payId, _paymentData.amount, textNotifyUser);
 
             String textNotifyMarket =
-                'ยืนยันการลงทะเบียนสินค้า Item Id : ${itemData!.itemId} ${itemData!.nameItem}';
-            int _count = (itemData!.count + _paymentData.number).toInt();
+                'ยืนยันการลงทะเบียนสินค้า Item Id : ${itemData.itemId} ${itemData.nameItem}';
+            int _count = (itemData.count + sumNumber).toInt();
             notifyMarketMethod(
                 context,
                 token,
                 _paymentData.marketId,
                 _paymentData.payId,
                 _count,
-                itemData!.countRequest,
+                itemData.countRequest,
                 textNotifyMarket);
           }
         } else if (_resStatus == 1 && status == 'ชำระเงินผิดพลาด') {
@@ -660,7 +681,7 @@ class _PaymentPage extends State {
     });
   }
 
-  Future<_Items?> getItemByItemId(int itemId) async {
+  Future<_Items?> getItemByItemId(token, int itemId) async {
     _Items? itemData;
     Map params = Map();
     params['id'] = itemId.toString();
@@ -728,13 +749,4 @@ class _Items {
       this.dealBegin,
       this.dealFinal,
       this.date);
-}
-
-class Detail {
-  Detail(this.item, this.size, this.color, this.price, this.number);
-  final String item;
-  final String size;
-  final String color;
-  final int price;
-  final int number;
 }
