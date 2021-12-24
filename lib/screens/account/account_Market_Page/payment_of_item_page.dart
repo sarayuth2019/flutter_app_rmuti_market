@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_payment_all.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentOfItemId extends StatefulWidget {

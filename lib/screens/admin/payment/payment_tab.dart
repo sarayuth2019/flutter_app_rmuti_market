@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/payment_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_payment_all.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentTab extends StatefulWidget {
@@ -25,9 +26,6 @@ class _PaymentTab extends State {
 
   final token;
   final tabStatus;
-
-  final String urlGetPaymentByStatusPayment =
-      '${Config.API_URL}/Pay/listByStatus';
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +143,7 @@ class _PaymentTab extends State {
   }
 
   Future<List<Payment>> listPayment() async {
+    final String urlGetPaymentByStatusPayment = '${Config.API_URL}/Pay/listByStatus';
     List<Payment> _listPayment = [];
     Map params = Map();
     params['status'] = tabStatus.toString();
@@ -176,35 +175,4 @@ class _PaymentTab extends State {
     });
     return _listPayment;
   }
-}
-
-class Payment {
-  final int payId;
-  final String status;
-  final int userId;
-  final int orderId;
-  final int marketId;
-  final detail;
-  final int amount;
-  final int lastNumber;
-  final String bankTransfer;
-  final String bankReceive;
-  final String date;
-  final String time;
-  final String dataTransfer;
-
-  Payment(
-      this.payId,
-      this.status,
-      this.userId,
-      this.orderId,
-      this.marketId,
-      this.detail,
-      this.amount,
-      this.lastNumber,
-      this.bankTransfer,
-      this.bankReceive,
-      this.date,
-      this.time,
-      this.dataTransfer);
 }

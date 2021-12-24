@@ -257,64 +257,53 @@ class _MarketPage extends State {
                         itemBuilder: (BuildContext context, index) {
                           return Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PaymentOfItemId(
-                                            token,
-                                            snapshot.data[index].itemID)));
-                              },
-                              child: Container(
-                                decoration: boxDecorationGrey,
-                                width: double.infinity,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 3.0, left: 8.0, right: 8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "${snapshot.data[index].nameItem}",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
+                            child: Container(
+                              decoration: boxDecorationGrey,
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 3.0, left: 8.0, right: 8.0),
+                                    child: Text(
+                                      "${snapshot.data[index].nameItem}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,fontSize: 18),
                                     ),
-                                    SizedBox(
-                                      height: 8,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0),
+                                    child: Text(
+                                      "ราคา ${snapshot.data[index].priceSell} บาท ลดราคาจาก ${snapshot.data[index].price} บาท",
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
-                                          ),
-                                        ],
-                                      ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
+                                        ),
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8.0, bottom: 4),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "รวมเป็นเงิน : ${(snapshot.data[index].priceSell) * snapshot.data[index].count} บาท",
-                                          )
-                                        ],
-                                      ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0, bottom: 4),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "รวมเป็นเงิน : ${(snapshot.data[index].priceSell) * snapshot.data[index].count} บาท",
+                                        )
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           );

@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/item_data_page.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/getDetailOrder.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_order_by_orderId.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_payment_all.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_payment_by_payId.dart';
+import 'package:flutter_app_rmuti_market/screens/method/save_status_order.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentFormQRCode extends StatefulWidget {
@@ -35,9 +37,10 @@ class _PaymentFormQRCode extends State {
     // TODO: implement build
     return Scaffold(
       body: FutureBuilder(
-        future: getPaymentByPayId(token,paymentId),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.data == null) {
+        future: getPaymentByPayId(token, paymentId),
+        builder:
+            (BuildContext context, AsyncSnapshot<dynamic> snapshotPayment) {
+          if (snapshotPayment.data == null) {
             return Center(child: CircularProgressIndicator());
           } else {
             return SafeArea(
@@ -54,19 +57,20 @@ class _PaymentFormQRCode extends State {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Container(
-                            child: snapshot.data.status == 'ชำระเงินสำเร็จ'
-                                ? Text(
-                                    '${snapshot.data.status}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green),
-                                  )
-                                : Text(
-                                    '${snapshot.data.status}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blue),
-                                  ),
+                            child:
+                                snapshotPayment.data.status == 'ชำระเงินสำเร็จ'
+                                    ? Text(
+                                        '${snapshotPayment.data.status}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.green),
+                                      )
+                                    : Text(
+                                        '${snapshotPayment.data.status}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue),
+                                      ),
                           )
                         ],
                       ),
@@ -127,70 +131,15 @@ class _PaymentFormQRCode extends State {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ItemDataPage(token,
-                                                      snapshot.data.itemId)));
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          'ชำระสินค้า : ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                            'Item Id  ${snapshot.data.itemId} '),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Icon(
-                                          Icons.search,
-                                          color: Colors.teal,
-                                          size: 20,
-                                        )
-                                      ],
-                                    ),
-                                  ),
                                   Row(
                                     children: [
                                       Text(
-                                        'จำนวน : ',
+                                        'ชำระสินค้า : ',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                          '${snapshot.data.number} '),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'รายละเอียดสินค้า : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Container(
-                                          child: snapshot.data.detail
-                                              .split(',')[0] ==
-                                              'null'
-                                              ? Container()
-                                              : Text(
-                                              'ขนาด : ${(snapshot.data.detail.split(',')[0]).split(':')[0]}')),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Container(
-                                          child: snapshot.data.detail
-                                              .split(',')[1] ==
-                                              'null'
-                                              ? Container()
-                                              : Text(
-                                              'สี : ${(snapshot.data.detail.split(',')[1]).split(':')[0]}')),
+                                          'Order Id  ${snapshotPayment.data.orderId} '),
                                     ],
                                   ),
                                   Row(
@@ -201,7 +150,7 @@ class _PaymentFormQRCode extends State {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                          'Market Id  ${snapshot.data.marketId} '),
+                                          'Market Id  ${snapshotPayment.data.marketId} '),
                                     ],
                                   ),
                                   Row(
@@ -212,7 +161,7 @@ class _PaymentFormQRCode extends State {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                          'User Id ${snapshot.data.marketId} '),
+                                          'User Id ${snapshotPayment.data.userId} '),
                                     ],
                                   ),
                                   Row(
@@ -222,7 +171,8 @@ class _PaymentFormQRCode extends State {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text('${snapshot.data.bankTransfer}'),
+                                      Text(
+                                          '${snapshotPayment.data.bankTransfer}'),
                                     ],
                                   ),
                                   Row(
@@ -232,7 +182,8 @@ class _PaymentFormQRCode extends State {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text('${snapshot.data.bankReceive}'),
+                                      Text(
+                                          '${snapshotPayment.data.bankReceive}'),
                                     ],
                                   ),
                                   Row(
@@ -242,7 +193,8 @@ class _PaymentFormQRCode extends State {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text('${snapshot.data.amount} บาท'),
+                                      Text(
+                                          '${snapshotPayment.data.amount} บาท'),
                                     ],
                                   ),
                                   Row(
@@ -252,7 +204,7 @@ class _PaymentFormQRCode extends State {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text('${snapshot.data.date}'),
+                                      Text('${snapshotPayment.data.date}'),
                                     ],
                                   ),
                                   Row(
@@ -262,7 +214,7 @@ class _PaymentFormQRCode extends State {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text('${snapshot.data.time}'),
+                                      Text('${snapshotPayment.data.time}'),
                                     ],
                                   ),
                                   Row(
@@ -272,7 +224,8 @@ class _PaymentFormQRCode extends State {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text('${snapshot.data.lastNumber}'),
+                                      Text(
+                                          '${snapshotPayment.data.lastNumber}'),
                                     ],
                                   ),
                                 ],
@@ -283,19 +236,103 @@ class _PaymentFormQRCode extends State {
                             height: 10,
                           ),
                           Container(
-                              child: snapshot.data.status == 'ชำระเงินสำเร็จ'
-                                  ? Container(
-                                      width: double.infinity,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              primary: Colors.teal),
-                                          onPressed: () {
-                                            _showAlertGetMoney(
-                                                context, snapshot.data);
-                                          },
-                                          child: Text('ส่งมอบสินค้า')),
-                                    )
-                                  : Container())
+                            decoration: boxDecorationGrey,
+                            child: FutureBuilder(
+                              future: getDetailOrder(
+                                  token, snapshotPayment.data.orderId),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshotDetailOrder) {
+                                if (snapshotDetailOrder.data == null) {
+                                  return Text('กำลังโหลด...');
+                                } else {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'รายละเอียดสินค้า',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            scrollDirection: Axis.vertical,
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                snapshotDetailOrder.data.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return Row(
+                                                children: [
+                                                  Text(
+                                                      '${snapshotDetailOrder.data[index].nameItem.split(':')[1]}'),
+                                                  Container(
+                                                    child: snapshotDetailOrder
+                                                                .data[index]
+                                                                .size ==
+                                                            'null'
+                                                        ? Container()
+                                                        : Text(
+                                                            'ขนาด : ${snapshotDetailOrder.data[index].size.split(':')[0]}'),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Container(
+                                                    child: snapshotDetailOrder
+                                                                .data[index]
+                                                                .color ==
+                                                            'null'
+                                                        ? Container()
+                                                        : Text(
+                                                            'สี : ${snapshotDetailOrder.data[index].color.split(':')[0]}'),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Text(
+                                                      'จำนวน : ${snapshotDetailOrder.data[index].number}'),
+                                                ],
+                                              );
+                                            }),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                          FutureBuilder(
+                            future: getOrderByOrderId(
+                                token, snapshotPayment.data.orderId),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshotOrderData) {
+                              if (snapshotOrderData.data == null) {
+                                return Text('กำลังโหลด...');
+                              } else {
+                                return Container(
+                                    child: snapshotPayment.data.status ==
+                                            'ชำระเงินสำเร็จ'
+                                        ? Container(
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    primary: Colors.teal),
+                                                onPressed: () {
+                                                  _showAlertDeliverItem(
+                                                      context,
+                                                      snapshotPayment.data,
+                                                      snapshotOrderData.data);
+                                                },
+                                                child: Text('ส่งมอบสินค้า')),
+                                          )
+                                        : Container());
+                              }
+                            },
+                          )
                         ],
                       ),
                     )
@@ -309,7 +346,8 @@ class _PaymentFormQRCode extends State {
     );
   }
 
-  void _showAlertGetMoney(BuildContext context, _paymentData) async {
+  void _showAlertDeliverItem(
+      BuildContext context, _paymentData, Order orderData) async {
     print('Show Alert Dialog !');
     return showDialog(
         context: context,
@@ -327,7 +365,7 @@ class _PaymentFormQRCode extends State {
                       child: GestureDetector(
                           child: Text('ส่งมอบสินค้า'),
                           onTap: () {
-                            _saveStatusPayment(_paymentData);
+                            _saveStatusPayment(_paymentData, orderData);
                             Navigator.pop(context);
                           })),
                   SizedBox(
@@ -346,24 +384,28 @@ class _PaymentFormQRCode extends State {
         });
   }
 
-  void _saveStatusPayment(Payment _paymentData) async {
+  void _saveStatusPayment(Payment _paymentData, Order orderData) async {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
-    String status = 'รับสินค้าสำเร็จ';
+    String statusPayment = 'รับสินค้าสำเร็จ';
+    String _date =
+        '${_paymentData.date.split('/')[1]}/${_paymentData.date.split('/')[0]}/${_paymentData.date.split('/')[2]}';
     print('save pay ....');
     Map params = Map();
     params['payId'] = _paymentData.payId.toString();
     params['userId'] = _paymentData.userId.toString();
     params['orderId'] = _paymentData.orderId.toString();
     params['marketId'] = _paymentData.marketId.toString();
-    params['detail'] = _paymentData.detail.toString();
+    //params['number'] = _paymentData.number.toString();
+    //params['itemId'] = _paymentData.itemId.toString();
+    //params['detail'] = _paymentData.detail.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
-    params['date'] = _paymentData.date.toString();
+    params['date'] = _date.toString();
     params['time'] = _paymentData.time.toString();
     params['amount'] = _paymentData.amount.toString();
     params['lastNumber'] = _paymentData.lastNumber.toString();
-    params['status'] = status.toString();
+    params['status'] = statusPayment.toString();
     await http.post(Uri.parse(urlSavePay), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
@@ -372,6 +414,7 @@ class _PaymentFormQRCode extends State {
       var resStatus = resData['status'];
       if (resStatus == 1) {
         setState(() {
+          saveStatusOrder(token, orderData, statusPayment);
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text('รับสินค้า สำเร็จ')));
         });
@@ -396,7 +439,4 @@ class _PaymentFormQRCode extends State {
     });
     return imagePay;
   }
-
 }
-
-

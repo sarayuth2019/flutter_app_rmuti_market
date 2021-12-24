@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market__data_page/market_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/user_data_page.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/getDetailOrder.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_Image_payment_method.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_payment_all.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_payment_by_payId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/notify_method.dart';
 import 'package:http/http.dart' as http;
@@ -315,6 +315,9 @@ class _PaymentPage extends State {
                                                       children: [
                                                         Text(
                                                             '${snapshotDetailOrder.data[index].nameItem.split(':')[1]}'),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
                                                         Container(
                                                           child: snapshotDetailOrder
                                                                       .data[
@@ -323,7 +326,7 @@ class _PaymentPage extends State {
                                                                   'null'
                                                               ? Container()
                                                               : Text(
-                                                                  'ขนาด : ${snapshotDetailOrder.data[index].size}'),
+                                                                  'ขนาด : ${snapshotDetailOrder.data[index].size.split(':')[0]}'),
                                                         ),
                                                         SizedBox(
                                                           width: 8,
@@ -336,7 +339,7 @@ class _PaymentPage extends State {
                                                                   'null'
                                                               ? Container()
                                                               : Text(
-                                                                  'สี : ${snapshotDetailOrder.data[index].color}'),
+                                                                  'สี : ${snapshotDetailOrder.data[index].color.split(':')[0]}'),
                                                         ),
                                                         SizedBox(
                                                           width: 8,
@@ -346,7 +349,9 @@ class _PaymentPage extends State {
                                                       ],
                                                     );
                                                   }),
-                                              SizedBox(height: 8,),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
                                               FutureBuilder(
                                                 future: getItemByItemId(
                                                     token,
@@ -515,8 +520,8 @@ class _PaymentPage extends State {
                       child: GestureDetector(
                           child: Text(statusPayment),
                           onTap: () {
-                            _saveStatusPayment(
-                                _paymentData, statusPayment, itemData, sumNumber);
+                            _saveStatusPayment(_paymentData, statusPayment,
+                                itemData, sumNumber);
                             Navigator.pop(context);
                           })),
                   SizedBox(
@@ -539,6 +544,8 @@ class _PaymentPage extends State {
       Payment _paymentData, statusPayment, _Items itemData, sumNumber) async {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
+    String _date =
+        '${_paymentData.date.split('/')[1]}/${_paymentData.date.split('/')[0]}/${_paymentData.date.split('/')[2]}';
     //String status = 'ชำระเงินสำเร็จ';
     print('save pay ....');
     Map params = Map();
@@ -551,7 +558,7 @@ class _PaymentPage extends State {
     //params['detail'] = _paymentData.detail.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
-    params['date'] = _paymentData.date.toString();
+    params['date'] = _date.toString();
     params['time'] = _paymentData.time.toString();
     params['amount'] = _paymentData.amount.toString();
     params['lastNumber'] = _paymentData.lastNumber.toString();
@@ -579,7 +586,8 @@ class _PaymentPage extends State {
     });
   }
 
-  void updateItem(Payment _paymentData, int sumNumber, status, _Items itemData) async {
+  void updateItem(
+      Payment _paymentData, int sumNumber, status, _Items itemData) async {
     var _dateBegin =
         '${itemData.dateBegin.split('/')[1]}/${itemData.dateBegin.split('/')[0]}/${itemData.dateBegin.split('/')[2]}';
     var _dateFinal =
