@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/method/get_payment_all.dart';
+import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 import 'package:http/http.dart'as http;
 
 

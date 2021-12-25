@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/method/get_payment_all.dart';
+import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 
 class TablePayment extends StatelessWidget {
    TablePayment(this.listPayment);

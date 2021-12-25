@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/overview_order/table_payment.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
-import 'package:flutter_app_rmuti_market/screens/method/get_payment_all.dart';
+import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 
-class OverViewTab extends StatefulWidget {
-  const OverViewTab(this.token);
+class AdminOverViewTab extends StatefulWidget {
+  const AdminOverViewTab(this.token);
 
   final token;
+
 
   @override
-  _OverViewTabState createState() => _OverViewTabState(token);
+  _AdminOverViewTabState createState() => _AdminOverViewTabState(token);
 }
 
-class _OverViewTabState extends State<OverViewTab> {
-  _OverViewTabState(this.token);
+class _AdminOverViewTabState extends State<AdminOverViewTab> {
+  _AdminOverViewTabState(this.token);
+
+  final token;
+
 
   DateTime dateTimeDayNow = DateTime.now();
-  final token;
+
   List<String> listDropdownButton = [
     'ทั้งหมด',
     'วันนี้',

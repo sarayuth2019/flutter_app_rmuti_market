@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/overview_order/overview_tab.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/overview_order/admin_overview_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/search_payment/search_payment_tab.dart';
+import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,6 +27,7 @@ class _AdminMainPage extends State {
   final marketId;
   PageController _pageController = PageController();
   int tabNum = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class _AdminMainPage extends State {
       body: PageView(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children: [PaymentTab(token, 'รอดำเนินการ'), SearchPayment(token),OverViewTab(token)],
+        children: [PaymentTab(token, 'รอดำเนินการ'), SearchPayment(token),AdminOverViewTab(token)],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

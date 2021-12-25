@@ -4,9 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/edit_account.dart';
-import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/payment_of_item_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/market_overview.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
-import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/scan_qr_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market__data_page/show_review_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/review_market_method.dart';
@@ -48,17 +47,22 @@ class _MarketPage extends State {
         appBar: AppBar(
           backgroundColor: Colors.teal,
           elevation: 0,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ScannerQRCode(token)));
-              },
-              icon: Icon(
-                Icons.qr_code_scanner,
-                color: Colors.white,
-              )),
+          title: Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MarketOverViewTab(token,marketId)));
+                  },
+                  icon: Icon(
+                    Icons.table_view_outlined,
+                    color: Colors.white,
+                  )),
+              //Text('ตารางการขาย'),
+            ],
+          ),
           actions: [
             TextButton(
                 onPressed: logout,

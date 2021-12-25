@@ -6,7 +6,7 @@ import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/getDetailOrder.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_order_by_orderId.dart';
-import 'package:flutter_app_rmuti_market/screens/method/get_payment_all.dart';
+import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_payment_by_payId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/save_status_order.dart';
 import 'package:http/http.dart' as http;
