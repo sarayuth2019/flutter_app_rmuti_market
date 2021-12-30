@@ -24,8 +24,25 @@ class _SearchPayment extends State {
   _SearchPayment(this.token);
 
   final token;
+
+  List<String> listDropdownButton = [
+    'PaymentId',
+    'UserId',
+    'MarketId',
+    'LastNumber',
+  ];
+  var _dropDownValue;
+  var searchDropDownValue;
+
   List<Payment?> _listAllPayment = [];
   List<Payment?> _listSearchPayment = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _dropDownValue = listDropdownButton[0];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,25 +51,50 @@ class _SearchPayment extends State {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: Container(
-            decoration: boxDecorationGrey,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: TextField(
-                decoration: InputDecoration(
-                    hintText: 'Search Payment Id', border: InputBorder.none),
-                onChanged: (textSearch) {
-                  setState(() {
-                    _listSearchPayment = _listAllPayment
-                        .where((element) => element!.payId
-                            .toString()
-                            .toLowerCase()
-                            .contains(textSearch.toLowerCase()))
-                        .toList();
-                  });
-                },
+          title: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Container(
+                  height: 42,
+                  decoration: boxDecorationGrey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                          value: _dropDownValue,
+                          onChanged: (value) {
+                            setState(() {
+                              this._dropDownValue = value;
+                            });
+                          },
+                          items: listDropdownButton
+                              .map((e) => DropdownMenuItem(
+                                  value: e, child: Text('${e.toString()}')))
+                              .toList()),
+                    ),
+                  ),
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Container(
+                  height: 42,
+                  width: 200,
+                  decoration: boxDecorationGrey,
+                  child: TextField(
+                    decoration: InputDecoration(
+                        hintText: 'Search ${_dropDownValue.toString()}',
+                        border: InputBorder.none),
+                    onChanged: (textSearch) {
+                      setState(() {
+                        checkDropDownPick(textSearch);
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         body: FutureBuilder(
@@ -101,6 +143,40 @@ class _SearchPayment extends State {
         ));
   }
 
+  void checkDropDownPick(textSearch) {
+    if (_dropDownValue == 'PaymentId') {
+      _listSearchPayment = _listAllPayment
+          .where((element) => element!.payId
+              .toString()
+              .toLowerCase()
+              .contains(textSearch.toLowerCase()))
+          .toList();
+    } else if (_dropDownValue == 'UserId') {
+      _listSearchPayment = _listAllPayment
+          .where((element) => element!.userId
+              .toString()
+              .toLowerCase()
+              .contains(textSearch.toLowerCase()))
+          .toList();
+    } else if (_dropDownValue == 'MarketId') {
+      _listSearchPayment = _listAllPayment
+          .where((element) => element!.marketId
+              .toString()
+              .toLowerCase()
+              .contains(textSearch.toLowerCase()))
+          .toList();
+    } else if (_dropDownValue == 'LastNumber') {
+      _listSearchPayment = _listAllPayment
+          .where((element) => element!.lastNumber
+              .toString()
+              .toLowerCase()
+              .contains(textSearch.toLowerCase()))
+          .toList();
+    } else if (_dropDownValue == 'ระบุวันที่') {
+      print(_dropDownValue);
+    }
+  }
+
   Future<void> getImagePay(int paymentId) async {
     final String urlGetPayImage = '${Config.API_URL}/ImagePay/listId';
     var imagePay;
@@ -147,4 +223,3 @@ class _SearchPayment extends State {
     return listAllPayment;
   }
 }
-
