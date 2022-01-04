@@ -164,6 +164,11 @@ class _MarketOverViewTabState extends State<MarketOverViewTab> {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                       fontSize: 14)),
+                              Text('Date',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 14)),
                             ])
                           ],
                         ),
@@ -202,22 +207,33 @@ class _MarketOverViewTabState extends State<MarketOverViewTab> {
   void checkDropDownPick(value, List<Payment> listPayment) {
     if (value == 'ทั้งหมด') {
       _listTypePayment = listPayment;
+      ///////ดูรายการของ วันนี้//////////////
     } else if (value == 'วันนี้') {
-      _dropDownPick = '${dateTimeDayNow.day}';
+      if (dateTimeDayNow.day.toString().length == 1) {
+        _dropDownPick = '0${dateTimeDayNow.day}';
+      } else {
+        _dropDownPick = '${dateTimeDayNow.day}';
+      }
       _listTypePayment = listPayment
           .where((element) => element.date
               .split('/')[0]
               .toString()
               .contains(_dropDownPick.toString()))
           .toList();
+      ///////ดูรายการของ เดือนนี้//////////////
     } else if (value == 'เดือนนี้') {
-      _dropDownPick = '${dateTimeDayNow.month}';
+      if (dateTimeDayNow.day.toString().length == 1) {
+        _dropDownPick = '0${dateTimeDayNow.month}';
+      } else {
+        _dropDownPick = '${dateTimeDayNow.month}';
+      }
       _listTypePayment = listPayment
           .where((element) => element.date
               .split('/')[1]
               .toString()
               .contains(_dropDownPick.toString()))
           .toList();
+      ///////ดูรายการของ ปีนี้//////////////
     } else if (value == 'ปีนี้') {
       _dropDownPick = '${dateTimeDayNow.year}';
       _listTypePayment = listPayment

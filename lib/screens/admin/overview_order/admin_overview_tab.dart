@@ -8,7 +8,6 @@ class AdminOverViewTab extends StatefulWidget {
 
   final token;
 
-
   @override
   _AdminOverViewTabState createState() => _AdminOverViewTabState(token);
 }
@@ -17,7 +16,6 @@ class _AdminOverViewTabState extends State<AdminOverViewTab> {
   _AdminOverViewTabState(this.token);
 
   final token;
-
 
   DateTime dateTimeDayNow = DateTime.now();
 
@@ -147,6 +145,11 @@ class _AdminOverViewTabState extends State<AdminOverViewTab> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                   fontSize: 14)),
+                          Text('Date',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 14)),
                         ])
                       ],
                     ),
@@ -183,7 +186,11 @@ class _AdminOverViewTabState extends State<AdminOverViewTab> {
     if (value == 'ทั้งหมด') {
       _listTypePayment = listPayment;
     } else if (value == 'วันนี้') {
-      _dropDownPick = '${dateTimeDayNow.day}';
+      if (dateTimeDayNow.day.toString().length == 1) {
+        _dropDownPick = '0${dateTimeDayNow.day}';
+      } else {
+        _dropDownPick = '${dateTimeDayNow.day}';
+      }
       _listTypePayment = listPayment
           .where((element) => element.date
               .split('/')[0]
@@ -191,7 +198,11 @@ class _AdminOverViewTabState extends State<AdminOverViewTab> {
               .contains(_dropDownPick.toString()))
           .toList();
     } else if (value == 'เดือนนี้') {
-      _dropDownPick = '${dateTimeDayNow.month}';
+      if (dateTimeDayNow.month.toString().length == 1) {
+        _dropDownPick = '0${dateTimeDayNow.month}';
+      } else {
+        _dropDownPick = '${dateTimeDayNow.month}';
+      }
       _listTypePayment = listPayment
           .where((element) => element.date
               .split('/')[1]

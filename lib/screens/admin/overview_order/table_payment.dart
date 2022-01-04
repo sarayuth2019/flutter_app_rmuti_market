@@ -25,6 +25,7 @@ class TablePayment extends StatelessWidget {
                    Text('${listPayment[index].payId}'),
                    Text('${listPayment[index].amount}'),
                    Text('${listPayment[index].status}'),
+                   Text('${listPayment[index].date}'),
                  ])
                ],
              ),
