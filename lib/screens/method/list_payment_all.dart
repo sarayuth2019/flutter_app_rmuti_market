@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 
 Future<List<Payment>> listAllPaymentData(token) async {
   final String urlGetAllPayment = '${Config.API_URL}/Pay/list';
+  List<Payment> listPaymentOverview = [];
   List<Payment> listAllPayment = [];
   await http.get(Uri.parse(urlGetAllPayment), headers: {
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
@@ -29,8 +30,20 @@ Future<List<Payment>> listAllPaymentData(token) async {
           i['dataTransfer']);
       listAllPayment.add(_payment);
     }
+    List<Payment> listStatus1 = listAllPayment
+        .where(
+            (element) => element.status.toString().contains('ชำระเงินสำเร็จ'))
+        .toList();
+    List<Payment> listStatus2 = listAllPayment
+        .where(
+            (element) => element.status.toString().contains('รับสินค้าสำเร็จ'))
+        .toList();
+    List<Payment> listStatus3 = listAllPayment
+        .where((element) => element.status.toString().contains('รีวิวสำเร็จ'))
+        .toList();
+    listPaymentOverview = listStatus1 + listStatus2 + listStatus3;
   });
-  return listAllPayment;
+  return listPaymentOverview;
 }
 
 class Payment {

@@ -20,11 +20,11 @@ class _AdminOverViewTabState extends State<AdminOverViewTab> {
   DateTime dateTimeDayNow = DateTime.now();
 
   List<String> listDropdownButton = [
-    'ทั้งหมด',
     'วันนี้',
     'เดือนนี้',
     'ปีนี้',
-    'ระบุวันที่'
+    'ระบุวันที่',
+    'ทั้งหมด'
   ];
   var _dropDownValue;
   var _dropDownPick;
@@ -37,7 +37,26 @@ class _AdminOverViewTabState extends State<AdminOverViewTab> {
     super.initState();
     _dropDownValue = listDropdownButton[0];
     listAllPaymentData(token).then((value) {
-      _listTypePayment = value;
+      if (dateTimeDayNow.day.toString().length == 1 &&
+          dateTimeDayNow.month.toString().length == 1) {
+        _dropDownPick =
+            '0${dateTimeDayNow.day}/0${dateTimeDayNow.month}/${dateTimeDayNow.year}';
+      } else if (dateTimeDayNow.day.toString().length == 1) {
+        _dropDownPick =
+            '0${dateTimeDayNow.day}/${dateTimeDayNow.month}/${dateTimeDayNow.year}';
+      } else if (dateTimeDayNow.month.toString().length == 1) {
+        _dropDownPick =
+            '${dateTimeDayNow.day}/0${dateTimeDayNow.month}/${dateTimeDayNow.year}';
+      } else {
+        _dropDownPick =
+            '${dateTimeDayNow.day}/${dateTimeDayNow.month}/${dateTimeDayNow.year}';
+      }
+      _listTypePayment = value
+          .where((element) => element.date
+              .substring(0, 10)
+              .toString()
+              .contains(_dropDownPick.toString()))
+          .toList();
     });
   }
 
@@ -185,32 +204,47 @@ class _AdminOverViewTabState extends State<AdminOverViewTab> {
   void checkDropDownPick(value, List<Payment> listPayment) {
     if (value == 'ทั้งหมด') {
       _listTypePayment = listPayment;
+      ///////ดูรายการของ วันนี้//////////////
     } else if (value == 'วันนี้') {
-      if (dateTimeDayNow.day.toString().length == 1) {
-        _dropDownPick = '0${dateTimeDayNow.day}';
+      if (dateTimeDayNow.day.toString().length == 1 &&
+          dateTimeDayNow.month.toString().length == 1) {
+        _dropDownPick =
+            '0${dateTimeDayNow.day}/0${dateTimeDayNow.month}/${dateTimeDayNow.year}';
+      } else if (dateTimeDayNow.day.toString().length == 1) {
+        _dropDownPick =
+            '0${dateTimeDayNow.day}/${dateTimeDayNow.month}/${dateTimeDayNow.year}';
+      } else if (dateTimeDayNow.month.toString().length == 1) {
+        _dropDownPick =
+            '${dateTimeDayNow.day}/0${dateTimeDayNow.month}/${dateTimeDayNow.year}';
       } else {
-        _dropDownPick = '${dateTimeDayNow.day}';
+        _dropDownPick =
+            '${dateTimeDayNow.day}/${dateTimeDayNow.month}/${dateTimeDayNow.year}';
       }
+      //print(_dropDownPick);
+      //print(listPayment[0].date.substring(0, 10));
       _listTypePayment = listPayment
           .where((element) => element.date
-              .split('/')[0]
+              .substring(0, 10)
               .toString()
               .contains(_dropDownPick.toString()))
           .toList();
+      ///////ดูรายการของ เดือนนี้//////////////
     } else if (value == 'เดือนนี้') {
-      if (dateTimeDayNow.month.toString().length == 1) {
-        _dropDownPick = '0${dateTimeDayNow.month}';
+      if (dateTimeDayNow.day.toString().length == 1) {
+        _dropDownPick = '0${dateTimeDayNow.month}/${dateTimeDayNow.year}';
       } else {
-        _dropDownPick = '${dateTimeDayNow.month}';
-      }
+        _dropDownPick = '${dateTimeDayNow.month}/${dateTimeDayNow.year}';
+      } //print(listPayment[1].date.substring(3,10));
       _listTypePayment = listPayment
           .where((element) => element.date
-              .split('/')[1]
+              .substring(3, 10)
               .toString()
               .contains(_dropDownPick.toString()))
           .toList();
+      ///////ดูรายการของ ปีนี้//////////////
     } else if (value == 'ปีนี้') {
       _dropDownPick = '${dateTimeDayNow.year}';
+      //print(listPayment[1].date.split('/')[2]);
       _listTypePayment = listPayment
           .where((element) => element.date
               .split('/')[2]

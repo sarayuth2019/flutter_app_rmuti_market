@@ -80,7 +80,7 @@ class _SearchPayment extends State {
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: Container(
                   height: 42,
-                  width: 200,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   decoration: boxDecorationGrey,
                   child: TextField(
                     decoration: InputDecoration(
