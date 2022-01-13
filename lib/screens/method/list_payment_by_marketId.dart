@@ -14,7 +14,7 @@ Future<List<Payment>> listPaymentByMarketId(token, int marketId) async {
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
   }).then((res) {
     var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
-    print(jsonData);
+    //print(jsonData);
     var payData = jsonData['data'];
     for (var i in payData) {
       Payment _payment = Payment(

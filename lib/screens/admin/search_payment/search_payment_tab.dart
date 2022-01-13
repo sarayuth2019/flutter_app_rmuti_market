@@ -118,6 +118,8 @@ class _SearchPayment extends State {
                                   'Payment Id : ${_listSearchPayment[index]!.payId}'),
                               Text(
                                   'สถานะ : ${_listSearchPayment[index]!.status}'),
+                              Text(
+                                  'เลขท้ายบัญชี : ${_listSearchPayment[index]!.lastNumber}'),
                             ],
                           ),
                           trailing: IconButton(
