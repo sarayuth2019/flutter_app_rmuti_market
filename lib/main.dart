@@ -50,7 +50,7 @@ class _HomePage extends State {
         physics: NeverScrollableScrollPhysics(),
         children: [
           MyShop(token, marketId),
-          NotifyPage(token, marketId),
+          NotifyPage(token, marketId, callBack),
           MarketPage(token, marketId),
           ScannerQRCode(token)
         ],
@@ -132,4 +132,11 @@ class _HomePage extends State {
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
   }
+
+  void callBack() {
+    setState(() {
+      print('SetState HomePage !!!!!!!!!!!!!!');
+    });
+  }
 }
+

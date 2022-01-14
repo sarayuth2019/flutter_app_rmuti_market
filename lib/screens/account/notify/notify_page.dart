@@ -7,28 +7,31 @@ import 'package:flutter_app_rmuti_market/screens/method/list_notifyMarket.dart';
 import 'package:http/http.dart' as http;
 
 class NotifyPage extends StatefulWidget {
-  NotifyPage(this.token, this.marketId);
+  NotifyPage(this.token, this.marketId,this.callBack);
 
   final token;
   final int marketId;
+  final callBack;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _NotifyPage(token, marketId);
+    return _NotifyPage(token, marketId,callBack);
   }
 }
 
 class _NotifyPage extends State {
-  _NotifyPage(this.token, this.marketId);
+  _NotifyPage(this.token, this.marketId,this.callBack);
 
   final token;
   final int marketId;
+  final callBack;
 
   final String urlClearAllNotifyByMarketId =
       '${Config.API_URL}/MarketNotify/deleteByMarketId';
   final String urlDeleteNotifyByNotifyId =
       '${Config.API_URL}/MarketNotify/deleteId';
+
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +165,7 @@ class _NotifyPage extends State {
   Future<void> _onRefresh() async {
     setState(() {
       listNotifyMarket(token, marketId);
+      callBack();
     });
   }
 
@@ -174,6 +178,7 @@ class _NotifyPage extends State {
         }).then((res) {
       setState(() {
         print(res.body);
+        callBack();
       });
     });
   }
@@ -187,6 +192,7 @@ class _NotifyPage extends State {
         }).then((res) {
       setState(() {
         print(res.body);
+        callBack();
       });
     });
   }
