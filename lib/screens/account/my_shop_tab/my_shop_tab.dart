@@ -50,6 +50,7 @@ class _MyShop extends State {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.teal,
+          mini: true,
           child: Icon(
             Icons.add,
           ),

@@ -75,6 +75,7 @@ class _MarketPage extends State {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.teal,
+          mini: true,
           child: Icon(Icons.edit),
           onPressed: () {
             Navigator.push(
