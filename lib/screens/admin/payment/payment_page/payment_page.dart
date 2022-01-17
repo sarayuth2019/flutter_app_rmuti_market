@@ -128,16 +128,6 @@ class _PaymentPage extends State {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'จำนวนของสินค้า : ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        // Text('${snapshot.data.number}'),
-                                      ],
-                                    ),
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -349,8 +339,16 @@ class _PaymentPage extends State {
                                                       ],
                                                     );
                                                   }),
-                                              SizedBox(
-                                                height: 8,
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text('รวมเป็นเงิน : '),
+                                                    Text(
+                                                        '${snapshotDetailOrder.data.map((e) => e.price * e.number).reduce((a, b) => a + b)}',style: TextStyle(fontWeight: FontWeight.bold),),
+                                                    Text(' บาท')
+                                                  ],
+                                                ),
                                               ),
                                               FutureBuilder(
                                                 future: getItemByItemId(
