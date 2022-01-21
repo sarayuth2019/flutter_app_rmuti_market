@@ -74,8 +74,7 @@ class _MarketOverViewTabState extends State<MarketOverViewTab> {
         future: listPaymentByMarketId(token, marketId),
         builder:
             (BuildContext context, AsyncSnapshot<dynamic> snapshotListPayment) {
-          if (snapshotListPayment.data == null &&
-              _listTypePayment.length == 0) {
+          if (snapshotListPayment.data == null || _dropDownPickValue == null) {
             return Center(child: CircularProgressIndicator());
           } else {
             return Scaffold(
@@ -145,7 +144,8 @@ class _MarketOverViewTabState extends State<MarketOverViewTab> {
                               ? Container()
                               : IconButton(
                                   onPressed: () {
-                                    _pickDate(context,snapshotListPayment.data);
+                                    _pickDate(
+                                        context, snapshotListPayment.data);
                                   },
                                   icon: Icon(
                                     Icons.edit,
@@ -221,7 +221,7 @@ class _MarketOverViewTabState extends State<MarketOverViewTab> {
     );
   }
 
-  Future _pickDate(BuildContext context,_listTypePayment) async {
+  Future _pickDate(BuildContext context, _listTypePayment) async {
     return showDatePicker(
             initialEntryMode: DatePickerEntryMode.calendarOnly,
             initialDatePickerMode: DatePickerMode.year,
@@ -233,7 +233,7 @@ class _MarketOverViewTabState extends State<MarketOverViewTab> {
       if (date != null) {
         setState(() {
           dateTimeDayNow = date;
-         checkDropDownPick(_typeDropDownPick,_listTypePayment);
+          checkDropDownPick(_typeDropDownPick, _listTypePayment);
         });
         print(dateTimeDayNow);
       }

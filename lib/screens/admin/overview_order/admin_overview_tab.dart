@@ -60,7 +60,7 @@ class _AdminOverViewTabState extends State<AdminOverViewTab> {
       future: listAllPaymentData(token),
       builder:
           (BuildContext context, AsyncSnapshot<dynamic> snapshotListPayment) {
-        if (snapshotListPayment.data == null) {
+        if (snapshotListPayment.data == null || _dropDownPickValue == null) {
           return Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
