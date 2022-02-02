@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -11,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 class EditProductPage extends StatefulWidget {
   EditProductPage(this.itemData, this.token);
 
-  var itemData;
+  final itemData;
   final token;
 
   @override
@@ -24,7 +25,7 @@ class EditProductPage extends StatefulWidget {
 class _EditProductPage extends State {
   _EditProductPage(this.itemData, this.token);
 
-  final itemData;
+  final Item itemData;
   final token;
 
   List? _resImageData;
@@ -38,7 +39,6 @@ class _EditProductPage extends State {
 
   int? marketID;
   String? nameItem;
-  int group = 1;
   int? price;
   int? priceSell;
   int? count;
@@ -980,7 +980,7 @@ class _EditProductPage extends State {
     params['itemId'] = itemData.itemID.toString();
     params['marketId'] = itemData.marketID.toString();
     params['nameItems'] = nameItem.toString();
-    params['groupItems'] = group.toString();
+    params['groupItems'] = itemData.groupItems.toString();
     params['price'] = price.toString();
     params['priceSell'] = priceSell.toString();
     params['count'] = count.toString();

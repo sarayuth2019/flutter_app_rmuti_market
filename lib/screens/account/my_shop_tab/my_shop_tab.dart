@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/edit_product_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/sell_products/showAlertSelectTypeSell.dart';
+import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/edit_date.dart';
 import 'package:http/http.dart' as http;
 
 class MyShop extends StatefulWidget {
@@ -25,6 +26,7 @@ class _MyShop extends State {
 
   final token;
   final marketId;
+  DateTime _dayNow = DateTime.now();
 
   final urlListItemByUser = "${Config.API_URL}/Item/find/market";
   final urlDeleteProducts = "${Config.API_URL}/Item/delete/";
@@ -78,6 +80,11 @@ class _MyShop extends State {
                 return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, index) {
+                      print(_dayNow);
+                      var stringDealFinal =
+                          '${snapshot.data[index].dealFinal.split('/')[2]}-${snapshot.data[index].dealFinal.split('/')[1]}-${snapshot.data[index].dealFinal.split('/')[0]}';
+                      print(stringDealFinal);
+                      DateTime _dealFinal = DateTime.parse(stringDealFinal);
                       return Padding(
                         padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                         child: Container(
@@ -92,13 +99,13 @@ class _MyShop extends State {
                                   if (snapshotImage.data == null) {
                                     return Container(
                                         color: Colors.grey,
-                                        height: 170,
+                                        height: 190,
                                         width: double.infinity,
                                         child:
                                             Center(child: Icon(Icons.image)));
                                   } else {
                                     return Container(
-                                        height: 170,
+                                        height: 190,
                                         width: double.infinity,
                                         child: Image.memory(
                                           base64Decode(snapshotImage.data[0]),
@@ -178,52 +185,118 @@ class _MyShop extends State {
                                                   color: Colors.white,
                                                   fontSize: _fontSize),
                                             ),
-                                            Container(
-                                                child: snapshot.data[index]
-                                                            .count !=
-                                                        0
-                                                    ? Container()
-                                                    : Container(
-                                                        height: 20,
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) => EditProductPage(
-                                                                        snapshot
-                                                                            .data[index],
-                                                                        token)));
-                                                          },
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                            child: Container(
-                                                              color:
-                                                                  Colors.orange,
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
+                                            Column(
+                                              children: [
+                                                Container(
+                                                    child: snapshot.data[index]
+                                                                .count !=
+                                                            0
+                                                        ? Container()
+                                                        : Container(
+                                                            height: 20,
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) => EditProductPage(
+                                                                            snapshot.data[index],
+                                                                            token)));
+                                                              },
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                child:
+                                                                    Container(
+                                                                  color: Colors
+                                                                      .orange,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
                                                                             .only(
                                                                         left:
                                                                             5.0,
                                                                         right:
                                                                             5.0),
-                                                                child: Text(
-                                                                  'แก้ไข',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold),
+                                                                    child: Text(
+                                                                      'แก้ไข',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
+                                                                    ),
+                                                                  ),
                                                                 ),
+                                                              ),
+                                                            ))),
+                                                snapshot.data[index].count !=
+                                                            snapshot.data[index]
+                                                                .countRequest &&
+                                                        _dayNow.isAfter(_dealFinal
+                                                                .add(Duration(
+                                                                    days:
+                                                                        1))) ==
+                                                            true
+                                                    ? GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (BuildContext
+                                                                          context) =>
+                                                                      EditDate(
+                                                                          token,
+                                                                          snapshot
+                                                                              .data[index])));
+                                                        },
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                          child: Container(
+                                                            color:
+                                                                Colors.orange,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 5.0,
+                                                                      right:
+                                                                          5.0),
+                                                              child: Text(
+                                                                'ขยายเวลา',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
                                                               ),
                                                             ),
                                                           ),
-                                                        ))),
+                                                        ),
+                                                      )
+                                                    : Container()
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, right: 8.0, bottom: 4),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "ระยะเวลาการลงทะเบียน : ${snapshot.data[index].dealBegin} - ${snapshot.data[index].dealFinal}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: _fontSize),
+                                            )
                                           ],
                                         ),
                                       ),
