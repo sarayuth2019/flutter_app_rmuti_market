@@ -129,7 +129,9 @@ class _EditDateState extends State<EditDate> {
           ),
           ElevatedButton(
               style: ElevatedButton.styleFrom(primary: Colors.teal),
-              onPressed: () {},
+              onPressed: () {
+                showDialogSaveDate();
+              },
               child: Text(
                 'บันทึก',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -203,6 +205,39 @@ class _EditDateState extends State<EditDate> {
     });
   }
 
+  void showDialogSaveDate() async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "บันทึกการขยายเวลา ?",
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.teal),
+                    onPressed: () {
+                      saveToDB(context, token, itemData);
+                    },
+                    child: Text('บันทึก')),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.grey),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('ยกเลิก'))
+              ],
+            ),
+          );
+        });
+  }
+
   void saveToDB(context, token, Item itemData) async {
     final urlSellProducts = "${Config.API_URL}/Item/update";
     ScaffoldMessenger.of(context)
@@ -238,11 +273,11 @@ class _EditDateState extends State<EditDate> {
       print(_resData);
       var _resStatus = _resData['status'];
       if (_resStatus == 1) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('ขยายเวลา สำเร็จ !')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('บันทึกการขยายเวลา สำเร็จ !')));
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('ขยายเวลา ล้มเหลว !')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('บันทึกการขยายเวลา ล้มเหลว !')));
       }
     });
   }

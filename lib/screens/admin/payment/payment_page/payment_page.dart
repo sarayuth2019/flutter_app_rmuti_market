@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/item_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market__data_page/market_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/user_data_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
@@ -301,51 +302,71 @@ class _PaymentPage extends State {
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    return Row(
-                                                      children: [
-                                                        Text(
-                                                            '${snapshotDetailOrder.data[index].nameItem.split(':')[1]}'),
-                                                        SizedBox(
-                                                          width: 8,
-                                                        ),
-                                                        Container(
-                                                          child: snapshotDetailOrder
-                                                                      .data[
-                                                                          index]
-                                                                      .size ==
-                                                                  'null'
-                                                              ? Container()
-                                                              : Text(
-                                                                  'ขนาด : ${snapshotDetailOrder.data[index].size.split(':')[0]}'),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 8,
-                                                        ),
-                                                        Container(
-                                                          child: snapshotDetailOrder
-                                                                      .data[
-                                                                          index]
-                                                                      .color ==
-                                                                  'null'
-                                                              ? Container()
-                                                              : Text(
-                                                                  'สี : ${snapshotDetailOrder.data[index].color.split(':')[0]}'),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 8,
-                                                        ),
-                                                        Text(
-                                                            'จำนวน : ${snapshotDetailOrder.data[index].number}'),
-                                                      ],
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (BuildContext
+                                                                        context) =>
+                                                                    ItemDataPage(
+                                                                        token,
+                                                                        int.parse(snapshotDetailOrder
+                                                                            .data[index]
+                                                                            .nameItem
+                                                                            .split(':')[0]))));
+                                                      },
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                              '${snapshotDetailOrder.data[index].nameItem.split(':')[1]}'),
+                                                          SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Container(
+                                                            child: snapshotDetailOrder
+                                                                        .data[
+                                                                            index]
+                                                                        .size ==
+                                                                    'null'
+                                                                ? Container()
+                                                                : Text(
+                                                                    'ขนาด : ${snapshotDetailOrder.data[index].size.split(':')[0]}'),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Container(
+                                                            child: snapshotDetailOrder
+                                                                        .data[
+                                                                            index]
+                                                                        .color ==
+                                                                    'null'
+                                                                ? Container()
+                                                                : Text(
+                                                                    'สี : ${snapshotDetailOrder.data[index].color.split(':')[0]}'),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Text(
+                                                              'จำนวน : ${snapshotDetailOrder.data[index].number}'),
+                                                        ],
+                                                      ),
                                                     );
                                                   }),
                                               Padding(
-                                                padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0, bottom: 8.0),
                                                 child: Row(
                                                   children: [
                                                     Text('รวมเป็นเงิน : '),
                                                     Text(
-                                                        '${snapshotDetailOrder.data.map((e) => e.price * e.number).reduce((a, b) => a + b)}',style: TextStyle(fontWeight: FontWeight.bold),),
+                                                      '${snapshotDetailOrder.data.map((e) => e.price * e.number).reduce((a, b) => a + b)}',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
                                                     Text(' บาท')
                                                   ],
                                                 ),
@@ -648,14 +669,8 @@ class _PaymentPage extends State {
             print('Notify All user get item');
             String textStatus =
                 'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';
-            notifyAllUserMethod(
-                context,
-                token,
-                itemData.itemId,
-                _paymentData.userId,
-                _paymentData.payId,
-                _paymentData.amount,
-                textStatus);
+            notifyAllUserMethod(context, token, itemData.itemId,
+                _paymentData.userId, _paymentData.payId,_paymentData.amount,textStatus);
           } else {
             String textNotifyUser =
                 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';

@@ -12,23 +12,26 @@ import 'package:flutter_app_rmuti_market/screens/method/save_status_order.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentFormQRCode extends StatefulWidget {
-  PaymentFormQRCode(this.token, this.paymentId);
+  PaymentFormQRCode(this.token, this.paymentId, this.marketId);
 
   final token;
   final int paymentId;
+  final int marketId;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _PaymentFormQRCode(token, paymentId);
+    return _PaymentFormQRCode(token, paymentId, marketId);
   }
 }
 
 class _PaymentFormQRCode extends State {
-  _PaymentFormQRCode(this.token, this.paymentId);
+  _PaymentFormQRCode(this.token, this.paymentId, this.marketId);
 
   final token;
   final int paymentId;
+  final int marketId;
+
   final String urlGetPayImage = '${Config.API_URL}/ImagePay/payId';
   final String urlSavePay = '${Config.API_URL}/Pay/save';
 
@@ -44,301 +47,353 @@ class _PaymentFormQRCode extends State {
             return Center(child: CircularProgressIndicator());
           } else {
             return SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
+              child: marketId != snapshotPayment.data.marketId
+                  ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'สถานะ ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            'ไม่สามารถรับสินค้าได้',
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
                           ),
-                          Container(
-                            child:
-                                snapshotPayment.data.status == 'ชำระเงินสำเร็จ'
-                                    ? Text(
-                                        '${snapshotPayment.data.status}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green),
-                                      )
-                                    : Text(
-                                        '${snapshotPayment.data.status}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue),
-                                      ),
-                          )
+                          Text(
+                            '* เนื่องจากร้านค้านี้ไม่ตรงกับร้านค้าที่ท่านได้ลงทะเบียนไว้',
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black54),
+                          ),
+
+                          ElevatedButton(
+                              style:
+                                  ElevatedButton.styleFrom(primary: Colors.teal),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('กลับ'))
                         ],
                       ),
-                    ),
-                    Container(
-                        decoration: boxDecorationGrey,
-                        height: 400,
-                        width: 250,
-                        child: FutureBuilder(
-                          future: getImagePayment(paymentId),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<dynamic> snapshotImage) {
-                            if (snapshotImage.data == null) {
-                              return Container(
-                                  decoration: boxDecorationGrey,
-                                  child:
-                                      Center(child: Text('กำลังโหลดสลีป...')));
-                            } else {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 310,
-                                  width: double.infinity,
-                                  child: ListView.builder(
-                                    //shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: snapshotImage.data.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 4.0, left: 4.0),
-                                        child: Container(
-                                          height: 300,
-                                          width: 240,
-                                          child: Image.memory(
-                                            base64Decode(
-                                                snapshotImage.data[index]),
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
+                  )
+                  : SingleChildScrollView(
                       child: Column(
                         children: [
-                          Container(
-                            decoration: boxDecorationGrey,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'ชำระสินค้า : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          'Order Id  ${snapshotPayment.data.orderId} '),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'สินค้าของ : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          'Market Id  ${snapshotPayment.data.marketId} '),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'ชำระโดย : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          'User Id ${snapshotPayment.data.userId} '),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'ธนาคารที่โอน : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          '${snapshotPayment.data.bankTransfer}'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'ธนาคารที่รับ : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          '${snapshotPayment.data.bankReceive}'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'จำนวนเงิน : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          '${snapshotPayment.data.amount} บาท'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'วันที่โอน : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('${snapshotPayment.data.date}'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'เวลาที่โอน : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('${snapshotPayment.data.time}'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'เลขท้ายบัญชี 4 ตัว : ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          '${snapshotPayment.data.lastNumber}'),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'สถานะ ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Container(
+                                  child: snapshotPayment.data.status ==
+                                          'ชำระเงินสำเร็จ'
+                                      ? Text(
+                                          '${snapshotPayment.data.status}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.green),
+                                        )
+                                      : Text(
+                                          '${snapshotPayment.data.status}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blue),
+                                        ),
+                                )
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
                           Container(
-                            decoration: boxDecorationGrey,
-                            child: FutureBuilder(
-                              future: getDetailOrder(
-                                  token, snapshotPayment.data.orderId),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<dynamic> snapshotDetailOrder) {
-                                if (snapshotDetailOrder.data == null) {
-                                  return Text('กำลังโหลด...');
-                                } else {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                              decoration: boxDecorationGrey,
+                              height: 400,
+                              width: 250,
+                              child: FutureBuilder(
+                                future: getImagePayment(paymentId),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshotImage) {
+                                  if (snapshotImage.data == null) {
+                                    return Container(
+                                        decoration: boxDecorationGrey,
+                                        child: Center(
+                                            child: Text('กำลังโหลดสลีป...')));
+                                  } else {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 310,
+                                        width: double.infinity,
+                                        child: ListView.builder(
+                                          //shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: snapshotImage.data.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 4.0, left: 4.0),
+                                              child: Container(
+                                                height: 300,
+                                                width: 240,
+                                                child: Image.memory(
+                                                  base64Decode(snapshotImage
+                                                      .data[index]),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: boxDecorationGrey,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'รายละเอียดสินค้า',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'ชำระสินค้า : ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                'Order Id  ${snapshotPayment.data.orderId} '),
+                                          ],
                                         ),
-                                        ListView.builder(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            scrollDirection: Axis.vertical,
-                                            shrinkWrap: true,
-                                            itemCount:
-                                                snapshotDetailOrder.data.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return Row(
-                                                children: [
-                                                  Text(
-                                                      '${snapshotDetailOrder.data[index].nameItem.split(':')[1]}'),
-                                                  Container(
-                                                    child: snapshotDetailOrder
-                                                                .data[index]
-                                                                .size ==
-                                                            'null'
-                                                        ? Container()
-                                                        : Text(
-                                                            'ขนาด : ${snapshotDetailOrder.data[index].size.split(':')[0]}'),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 8,
-                                                  ),
-                                                  Container(
-                                                    child: snapshotDetailOrder
-                                                                .data[index]
-                                                                .color ==
-                                                            'null'
-                                                        ? Container()
-                                                        : Text(
-                                                            'สี : ${snapshotDetailOrder.data[index].color.split(':')[0]}'),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 8,
-                                                  ),
-                                                  Text(
-                                                      'จำนวน : ${snapshotDetailOrder.data[index].number}'),
-                                                ],
-                                              );
-                                            }),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'สินค้าของ : ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                'Market Id  ${snapshotPayment.data.marketId} '),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'ชำระโดย : ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                'User Id ${snapshotPayment.data.userId} '),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'ธนาคารที่โอน : ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                '${snapshotPayment.data.bankTransfer}'),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'ธนาคารที่รับ : ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                '${snapshotPayment.data.bankReceive}'),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'จำนวนเงิน : ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                '${snapshotPayment.data.amount} บาท'),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'วันที่โอน : ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                '${snapshotPayment.data.date}'),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'เวลาที่โอน : ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                '${snapshotPayment.data.time}'),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'เลขท้ายบัญชี 4 ตัว : ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                '${snapshotPayment.data.lastNumber}'),
+                                          ],
+                                        ),
                                       ],
                                     ),
-                                  );
-                                }
-                              },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  decoration: boxDecorationGrey,
+                                  child: FutureBuilder(
+                                    future: getDetailOrder(
+                                        token, snapshotPayment.data.orderId),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<dynamic>
+                                            snapshotDetailOrder) {
+                                      if (snapshotDetailOrder.data == null) {
+                                        return Text('กำลังโหลด...');
+                                      } else {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'รายละเอียดสินค้า',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              ListView.builder(
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  itemCount: snapshotDetailOrder
+                                                      .data.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return Row(
+                                                      children: [
+                                                        Text(
+                                                            '${snapshotDetailOrder.data[index].nameItem.split(':')[1]}'),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Container(
+                                                          child: snapshotDetailOrder
+                                                                      .data[
+                                                                          index]
+                                                                      .size ==
+                                                                  'null'
+                                                              ? Container()
+                                                              : Text(
+                                                                  'ขนาด : ${snapshotDetailOrder.data[index].size.split(':')[0]}'),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Container(
+                                                          child: snapshotDetailOrder
+                                                                      .data[
+                                                                          index]
+                                                                      .color ==
+                                                                  'null'
+                                                              ? Container()
+                                                              : Text(
+                                                                  'สี : ${snapshotDetailOrder.data[index].color.split(':')[0]}'),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Text(
+                                                            'จำนวน : ${snapshotDetailOrder.data[index].number}'),
+                                                      ],
+                                                    );
+                                                  }),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                                FutureBuilder(
+                                  future: getOrderByOrderId(
+                                      token, snapshotPayment.data.orderId),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<dynamic>
+                                          snapshotOrderData) {
+                                    if (snapshotOrderData.data == null) {
+                                      return Text('กำลังโหลด...');
+                                    } else {
+                                      return Container(
+                                          child: snapshotPayment.data.status ==
+                                                      'ชำระเงินสำเร็จ' &&
+                                                  marketId ==
+                                                      snapshotPayment
+                                                          .data.marketId
+                                              ? Container(
+                                                  width: double.infinity,
+                                                  child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              primary:
+                                                                  Colors.teal),
+                                                      onPressed: () {
+                                                        _showAlertDeliverItem(
+                                                            context,
+                                                            snapshotPayment
+                                                                .data,
+                                                            snapshotOrderData
+                                                                .data);
+                                                      },
+                                                      child:
+                                                          Text('ส่งมอบสินค้า')),
+                                                )
+                                              : Container());
+                                    }
+                                  },
+                                )
+                              ],
                             ),
-                          ),
-                          FutureBuilder(
-                            future: getOrderByOrderId(
-                                token, snapshotPayment.data.orderId),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<dynamic> snapshotOrderData) {
-                              if (snapshotOrderData.data == null) {
-                                return Text('กำลังโหลด...');
-                              } else {
-                                return Container(
-                                    child: snapshotPayment.data.status ==
-                                            'ชำระเงินสำเร็จ'
-                                        ? Container(
-                                            width: double.infinity,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Colors.teal),
-                                                onPressed: () {
-                                                  _showAlertDeliverItem(
-                                                      context,
-                                                      snapshotPayment.data,
-                                                      snapshotOrderData.data);
-                                                },
-                                                child: Text('ส่งมอบสินค้า')),
-                                          )
-                                        : Container());
-                              }
-                            },
                           )
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ),
+                    ),
             );
           }
         },

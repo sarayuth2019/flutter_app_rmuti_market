@@ -6,21 +6,24 @@ import 'package:flutter_app_rmuti_market/screens/account/scanner_qr_code/payment
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScannerQRCode extends StatefulWidget {
-  ScannerQRCode(this.token);
+  ScannerQRCode(this.token, this.marketId);
 
   final token;
+  final int marketId;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _ScannerQRCode(token);
+    return _ScannerQRCode(token,marketId);
   }
 }
 
 class _ScannerQRCode extends State {
-  _ScannerQRCode(this.token);
+  _ScannerQRCode(this.token, this.marketId);
 
   final token;
+  final int marketId;
+
   QRViewController? controller;
   final qrKey = GlobalKey();
 
@@ -107,7 +110,7 @@ class _ScannerQRCode extends State {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => PaymentFormQRCode(token, paymentId!)));
+                  builder: (context) => PaymentFormQRCode(token, paymentId!,marketId)));
         });
       });
     } else {

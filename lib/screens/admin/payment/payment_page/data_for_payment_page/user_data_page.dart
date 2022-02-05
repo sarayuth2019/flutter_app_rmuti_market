@@ -160,8 +160,7 @@ class _UserDataPage extends State {
                                   Row(
                                     children: [
                                       Text('โอนชำระสินค้า : '),
-                                      Text(
-                                          'item Id ${snapshot.data[index].itemId}'),
+                                      Text('Order Id ${snapshot.data[index].orderId}'),
                                     ],
                                   ),
                                   Text(

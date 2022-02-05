@@ -287,25 +287,8 @@ class _MarketPage extends State {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 8.0, right: 8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8.0, right: 8.0, bottom: 4),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "รวมเป็นเงิน : ${(snapshot.data[index].priceSell) * snapshot.data[index].count} บาท",
-                                        )
-                                      ],
+                                    child: Text(
+                                      "ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
                                     ),
                                   ),
                                 ],

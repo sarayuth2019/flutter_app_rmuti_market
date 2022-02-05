@@ -27,7 +27,6 @@ class _ItemDataPage extends State {
   final token;
   final itemId;
   final String urlGetItemDataByItemId = '${Config.API_URL}/Item/list/item';
-  final String urlGetImageByItemId = "${Config.API_URL}/images/";
 
   var size;
   int _sizePrice = 0;
@@ -51,46 +50,7 @@ class _ItemDataPage extends State {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FutureBuilder(
-              future: getImage(itemId),
-              builder:
-                  (BuildContext context, AsyncSnapshot<dynamic> snapshotImage) {
-                print(snapshotImage.data.runtimeType);
-                if (snapshotImage.data == null) {
-                  return Container(
-                      height: 150,
-                      width: double.infinity,
-                      decoration: boxDecorationGrey,
-                      child: Center(child: Text('กำลังโหลดภาพ...')));
-                } else {
-                  return Container(
-                    height: 150,
-                    width: double.infinity,
-                    child: CarouselSlider.builder(
-                      options: CarouselOptions(
-                          initialPage: 0,
-                          enlargeCenterPage: true,
-                          autoPlay: true),
-                      itemCount: snapshotImage.data.length,
-                      itemBuilder:
-                          (BuildContext context, int index, int realIndex) {
-                        return Container(
-                            child: snapshotImage.data.length == 0
-                                ? Container(
-                                    child:
-                                        Center(child: Text('กำลังโหลดภาพ...')))
-                                : Container(
-                                    height: 150,
-                                    width: double.infinity,
-                                    child: Image.memory(
-                                        base64Decode(snapshotImage.data[index]),
-                                        fit: BoxFit.fill)));
-                      },
-                    ),
-                  );
-                }
-              },
-            ),
+            ShowImageItem(token, itemId),
             SizedBox(
               height: 15,
             ),
@@ -317,11 +277,11 @@ class _ItemDataPage extends State {
                                   ],
                                 ),
                                 Text(
-                                  "ราคา ${snapshot.data.priceSell+_sizePrice+_colorPrice} บาท",
+                                  "ราคา ${snapshot.data.priceSell + _sizePrice + _colorPrice} บาท",
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
-                                  "ลดราคาจาก ${snapshot.data.price+_sizePrice+_colorPrice} บาท",
+                                  "ลดราคาจาก ${snapshot.data.price + _sizePrice + _colorPrice} บาท",
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 Text(
@@ -416,13 +376,65 @@ class _ItemDataPage extends State {
     });
     return _items;
   }
+}
+
+class ShowImageItem extends StatefulWidget {
+  ShowImageItem(this.token, this.itemId);
+
+  final token;
+  final int itemId;
+
+  @override
+  _ShowImageItemState createState() => _ShowImageItemState();
+}
+
+class _ShowImageItemState extends State<ShowImageItem> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: getImage(widget.itemId),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshotImage) {
+        print(snapshotImage.data.runtimeType);
+        if (snapshotImage.data == null) {
+          return Container(
+              height: 150,
+              width: double.infinity,
+              decoration: boxDecorationGrey,
+              child: Center(child: Text('กำลังโหลดภาพ...')));
+        } else {
+          return Container(
+            height: 150,
+            width: double.infinity,
+            child: CarouselSlider.builder(
+              options: CarouselOptions(
+                  initialPage: 0, enlargeCenterPage: true, autoPlay: true),
+              itemCount: snapshotImage.data.length,
+              itemBuilder: (BuildContext context, int index, int realIndex) {
+                return Container(
+                    child: snapshotImage.data.length == 0
+                        ? Container(
+                            child: Center(child: Text('กำลังโหลดภาพ...')))
+                        : Container(
+                            height: 150,
+                            width: double.infinity,
+                            child: Image.memory(
+                                base64Decode(snapshotImage.data[index]),
+                                fit: BoxFit.fill)));
+              },
+            ),
+          );
+        }
+      },
+    );
+  }
 
   Future<void> getImage(_itemId) async {
+    final String urlGetImageByItemId = "${Config.API_URL}/images/";
     var _resData;
     await http.get(
         Uri.parse('${urlGetImageByItemId.toString()}${_itemId.toString()}'),
         headers: {
-          HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+          HttpHeaders.authorizationHeader: 'Bearer ${widget.token.toString()}'
         }).then((res) {
       print(res.body);
       Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;

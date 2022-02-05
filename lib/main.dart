@@ -52,7 +52,7 @@ class _HomePage extends State {
           MyShop(token, marketId),
           NotifyPage(token, marketId, callBack),
           MarketPage(token, marketId),
-          ScannerQRCode(token)
+          ScannerQRCode(token,marketId)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

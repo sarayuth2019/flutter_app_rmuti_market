@@ -52,7 +52,7 @@ void notifyMarketMethod(context, token, int marketId, int payId, int count,
 void notifyAllUserMethod(context, token, int itemId, int userId, int payId,
     int amount, String textStatus) async {
   const String urlListPaymentByItemId =
-      '${Config.API_URL}/Pay/listItemIdByUserId';
+      '${Config.API_URL}/Pay/listPayIdByUserId';
   Map params = Map();
   params['itemId'] = itemId.toString();
   await http.post(Uri.parse(urlListPaymentByItemId), body: params, headers: {
