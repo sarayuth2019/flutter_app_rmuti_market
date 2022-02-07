@@ -48,6 +48,10 @@ class _EditProductPage extends State {
   String? dealFinal;
   String? dateBegin;
   String? dateFinal;
+  String? _textDealBegin;
+  String? _textDealFinal;
+  String? _textDateBegin;
+  String? _textDateFinal;
   final snackBarOnSave =
       SnackBar(content: Text("กำลังแก้ไขสินค้า กรุณารอซักครู่..."));
   final snackBarOnSaveSuccess = SnackBar(content: Text("แก้ไขสินค้า สำเร็จ !"));
@@ -91,6 +95,14 @@ class _EditProductPage extends State {
         '${itemData.dealBegin.split('/')[1]}/${itemData.dealBegin.split('/')[0]}/${itemData.dealBegin.split('/')[2]}';
     var _dealFinal =
         '${itemData.dealFinal.split('/')[1]}/${itemData.dealFinal.split('/')[0]}/${itemData.dealFinal.split('/')[2]}';
+
+    _textDealBegin = '${itemData.dealBegin.split('/')[0]}/${itemData.dealBegin.split('/')[1]}/${itemData.dealBegin.split('/')[2]}';
+    _textDealFinal = '${itemData.dealFinal.split('/')[0]}/${itemData.dealFinal.split('/')[1]}/${itemData.dealFinal.split('/')[2]}';
+    _textDateBegin = '${itemData.dateBegin.split('/')[0]}/${itemData.dateBegin.split('/')[1]}/${itemData.dateBegin.split('/')[2]}';
+    _textDateFinal = '${itemData.dateFinal.split('/')[0]}/${itemData.dateFinal.split('/')[1]}/${itemData.dateFinal.split('/')[2]}';
+
+
+
 
     marketID = itemData.marketID;
     nameItem = itemData.nameItem;
@@ -658,7 +670,7 @@ class _EditProductPage extends State {
                                     },
                                     icon: Icon(Icons.date_range)),
                                 Text("วันเริ่ม"),
-                                Text("${dealBegin ?? 'เลือกวันที่'}"),
+                                Text("${_textDealBegin ?? 'เลือกวันที่'}"),
                               ],
                             ),
                             Icon(Icons.arrow_forward),
@@ -670,7 +682,7 @@ class _EditProductPage extends State {
                                     },
                                     icon: Icon(Icons.date_range)),
                                 Text("วันสิ้นสุด"),
-                                Text("${dealFinal ?? 'เลือกวันที่'}"),
+                                Text("${_textDealFinal ?? 'เลือกวันที่'}"),
                               ],
                             ),
                           ],
@@ -699,7 +711,7 @@ class _EditProductPage extends State {
                                     },
                                     icon: Icon(Icons.date_range)),
                                 Text("วันเริ่ม"),
-                                Text('${dateBegin ?? 'เลือกวันที่'}'),
+                                Text('${_textDateBegin ?? 'เลือกวันที่'}'),
                               ],
                             ),
                             Icon(Icons.arrow_forward),
@@ -711,7 +723,7 @@ class _EditProductPage extends State {
                                     },
                                     icon: Icon(Icons.date_range)),
                                 Text("วันสิ้นสุด"),
-                                Text("${dateFinal ?? 'เลือกวันที่'}"),
+                                Text("${_textDateFinal ?? 'เลือกวันที่'}"),
                               ],
                             ),
                           ],
@@ -746,7 +758,8 @@ class _EditProductPage extends State {
             lastDate: DateTime(DateTime.now().year + 5))
         .then((date) {
       setState(() {
-        dealBegin = "${date!.month}/${date.day}/${date.year}";
+        _textDealBegin = "${date!.day}/${date.month}/${date.year}";
+        dealBegin = "${date.month}/${date.day}/${date.year}";
         print(date);
       });
     });
@@ -761,7 +774,8 @@ class _EditProductPage extends State {
             lastDate: DateTime(DateTime.now().year + 5))
         .then((date) {
       setState(() {
-        dealFinal = "${date!.month}/${date.day}/${date.year}";
+        _textDealFinal = "${date!.day}/${date.month}/${date.year}";
+        dealFinal = "${date.month}/${date.day}/${date.year}";
         print(date);
       });
     });
@@ -776,7 +790,8 @@ class _EditProductPage extends State {
             lastDate: DateTime(DateTime.now().year + 5))
         .then((date) {
       setState(() {
-        dateBegin = "${date!.month}/${date.day}/${date.year}";
+        _textDateBegin = "${date!.day}/${date.month}/${date.year}";
+        dateBegin = "${date.month}/${date.day}/${date.year}";
         print(date);
       });
     });
@@ -791,7 +806,8 @@ class _EditProductPage extends State {
             lastDate: DateTime(DateTime.now().year + 5))
         .then((date) {
       setState(() {
-        dateFinal = "${date!.month}/${date.day}/${date.year}";
+        _textDateFinal = "${date!.day}/${date.month}/${date.year}";
+        dateFinal = "${date.month}/${date.day}/${date.year}";
         print(date);
       });
     });

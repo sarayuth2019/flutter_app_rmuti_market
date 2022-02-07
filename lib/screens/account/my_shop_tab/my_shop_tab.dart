@@ -265,6 +265,7 @@ class _MyShop extends State {
                                                 ),
                                               ),
                                             ))),
+                                    SizedBox(height: 4,),
                                     snapshot.data[index].count !=
                                         snapshot.data[index]
                                             .countRequest &&
