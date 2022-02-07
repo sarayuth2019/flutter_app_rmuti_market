@@ -49,52 +49,60 @@ class _SearchPayment extends State {
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
+          title: Text('Search Payment',style: TextStyle(color: Colors.teal,fontSize: 18),),
+          iconTheme: IconThemeData(color: Colors.teal),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: Container(
-                  height: 42,
-                  decoration: boxDecorationGrey,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                          value: _dropDownValue,
-                          onChanged: (value) {
-                            setState(() {
-                              this._dropDownValue = value;
-                            });
-                          },
-                          items: listDropdownButton
-                              .map((e) => DropdownMenuItem(
-                                  value: e, child: Text('${e.toString()}')))
-                              .toList()),
+          bottom: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            flexibleSpace: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: Container(
+                    height: 42,
+                    decoration: boxDecorationGrey,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                            value: _dropDownValue,
+                            onChanged: (value) {
+                              setState(() {
+                                this._dropDownValue = value;
+                              });
+                            },
+                            items: listDropdownButton
+                                .map((e) => DropdownMenuItem(
+                                    value: e, child: Text('${e.toString()}')))
+                                .toList()),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: Container(
-                  height: 42,
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  decoration: boxDecorationGrey,
-                  child: TextField(
-                    decoration: InputDecoration(
-                        hintText: 'Search ${_dropDownValue.toString()}',
-                        border: InputBorder.none),
-                    onChanged: (textSearch) {
-                      setState(() {
-                        checkDropDownPick(textSearch);
-                      });
-                    },
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: Container(
+                    height: 42,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    decoration: boxDecorationGrey,
+                    child: TextField(
+                      decoration: InputDecoration(
+                          hintText: 'Search ${_dropDownValue.toString()}',
+                          border: InputBorder.none),
+                      onChanged: (textSearch) {
+                        setState(() {
+                          checkDropDownPick(textSearch);
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         body: FutureBuilder(

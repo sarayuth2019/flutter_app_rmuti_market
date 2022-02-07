@@ -120,6 +120,7 @@ class _MyShop extends State {
                                   color: Colors.teal,
                                   width: double.infinity,
                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(

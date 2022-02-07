@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +17,7 @@ Future<Order?> getOrderByOrderId(token, orderId) async {
     Order _order = Order(
         data['orderId'],
         data['status'],
+        data['priceSell'],
         data['marketId'],
         data['userId'],
         data['itemId'],
@@ -35,6 +35,7 @@ class Order {
   Order(
       this.orderId,
       this.status,
+      this.priceSell,
       this.marketId,
       this.userId,
       this.itemId,
@@ -46,6 +47,7 @@ class Order {
 
   final orderId;
   final status;
+  final priceSell;
   final marketId;
   final userId;
   final itemId;

@@ -469,6 +469,7 @@ class _PaymentFormQRCode extends State {
       var resStatus = resData['status'];
       if (resStatus == 1) {
         setState(() {
+          ////////////////SaveStatusOrder//////////////////
           saveStatusOrder(token, orderData, statusPayment);
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text('รับสินค้า สำเร็จ')));

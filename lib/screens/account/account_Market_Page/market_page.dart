@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/edit_account.dart';
 import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/market_overview.dart';
-import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market__data_page/show_review_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/list_item_by_marketId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/review_market_method.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -35,7 +35,6 @@ class _MarketPage extends State {
 
   final String urlSendAccountById = "${Config.API_URL}/Market/list";
   final String urlGetPaymentByMarketId = '${Config.API_URL}/Pay/market';
-  final urlListItemByMarketId = "${Config.API_URL}/Item/find/market";
   MarketData? _marketAccountData;
   var _imageMarket;
 
@@ -88,7 +87,7 @@ class _MarketPage extends State {
         body: Column(
           children: [
             FutureBuilder(
-              future: sendAccountDataByUser(),
+              future: sendAccountDataByUser(token),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.data == null) {
                   print('Account snapshotData : ${snapshot.data}');
@@ -241,7 +240,7 @@ class _MarketPage extends State {
             ),
             Expanded(
               child: FutureBuilder(
-                future: listItemByUser(),
+                future: listItemByUser(token,marketId),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (snapshot.data == null) {
@@ -304,7 +303,7 @@ class _MarketPage extends State {
         ));
   }
 
-  Future<MarketData> sendAccountDataByUser() async {
+  Future<MarketData> sendAccountDataByUser(token) async {
     await http.post(Uri.parse(urlSendAccountById), headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
@@ -333,51 +332,6 @@ class _MarketPage extends State {
       print("market data : ${_marketAccountData}");
     });
     return _marketAccountData!;
-  }
-
-  Future<List<Item>> listItemByUser() async {
-    Map params = Map();
-    List<Item> listItemSell = [];
-    params['market'] = marketId.toString();
-    await http.post(Uri.parse(urlListItemByMarketId), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      print("listItem By Account Success");
-      Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      var _itemData = _jsonRes['data'];
-
-      for (var i in _itemData) {
-        Item _items = Item(
-          i['itemId'],
-          i['nameItems'],
-          i['groupItems'],
-          i['price'],
-          i['priceSell'],
-          i['count'],
-          i['size'],
-          i['colors'],
-          i['countRequest'],
-          i['marketId'],
-          i['dateBegin'],
-          i['dateFinal'],
-          i['dealBegin'],
-          i['dealFinal'],
-          i['createDate'],
-        );
-        if (_items.count == _items.countRequest) {
-          listItemSell.add(_items);
-        }
-      }
-
-      /*listItemSell = listItem
-          .where((element) =>
-          element.count.toLowerCase().contains(status.toLowerCase()))
-          .toList();
-
-       */
-    });
-    print("Products By Account : ${listItemSell.length}");
-    return listItemSell;
   }
 
   Future logout() async {

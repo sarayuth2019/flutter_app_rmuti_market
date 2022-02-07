@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/payment_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/payment/search_payment/search_payment_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 import 'package:http/http.dart' as http;
@@ -33,6 +34,17 @@ class _PaymentTab extends State {
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.teal,
+          mini: true,
+          child: Icon(Icons.search),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => SearchPayment(token)));
+          },
+        ),
         body: FutureBuilder(
           future: listPayment(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -143,7 +155,8 @@ class _PaymentTab extends State {
   }
 
   Future<List<Payment>> listPayment() async {
-    final String urlGetPaymentByStatusPayment = '${Config.API_URL}/Pay/listByStatus';
+    final String urlGetPaymentByStatusPayment =
+        '${Config.API_URL}/Pay/listByStatus';
     List<Payment> _listPayment = [];
     Map params = Map();
     params['status'] = tabStatus.toString();

@@ -1,8 +1,9 @@
 import 'dart:io';
+import 'package:flutter_app_rmuti_market/screens/method/get_order_by_orderId.dart';
 import 'package:http/http.dart'as http;
 import 'package:flutter_app_rmuti_market/config/config.dart';
 
-Future<void> saveStatusOrder(token,orderData,statusOrder) async {
+Future<void> saveStatusOrder(token,Order orderData,statusOrder) async {
   final String urlOrderUpdate = '${Config.API_URL}/Order/update';
   var _dealBegin =
       '${orderData.dealBegin.split('/')[1]}/${orderData.dealBegin
@@ -27,6 +28,7 @@ Future<void> saveStatusOrder(token,orderData,statusOrder) async {
   params['marketId'] = orderData.marketId.toString();
   params['status'] = statusOrder.toString();
   params['userId'] = orderData.userId.toString();
+  params['priceSell'] = orderData.priceSell.toString();
   params['dealBegin'] = _dealBegin.toString();
   params['dealFinal'] = _dealFinal.toString();
   params['dateBegin'] = _dateBegin.toString();

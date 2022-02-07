@@ -9,9 +9,12 @@ import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/getDetailOrder.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_Image_payment_method.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_item_by_itemId.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_order_by_orderId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_payment_by_payId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/notify_method.dart';
+import 'package:flutter_app_rmuti_market/screens/method/save_status_order.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentPage extends StatefulWidget {
@@ -34,20 +37,7 @@ class _PaymentPage extends State {
   final Payment paymentData;
   final String urlGetPayData = '${Config.API_URL}/Pay/listId';
   final String urlSavePay = '${Config.API_URL}/Pay/save';
-  final String urlGetItemByItemId = '${Config.API_URL}/Item/list/item';
   final String urlUpdateItem = '${Config.API_URL}/Item/update';
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    /*
-    getItemByItemId(paymentData.itemId).then((value) {
-      item = value!;
-      print('Item Data : ${item}');
-    });
-     */
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -422,28 +412,46 @@ class _PaymentPage extends State {
                                                                       ),
                                                                     ),
                                                                   )
-                                                                : Center(
-                                                                    child: Container(
-                                                                        child: snapshotPayment.data.status == 'รอดำเนินการ'
-                                                                            ? Column(
-                                                                                children: [
-                                                                                  ElevatedButton(
-                                                                                      style: ElevatedButton.styleFrom(primary: Colors.teal),
-                                                                                      onPressed: () {
-                                                                                        String _statusPayment = 'ชำระเงินสำเร็จ';
-                                                                                        _showAlertGetMoney(context, snapshotPayment.data, _statusPayment, snapshotItemData.data, sumNumber);
-                                                                                      },
-                                                                                      child: Text('ชำระเงินสำเร็จ')),
-                                                                                  ElevatedButton(
-                                                                                      style: ElevatedButton.styleFrom(primary: Colors.deepOrange),
-                                                                                      onPressed: () {
-                                                                                        String _statusPayment = 'ชำระเงินผิดพลาด';
-                                                                                        _showAlertGetMoney(context, snapshotPayment.data, _statusPayment, snapshotItemData.data, 0);
-                                                                                      },
-                                                                                      child: Text('จำนวนเงินผิดพลาด')),
-                                                                                ],
-                                                                              )
-                                                                            : Container()),
+                                                                : FutureBuilder(
+                                                                    future: getOrderByOrderId(
+                                                                        token,
+                                                                        paymentData
+                                                                            .orderId),
+                                                                    builder: (BuildContext
+                                                                            context,
+                                                                        AsyncSnapshot<dynamic>
+                                                                            snapshotOrder) {
+                                                                      if (snapshotOrder
+                                                                              .data ==
+                                                                          null) {
+                                                                        return Text(
+                                                                            'กำลังโหลด...');
+                                                                      } else {
+                                                                        return Center(
+                                                                          child: Container(
+                                                                              child: snapshotPayment.data.status == 'รอดำเนินการ'
+                                                                                  ? Column(
+                                                                                      children: [
+                                                                                        ElevatedButton(
+                                                                                            style: ElevatedButton.styleFrom(primary: Colors.teal),
+                                                                                            onPressed: () {
+                                                                                              String _statusPayment = 'ชำระเงินสำเร็จ';
+                                                                                              _showAlertGetMoney(context, snapshotPayment.data, snapshotOrder.data, _statusPayment, snapshotItemData.data, sumNumber);
+                                                                                            },
+                                                                                            child: Text('ชำระเงินสำเร็จ')),
+                                                                                        ElevatedButton(
+                                                                                            style: ElevatedButton.styleFrom(primary: Colors.deepOrange),
+                                                                                            onPressed: () {
+                                                                                              String _statusPayment = 'ชำระเงินผิดพลาด';
+                                                                                              _showAlertGetMoney(context, snapshotPayment.data, snapshotOrder.data, _statusPayment, snapshotItemData.data, 0);
+                                                                                            },
+                                                                                            child: Text('จำนวนเงินผิดพลาด')),
+                                                                                      ],
+                                                                                    )
+                                                                                  : Container()),
+                                                                        );
+                                                                      }
+                                                                    },
                                                                   )),
                                                       ],
                                                     );
@@ -520,8 +528,8 @@ class _PaymentPage extends State {
     });
   }
 
-  void _showAlertGetMoney(BuildContext context, _paymentData, statusPayment,
-      _Items itemData, int sumNumber) async {
+  void _showAlertGetMoney(BuildContext context, _paymentData, _orderData,
+      statusPayment, Items itemData, int sumNumber) async {
     print('Show Alert Dialog !');
     return showDialog(
         context: context,
@@ -539,8 +547,8 @@ class _PaymentPage extends State {
                       child: GestureDetector(
                           child: Text(statusPayment),
                           onTap: () {
-                            _saveStatusPayment(_paymentData, statusPayment,
-                                itemData, sumNumber);
+                            _saveStatusPayment(_paymentData, _orderData,
+                                statusPayment, itemData, sumNumber);
                             Navigator.pop(context);
                           })),
                   SizedBox(
@@ -559,8 +567,8 @@ class _PaymentPage extends State {
         });
   }
 
-  void _saveStatusPayment(
-      Payment _paymentData, statusPayment, _Items itemData, sumNumber) async {
+  void _saveStatusPayment(Payment _paymentData, Order _orderData, statusPayment,
+      Items itemData, sumNumber) async {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
     String _date =
@@ -589,8 +597,12 @@ class _PaymentPage extends State {
       var resData = jsonDecode(utf8.decode(res.bodyBytes));
       var resStatus = resData['status'];
       if (resStatus == 1) {
+        ///////////////SaveStatusOrder/////////////////
+        saveStatusOrder(token, _orderData, statusPayment);
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('บันทึกสถานะสำเร็จ')));
+
+        //////////////////UpdateItemCount/////////////////////////////
         if (statusPayment == 'ชำระเงินสำเร็จ') {
           int _number = sumNumber;
           updateItem(_paymentData, _number, statusPayment, itemData);
@@ -606,7 +618,7 @@ class _PaymentPage extends State {
   }
 
   void updateItem(
-      Payment _paymentData, int sumNumber, status, _Items itemData) async {
+      Payment _paymentData, int sumNumber, status, Items itemData) async {
     var _dateBegin =
         '${itemData.dateBegin.split('/')[1]}/${itemData.dateBegin.split('/')[0]}/${itemData.dateBegin.split('/')[2]}';
     var _dateFinal =
@@ -669,8 +681,14 @@ class _PaymentPage extends State {
             print('Notify All user get item');
             String textStatus =
                 'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';
-            notifyAllUserMethod(context, token, itemData.itemId,
-                _paymentData.userId, _paymentData.payId,_paymentData.amount,textStatus);
+            notifyAllUserMethod(
+                context,
+                token,
+                itemData.itemId,
+                _paymentData.userId,
+                _paymentData.payId,
+                _paymentData.amount,
+                textStatus);
           } else {
             String textNotifyUser =
                 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';
@@ -701,73 +719,4 @@ class _PaymentPage extends State {
       });
     });
   }
-
-  Future<_Items?> getItemByItemId(token, int itemId) async {
-    _Items? itemData;
-    Map params = Map();
-    params['id'] = itemId.toString();
-    await http.post(Uri.parse(urlGetItemByItemId), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      print("Get Item By Account Success");
-      Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      var _itemData = _jsonRes['data'];
-      print(_itemData);
-      _Items _items = _Items(
-        _itemData['itemId'],
-        _itemData['nameItems'],
-        _itemData['groupItems'],
-        _itemData['price'],
-        _itemData['priceSell'],
-        _itemData['count'],
-        _itemData['size'],
-        _itemData['colors'],
-        _itemData['countRequest'],
-        _itemData['marketId'],
-        _itemData['dateBegin'],
-        _itemData['dateFinal'],
-        _itemData['dealBegin'],
-        _itemData['dealFinal'],
-        _itemData['createDate'],
-      );
-      itemData = _items;
-    });
-    //item = itemData;
-    return itemData;
-  }
-}
-
-class _Items {
-  final int itemId;
-  final String nameItem;
-  final int groupItem;
-  final int price;
-  final int priceSell;
-  final int count;
-  final List size;
-  final List color;
-  final int countRequest;
-  final int marketId;
-  final String dateBegin;
-  final String dateFinal;
-  final String dealBegin;
-  final String dealFinal;
-  final String date;
-
-  _Items(
-      this.itemId,
-      this.nameItem,
-      this.groupItem,
-      this.price,
-      this.priceSell,
-      this.count,
-      this.size,
-      this.color,
-      this.countRequest,
-      this.marketId,
-      this.dateBegin,
-      this.dateFinal,
-      this.dealBegin,
-      this.dealFinal,
-      this.date);
 }

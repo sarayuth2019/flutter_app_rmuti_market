@@ -18,6 +18,7 @@ Future<List<Order>> listOrderAll(token) async {
       Order order = Order(
           i['orderId'],
           i['status'],
+          i['priceSell'],
           i['marketId'],
           i['userId'],
           i['itemId'],
