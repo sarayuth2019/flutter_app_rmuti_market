@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/overview_order/admin_overview_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/payment/search_payment/search_payment_tab.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/sold_items/sold_items_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,7 +57,7 @@ class _AdminMainPage extends State {
       body: PageView(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children: [PaymentTab(token, 'รอดำเนินการ'), SearchPayment(token),AdminOverViewTab(token)],
+        children: [PaymentTab(token, 'รอดำเนินการ'), SoldItemsTab(token),AdminOverViewTab(token)],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -72,9 +72,9 @@ class _AdminMainPage extends State {
         },
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.receipt_long), label: "Payment"),
+              icon: Icon(Icons.receipt_long), label: "Payments"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.search), label: "Search Payment"),
+              icon: Icon(Icons.monetization_on_outlined), label: "Sold Items"),
           BottomNavigationBarItem(
               icon: Icon(Icons.table_view_outlined), label: "Over View"),
         ],
@@ -86,7 +86,7 @@ class _AdminMainPage extends State {
     _pageController.jumpToPage(numPageView);
     setState(() {
       tabNum = numPageView;
-      print(tabNum);
+      //print(tabNum);
     });
   }
   Future logout() async {

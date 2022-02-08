@@ -166,7 +166,7 @@ class _PaymentTab extends State {
           HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
         }).then((res) {
       var resJson = jsonDecode(utf8.decode(res.bodyBytes));
-      print(resJson);
+      //print(resJson);
       var resData = resJson['dataId'];
       for (var i in resData) {
         Payment _payment = Payment(

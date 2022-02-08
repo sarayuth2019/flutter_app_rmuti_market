@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_image_Item.dart';
 import 'package:http/http.dart' as http;
 
 class ItemDataPage extends StatefulWidget {
@@ -385,14 +386,19 @@ class ShowImageItem extends StatefulWidget {
   final int itemId;
 
   @override
-  _ShowImageItemState createState() => _ShowImageItemState();
+  _ShowImageItemState createState() => _ShowImageItemState(token, itemId);
 }
 
 class _ShowImageItemState extends State<ShowImageItem> {
+  _ShowImageItemState(this.token, this.itemId);
+
+  final token;
+  final int itemId;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getImage(widget.itemId),
+      future: getImage(token, itemId),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshotImage) {
         print(snapshotImage.data.runtimeType);
         if (snapshotImage.data == null) {
@@ -426,27 +432,5 @@ class _ShowImageItemState extends State<ShowImageItem> {
         }
       },
     );
-  }
-
-  Future<void> getImage(_itemId) async {
-    final String urlGetImageByItemId = "${Config.API_URL}/images/";
-    var _resData;
-    await http.get(
-        Uri.parse('${urlGetImageByItemId.toString()}${_itemId.toString()}'),
-        headers: {
-          HttpHeaders.authorizationHeader: 'Bearer ${widget.token.toString()}'
-        }).then((res) {
-      print(res.body);
-      Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      var _statusData = jsonData['status'];
-      var _dataImage = jsonData['dataImages'];
-      //var _dataId = jsonData['dataId'];
-      if (_statusData == 1) {
-        _resData = _dataImage;
-        //print("jsonData : ${_resData.toString()}");
-      }
-    });
-    print("_resData ${_resData.toString()}");
-    return _resData;
   }
 }
