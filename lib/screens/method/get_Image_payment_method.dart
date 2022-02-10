@@ -11,7 +11,7 @@ Future<void> getImagePayment(token,int payId) async {
   await http.post(Uri.parse(urlGetPayImage), body: params, headers: {
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
   }).then((res) {
-    print(res.body);
+    //print(res.body);
     var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
     var imagePayData = jsonData['dataImages'];
     imagePay = imagePayData;

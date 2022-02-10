@@ -699,9 +699,8 @@ class _PaymentPage extends State {
                 textStatus);
 
             ///////////////////////////// บันทึก Payment Admin ////////////////////////////////////////
-            savePaymentAdmin(
-                token, adminId, _paymentData.marketId,itemData.itemId, 'รอดำเนินการ');
-
+            savePaymentAdmin(token, adminId, _paymentData.marketId,
+                itemData.itemId, 'รอดำเนินการ');
           } else {
             String textNotifyUser =
                 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';

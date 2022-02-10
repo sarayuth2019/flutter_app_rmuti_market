@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/sold_items/list_order_by_item/list_order_by_Item_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_items_for_admin.dart';
+
+import 'list_order_by_item/list_order_by_Item_page.dart';
 
 class SoldItemsTab extends StatefulWidget {
   SoldItemsTab(this.token, this.adminId, this.url);
@@ -11,16 +12,18 @@ class SoldItemsTab extends StatefulWidget {
   final adminId;
   final String url;
 
+
   @override
   _SoldItemsTabState createState() => _SoldItemsTabState(token, adminId, url);
 }
 
 class _SoldItemsTabState extends State<SoldItemsTab> {
-  _SoldItemsTabState(this.token, this.adminId, this.url);
+  _SoldItemsTabState(this.token, this.adminId, this.url,);
 
   final token;
   final adminId;
   final String url;
+
 
   @override
   Widget build(BuildContext context) {

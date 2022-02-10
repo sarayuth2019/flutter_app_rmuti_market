@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/edit_account.dart';
-import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/market_overview.dart';
+import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/sold_items_market/market_sold_items_main_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market__data_page/show_review_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_item_by_marketId.dart';
@@ -53,11 +53,11 @@ class _MarketPage extends State {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MarketOverViewTab(token,marketId)));
+                            builder: (context) => MarketSoldItemsMainPage(token, marketId)));
                   },
                   icon: Icon(
-                    Icons.table_view_outlined,
-                    color: Colors.white,
+                    Icons.monetization_on_outlined,
+                    color: Colors.amber,
                   )),
               //Text('ตารางการขาย'),
             ],

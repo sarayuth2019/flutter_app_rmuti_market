@@ -16,11 +16,10 @@ void saveStatusPaymentAdmin(
     date,
     time,
     amount,
-    listNumber,
     statusPaymentAdmin,
     imageFile) async {
   print('Save PaymentAdminData ..........................');
-  String urlSavePaymentAdmin = '${Config.API_URL}/PayAdmin/update';
+  String urlSavePaymentAdmin = '${Config.API_URL}/PayAdmin/update/${paymentAdminData.payId}';
   Map params = Map();
   params['payId'] = paymentAdminData.payId.toString();
   params['adminId'] = adminId.toString();
@@ -30,9 +29,9 @@ void saveStatusPaymentAdmin(
   params['bankTransfer'] = bankTransfer.toString();
   params['bankReceive'] = bankReceive.toString();
   params['date'] = date.toString();
-  params['time'] = time.toString();
+  params['time'] = '${time.toString()}:00'.toString();
   params['amount'] = amount.toString();
-  params['lastNumber'] = listNumber.toString();
+  //params['lastNumber'] = listNumber.toString();
   params['status'] = statusPaymentAdmin.toString();
   await http.post(Uri.parse(urlSavePaymentAdmin), body: params, headers: {
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'

@@ -71,6 +71,14 @@ class _EditAccount extends State {
           "แก้ไขข้อมูลผู้ใช้",
           style: TextStyle(color: Colors.teal),
         ),
+        actions: [
+          TextButton(
+              onPressed: () {},
+              child: Text(
+                'บัญชีธนาคาร',
+                style: TextStyle(color: Colors.orange),
+              ))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

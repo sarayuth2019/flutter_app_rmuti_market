@@ -4,33 +4,36 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_item_by_itemId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_payment_admin_by_itemId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_bankmarket.dart';
 import 'package:flutter_app_rmuti_market/screens/method/save_status_payment_admin.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PaymentAminToMarket extends StatefulWidget {
-  PaymentAminToMarket(
-      this.token, this.adminId, this.listOrders, this.listOrderDetail);
+  PaymentAminToMarket(this.token, this.adminId, this.listOrders,
+      this.listOrderDetail, this.itemData);
 
   final token;
   final adminId;
   final listOrders;
   final listOrderDetail;
+  final itemData;
 
   @override
-  _PaymentAminToMarketState createState() =>
-      _PaymentAminToMarketState(token, adminId, listOrders, listOrderDetail);
+  _PaymentAminToMarketState createState() => _PaymentAminToMarketState(
+      token, adminId, listOrders, listOrderDetail, itemData);
 }
 
 class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
-  _PaymentAminToMarketState(
-      this.token, this.adminId, this.listOrders, this.listOrderDetail);
+  _PaymentAminToMarketState(this.token, this.adminId, this.listOrders,
+      this.listOrderDetail, this.itemId);
 
   final token;
   final adminId;
   final listOrders;
   final listOrderDetail;
+  final Items itemId;
 
   String statusPaymentAdmin = 'รอตรวจสอบจากร้านค้า';
 
@@ -54,7 +57,7 @@ class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
   String? _bankReceiveValue;
   String? _dateTransfer;
   String? _timeTransfer;
-  int? _lastNumber;
+  //int? _lastNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -378,6 +381,7 @@ class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
                                         )
                                       ],
                                     ),
+                                    /*
                                     Container(
                                       height: 40,
                                       width: double.infinity,
@@ -398,6 +402,8 @@ class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
                                         ),
                                       ),
                                     ),
+
+                                     */
                                     SizedBox(height: 10),
                                     Center(
                                       child: ElevatedButton(
@@ -438,10 +444,15 @@ class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
     } else if (_timeTransfer == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('กรุณาเพิ่มเวลาที่โอนเงิน')));
-    } else if (_lastNumber == null || _lastNumber.toString().length != 4) {
+    }
+    /*
+    else if (_lastNumber == null || _lastNumber.toString().length != 4) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('กรุณากรอกเลขท้ายบัญชีธนาคาร 4 ตัว')));
-    } else if (imageFile == null) {
+    }
+     */
+
+    else if (imageFile == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('กรุณาเพิ่มภาพสลิปการโอนเงิน')));
     } else {
@@ -451,7 +462,7 @@ class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
       print('วันที่ : ${_dateTransfer.toString()}');
       print('เวลา : ${_timeTransfer.toString()}');
       print('จำนวนเงิน : ${amount.toString()}');
-      print('เลขท้าย บช : ${_lastNumber.toString()}');
+      //print('เลขท้าย บช : ${_lastNumber.toString()}');
       ///////////////////////// บันทึกสถานะการโอนเงินของ admin ===> market //////////////////////////
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('กำลังบันทึก...')));
@@ -461,13 +472,12 @@ class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
           token,
           paymentAdminData,
           adminId,
-          'ItemId:${listOrders[0].itemId},จำนวนเงิน:${amount.toString()}',
+          'จำนวนคนทะเบียน : ${itemId.count}/${itemId.countRequest}',
           _bankTransferValue,
           _bankReceiveValue,
           _dateTransfer,
           _timeTransfer,
           amount,
-          _lastNumber,
           statusPaymentAdmin,
           imageFile);
     }

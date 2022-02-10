@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/sold_items/list_order_by_item/payment_admin_to_market_page.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/sold_items/list_order_by_item/show_order_detail.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/sold_items_admin/list_order_by_item/payment_admin_to_market_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/sold_items_admin/list_order_by_item/show_order_detail.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/getDetailOrder.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_image_Item.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_item_by_itemId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_order_by_orderId.dart';
+import 'package:flutter_app_rmuti_market/screens/method/get_payment_admin_by_itemId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_orders_by_ItemId.dart';
 
 class ListOrderByItemPage extends StatefulWidget {
@@ -32,9 +33,17 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
   List<Order> listOrders = [];
   List<Detail> listOrdersDetail = [];
 
+  Future<void> _refreshPage() async {
+    setState(() {
+      print('Set State !!');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return RefreshIndicator(
+      onRefresh: _refreshPage,
+      child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -203,7 +212,40 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
                             }),
                         Text(
                             'รวมเป็นเงิน : ${listOrders.map((e) => e.priceSell).reduce((a, b) => a + b)} บาท',
-                            style: TextStyle(fontWeight: FontWeight.bold))
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(height: 10,),
+                        FutureBuilder(
+                          future:
+                              getPaymentAdminByItemId(token, itemData.itemId),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic>
+                                  snapshotGetPaymentAdminByItemId) {
+                            if (snapshotGetPaymentAdminByItemId.data == null) {
+                              return Text('กำลังโหลด...');
+                            } else {
+                              return Column(
+                                children: [
+                                  snapshotGetPaymentAdminByItemId.data.status ==
+                                          'รอดำเนินการ'
+                                      ? buttonTab1()
+                                      : Container(),
+                                  snapshotGetPaymentAdminByItemId.data.status ==
+                                          'รอตรวจสอบจากร้านค้า'
+                                      ? buttonTab2()
+                                      : Container(),
+                                  snapshotGetPaymentAdminByItemId.data.status ==
+                                          'ชำระเงินสำเร็จ'
+                                      ? buttonTab3()
+                                      : Container(),
+                                  snapshotGetPaymentAdminByItemId.data.status ==
+                                          'ชำระเงินผิดพลาด'
+                                      ? buttonTab4()
+                                      : Container(),
+                                ],
+                              );
+                            }
+                          },
+                        )
                       ],
                     ),
                   );
@@ -212,35 +254,53 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
             ),
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FutureBuilder(
-          builder: (BuildContext context,
-              AsyncSnapshot<dynamic> snapshotGetPaymentAdminByItemId) {
-            if (snapshotGetPaymentAdminByItemId.data == null) {
-              return Text('กำลังโหลด...');
-            } else {
-              return Container(
-                  width: 200,
-                  child: snapshotGetPaymentAdminByItemId.data.status ==
-                          'รอดำเนินการ'
-                      ? ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.teal),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        PaymentAminToMarket(token, adminId,
-                                            listOrders, listOrdersDetail)));
-                          },
-                          child: Text(
-                            'โอนเงินไปยังร้านค้า',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      : Text('${snapshotGetPaymentAdminByItemId.data.status}'));
-            }
-          },
+      ),
+    );
+  }
+
+  Widget buttonTab1() {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Colors.teal),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => PaymentAminToMarket(
+                      token, adminId, listOrders, listOrdersDetail, itemData)));
+        },
+        child: Text(
+          'โอนเงินไปยังร้านค้า',
+          style: TextStyle(color: Colors.white),
+        ));
+  }
+
+  Widget buttonTab2() {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Colors.amber),
+        onPressed: () {},
+        child: Text(
+          'สลีปการโอนเงิน',
+          style: TextStyle(color: Colors.white),
+        ));
+  }
+
+  Widget buttonTab3() {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Colors.green),
+        onPressed: () {},
+        child: Text(
+          'สลีปการโอนเงิน',
+          style: TextStyle(color: Colors.white),
+        ));
+  }
+
+  Widget buttonTab4() {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Colors.red),
+        onPressed: () {},
+        child: Text(
+          'โอนเงินผิดพลาด',
+          style: TextStyle(color: Colors.white),
         ));
   }
 }
