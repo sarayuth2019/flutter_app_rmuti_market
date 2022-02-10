@@ -12,12 +12,10 @@ Future<List<Detail>> getDetailOrder(token, int orderId) async {
   Map params = Map();
   params['orderId'] = orderId.toString();
 
-  await http.post(
-      Uri.parse(urlGetItemByItemId),body: params,
-      headers: {
-        HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-      }).then((res) {
-    print(res.body);
+  await http.post(Uri.parse(urlGetItemByItemId), body: params, headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+  }).then((res) {
+    //print(res.body);
     var resData = jsonDecode(utf8.decode(res.bodyBytes));
     var dataDetail = resData['data'];
     for (var i in dataDetail) {

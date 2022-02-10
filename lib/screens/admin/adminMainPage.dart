@@ -2,31 +2,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/overview_order/admin_overview_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_tab.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/sold_items/sold_items_tab.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/sold_items/sold_items_main_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/sing_in_up/sing_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminMainPage extends StatefulWidget {
-  AdminMainPage(this.token, this.marketId);
+  AdminMainPage(this.token, this.adminId);
 
   final token;
-  final marketId;
+  final adminId;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _AdminMainPage(token, marketId);
+    return _AdminMainPage(token, adminId);
   }
 }
 
 class _AdminMainPage extends State {
-  _AdminMainPage(this.token, this.marketId);
+  _AdminMainPage(this.token, this.adminId);
 
   final token;
-  final marketId;
+  final adminId;
   PageController _pageController = PageController();
   int tabNum = 0;
-
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,11 @@ class _AdminMainPage extends State {
       body: PageView(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children: [PaymentTab(token, 'รอดำเนินการ'), SoldItemsTab(token),AdminOverViewTab(token)],
+        children: [
+          PaymentTab(token, 'รอดำเนินการ', adminId),
+          SoldItemsMainTab(token, adminId),
+          AdminOverViewTab(token)
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -89,8 +92,10 @@ class _AdminMainPage extends State {
       //print(tabNum);
     });
   }
+
   Future logout() async {
-    final SharedPreferences _tokenIDInDevice = await SharedPreferences.getInstance();
+    final SharedPreferences _tokenIDInDevice =
+        await SharedPreferences.getInstance();
     _tokenIDInDevice.clear();
     print("account logout ! ${_tokenIDInDevice.toString()}");
     Navigator.pushAndRemoveUntil(context,

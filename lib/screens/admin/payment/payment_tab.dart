@@ -10,23 +10,25 @@ import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentTab extends StatefulWidget {
-  PaymentTab(this.token, this.tabStatus);
+  PaymentTab(this.token, this.tabStatus, this.adminId);
 
   final token;
   final tabStatus;
+  final adminId;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _PaymentTab(token, tabStatus);
+    return _PaymentTab(token, tabStatus,adminId);
   }
 }
 
 class _PaymentTab extends State {
-  _PaymentTab(this.token, this.tabStatus);
+  _PaymentTab(this.token, this.tabStatus, this.adminId);
 
   final token;
   final tabStatus;
+  final adminId;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class _PaymentTab extends State {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => SearchPayment(token)));
+                    builder: (BuildContext context) => SearchPayment(token,adminId)));
           },
         ),
         body: FutureBuilder(
@@ -134,7 +136,7 @@ class _PaymentTab extends State {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     PaymentPage(token,
-                                                        snapshot.data[index])));
+                                                        snapshot.data[index],adminId)));
                                       },
                                       child: Text('ตรวจสอบการชำระเงิน')),
                                 ],

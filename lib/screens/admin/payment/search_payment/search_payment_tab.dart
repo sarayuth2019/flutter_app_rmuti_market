@@ -9,21 +9,23 @@ import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 import 'package:http/http.dart' as http;
 
 class SearchPayment extends StatefulWidget {
-  SearchPayment(this.token);
+  SearchPayment(this.token, this.adminId);
 
   final token;
+  final adminId;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _SearchPayment(token);
+    return _SearchPayment(token, adminId);
   }
 }
 
 class _SearchPayment extends State {
-  _SearchPayment(this.token);
+  _SearchPayment(this.token, this.adminId);
 
   final token;
+  final adminId;
 
   List<String> listDropdownButton = [
     'PaymentId',
@@ -49,7 +51,10 @@ class _SearchPayment extends State {
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
-          title: Text('Search Payment',style: TextStyle(color: Colors.teal,fontSize: 18),),
+          title: Text(
+            'Search Payment',
+            style: TextStyle(color: Colors.teal, fontSize: 18),
+          ),
           iconTheme: IconThemeData(color: Colors.teal),
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -135,8 +140,8 @@ class _SearchPayment extends State {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PaymentPage(
-                                          token, _listSearchPayment[index])));
+                                      builder: (context) => PaymentPage(token,
+                                          _listSearchPayment[index], adminId)));
                             },
                             iconSize: 20,
                             icon: Icon(

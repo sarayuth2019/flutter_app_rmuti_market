@@ -1,28 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/admin/sold_items/list_order_by_Item_page.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/sold_items/list_order_by_item/list_order_by_Item_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_items_for_admin.dart';
 
 class SoldItemsTab extends StatefulWidget {
-  SoldItemsTab(this.token);
+  SoldItemsTab(this.token, this.adminId, this.url);
 
   final token;
+  final adminId;
+  final String url;
 
   @override
-  _SoldItemsTabState createState() => _SoldItemsTabState(token);
+  _SoldItemsTabState createState() => _SoldItemsTabState(token, adminId, url);
 }
 
 class _SoldItemsTabState extends State<SoldItemsTab> {
-  _SoldItemsTabState(this.token);
+  _SoldItemsTabState(this.token, this.adminId, this.url);
 
   final token;
+  final adminId;
+  final String url;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: listItemsForAdmin(token),
+        future: listItemsForAdmin(token, url),
         builder:
             (BuildContext context, AsyncSnapshot<dynamic> snapshotItemData) {
           if (snapshotItemData.data == null) {
@@ -31,7 +35,11 @@ class _SoldItemsTabState extends State<SoldItemsTab> {
             );
           } else if (snapshotItemData.data.length == 0) {
             return Center(
-              child: Text('ไม่มีรายการที่ขายสำเร็จ'),
+              child: Text(
+                'ไม่มีรายการ',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+              ),
             );
           } else {
             return ListView.builder(
@@ -45,8 +53,8 @@ class _SoldItemsTabState extends State<SoldItemsTab> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    ListOrderByItemPage(
-                                        token, snapshotItemData.data[index])));
+                                    ListOrderByItemPage(token, adminId,
+                                        snapshotItemData.data[index])));
                       },
                       child: Container(
                           decoration: boxDecorationGrey,

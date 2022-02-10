@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_item_by_itemId.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<Items>> listItemsForAdmin(token) async {
-  String urlListItemsForAdmin = '${Config.API_URL}/Market/listItemIdByCountRequest';
+Future<List<Items>> listItemsForAdmin(token,String urlApi) async {
   List<Items> listItemsForAdmin = [];
-  await http.get(Uri.parse(urlListItemsForAdmin), headers: {
+  await http.get(Uri.parse(urlApi), headers: {
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
   }).then((res) {
     //print(res.body);

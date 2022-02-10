@@ -14,33 +14,38 @@ import 'package:flutter_app_rmuti_market/screens/method/get_order_by_orderId.dar
 import 'package:flutter_app_rmuti_market/screens/method/list_payment_all.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_payment_by_payId.dart';
 import 'package:flutter_app_rmuti_market/screens/method/notify_method.dart';
+import 'package:flutter_app_rmuti_market/screens/method/save_payment_admin.dart';
 import 'package:flutter_app_rmuti_market/screens/method/save_status_order.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage(this.token, this.paymentData);
+  PaymentPage(this.token, this.paymentData, this.adminId);
 
   final token;
   final paymentData;
+  final adminId;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _PaymentPage(token, paymentData);
+    return _PaymentPage(token, paymentData, adminId);
   }
 }
 
 class _PaymentPage extends State {
-  _PaymentPage(this.token, this.paymentData);
+  _PaymentPage(this.token, this.paymentData, this.adminId);
 
   final token;
   final Payment paymentData;
+  final adminId;
+
   final String urlGetPayData = '${Config.API_URL}/Pay/listId';
   final String urlSavePay = '${Config.API_URL}/Pay/save';
   final String urlUpdateItem = '${Config.API_URL}/Item/update';
 
   @override
   Widget build(BuildContext context) {
+    print('AdminId : ${adminId.toString()}');
     // TODO: implement build
     return RefreshIndicator(
       onRefresh: _onRefresh,
@@ -661,11 +666,13 @@ class _PaymentPage extends State {
               SnackBar(content: Text('เพิ่มจำนวนคนไปยัง item นั้นสำเร็จ')));
 
           if (itemData.countRequest == (itemData.count + sumNumber)) {
+            ///////////////////////////// บันทึกการแจ้งเตือนคนซื้อสินค้านั้นๆ ////////////////////////////////////////
             String textNotifyUser =
                 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';
             notifyUserMethod(context, token, _paymentData.userId,
                 _paymentData.payId, _paymentData.amount, textNotifyUser);
 
+            ///////////////////////////// บันทึกการแจ้งเตือนร้านค้าที่ขายสินค้านั้นๆ ////////////////////////////////////////
             String textNotifyMarket =
                 'ยืนยันการลงทะเบียนสินค้า Item Id : ${itemData.itemId} ${itemData.nameItem}';
             int _count = (itemData.count + sumNumber).toInt();
@@ -678,6 +685,7 @@ class _PaymentPage extends State {
                 itemData.countRequest,
                 textNotifyMarket);
 
+            ///////////////////////////// บันทึกการแจ้งเตือนคนซื้อสินค้านั้นทั้งหมด ////////////////////////////////////////
             print('Notify All user get item');
             String textStatus =
                 'จำนวนผู้ลงทะเบียนครบแล้ว ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';
@@ -689,6 +697,11 @@ class _PaymentPage extends State {
                 _paymentData.payId,
                 _paymentData.amount,
                 textStatus);
+
+            ///////////////////////////// บันทึก Payment Admin ////////////////////////////////////////
+            savePaymentAdmin(
+                token, adminId, _paymentData.marketId,itemData.itemId, 'รอดำเนินการ');
+
           } else {
             String textNotifyUser =
                 'ยืนยันการชำระเงินสำเร็จ ใช้สิทธิ์รับสินค้าที่ร้านได้ภายในวันที่ ${itemData.dateBegin} - ${itemData.dateFinal}';
