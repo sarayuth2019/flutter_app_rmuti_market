@@ -30,10 +30,24 @@ class _MarketSoldItemsMainPageState extends State<MarketSoldItemsMainPage> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'บิลการโอนเงินค่าสินค้า',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.teal),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'บิลการโอนเงินค่าสินค้า',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.teal),
+              ),
+              Text(
+                'จากแอดมิน',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.teal),
+              ),
+            ],
           ),
           actions: [
             TextButton(
@@ -46,7 +60,8 @@ class _MarketSoldItemsMainPageState extends State<MarketSoldItemsMainPage> {
                 },
                 child: Text(
                   'over view',
-                  style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.orange, fontWeight: FontWeight.bold),
                 ))
           ],
           backgroundColor: Colors.transparent,

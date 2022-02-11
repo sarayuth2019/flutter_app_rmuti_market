@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/edit_account/edit_bank_market_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -73,10 +74,17 @@ class _EditAccount extends State {
         ),
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            EditBankMarketPage(token,marketData)));
+              },
               child: Text(
                 'บัญชีธนาคาร',
-                style: TextStyle(color: Colors.orange),
+                style: TextStyle(
+                    color: Colors.orange, fontWeight: FontWeight.bold),
               ))
         ],
       ),
