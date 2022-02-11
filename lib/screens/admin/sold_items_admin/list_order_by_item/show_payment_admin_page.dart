@@ -1,32 +1,23 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_Image_payment_method.dart';
-import 'package:flutter_app_rmuti_market/screens/method/get_payment_admin_by_itemId.dart';
 
-class ShowPaymentAdminPage extends StatefulWidget {
+class ShowPaymentAdminPage extends StatelessWidget {
   ShowPaymentAdminPage(this.token, this.paymentAdminData);
 
   final token;
   final paymentAdminData;
 
   @override
-  _ShowPaymentAdminPageState createState() =>
-      _ShowPaymentAdminPageState(token, paymentAdminData);
-}
-
-class _ShowPaymentAdminPageState extends State<ShowPaymentAdminPage> {
-  _ShowPaymentAdminPageState(this.token, this.paymentAdminData);
-
-  final token;
-  final PaymentAdmin paymentAdminData;
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          'PaymentAdminId : ${paymentAdminData.payId}',
+          style: TextStyle(color: Colors.teal, fontSize: 15),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.teal),
@@ -37,6 +28,13 @@ class _ShowPaymentAdminPageState extends State<ShowPaymentAdminPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            /*
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text('สถานะ : ${paymentAdminData.status}'),
+            ),
+
+             */
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -108,14 +106,45 @@ class _ShowPaymentAdminPageState extends State<ShowPaymentAdminPage> {
                 ),
               ),
             ),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.teal),
-                onPressed: () {},
-                child: Text('จำนวนเงินถูกต้อง')),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.grey),
-                onPressed: () {},
-                child: Text('จำนวนเงินผิดพลาด'))
+            paymentAdminData.status == 'ชำระเงินสำเร็จ'
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      color: Colors.green,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'สถานะ : ${paymentAdminData.status}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      color: Colors.amber,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                'สถานะ : ${paymentAdminData.status}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
           ],
         ),
       )),

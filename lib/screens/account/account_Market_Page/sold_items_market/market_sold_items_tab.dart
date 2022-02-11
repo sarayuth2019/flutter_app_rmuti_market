@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/sold_items_market/show_payment_admin_page.dart';
+import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/sold_items_market/market_payment_admin_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_payment_admin_by_marketId_andStatus.dart';
 
 class MarketSoldItemsTab extends StatefulWidget {
@@ -54,22 +54,61 @@ class _MarketSoldItemsTabState extends State<MarketSoldItemsTab> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                    width: 120,
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.teal),
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ShowPaymentAdminPage(
-                                                          token,
-                                                          snapshotPaymentAdmin
-                                                              .data[index])));
-                                        },
-                                        child: Text('ตรวจสอบ'))),
+                                snapshotPaymentAdmin.data[index].status ==
+                                        'รอตรวจสอบจากร้านค้า'
+                                    ? Container(
+                                        width: 120,
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Colors.amber),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          MarketPaymentAdminPage(
+                                                              token,
+                                                              snapshotPaymentAdmin
+                                                                      .data[
+                                                                  index])));
+                                            },
+                                            child: Text('ตรวจสอบ')))
+                                    : snapshotPaymentAdmin.data[index].status ==
+                                            'ชำระเงินสำเร็จ'
+                                        ? Container(
+                                            width: 120,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    primary: Colors.green),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MarketPaymentAdminPage(
+                                                                  token,
+                                                                  snapshotPaymentAdmin
+                                                                          .data[
+                                                                      index])));
+                                                },
+                                                child: Text('ดูสลีป')))
+                                        : Container(
+                                            width: 120,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    primary: Colors.red),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MarketPaymentAdminPage(
+                                                                  token,
+                                                                  snapshotPaymentAdmin
+                                                                          .data[
+                                                                      index])));
+                                                },
+                                                child: Text('ดูสลีป'))),
                               ],
                             )
                           ],

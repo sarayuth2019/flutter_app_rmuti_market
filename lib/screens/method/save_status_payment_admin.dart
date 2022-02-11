@@ -5,6 +5,33 @@ import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:flutter_app_rmuti_market/screens/method/save_Image_payment_admin.dart';
 import 'package:http/http.dart' as http;
 
+void marketSaveStatusPaymentAdmin(
+    context, token, paymentAdminData, status) async {
+  print(
+      '=====================================>  Market Save Status Payment Admin ${status.toString()}!!!');
+  String _time =
+      '${paymentAdminData.time.split(':')[0]}:${paymentAdminData.time.split(':')[1]}';
+  String _date =
+      '${paymentAdminData.date.split('/')[1]}/${paymentAdminData.date.split('/')[0]}/${paymentAdminData.date.split('/')[2]}';
+  print(_time);
+  print(_date);
+
+  saveStatusPaymentAdmin(
+      context,
+      token,
+      paymentAdminData,
+      paymentAdminData.adminId,
+      paymentAdminData.detail,
+      paymentAdminData.bankTransfer,
+      paymentAdminData.bankReceive,
+      _date,
+      _time,
+      paymentAdminData.amount,
+      status,
+      null);
+  Navigator.pop(context);
+}
+
 void saveStatusPaymentAdmin(
     context,
     token,
@@ -19,7 +46,8 @@ void saveStatusPaymentAdmin(
     statusPaymentAdmin,
     imageFile) async {
   print('Save PaymentAdminData ..........................');
-  String urlSavePaymentAdmin = '${Config.API_URL}/PayAdmin/update/${paymentAdminData.payId}';
+  String urlSavePaymentAdmin =
+      '${Config.API_URL}/PayAdmin/update/${paymentAdminData.payId}';
   Map params = Map();
   params['payId'] = paymentAdminData.payId.toString();
   params['adminId'] = adminId.toString();
@@ -37,12 +65,16 @@ void saveStatusPaymentAdmin(
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
   }).then((res) {
     print(
-        '=====================================>   Save Status Payment Admin !!!');
+        '=====================================>  Save Status Payment Admin ${statusPaymentAdmin.toString()}!!!');
     print(res.body);
     var resData = jsonDecode(utf8.decode(res.bodyBytes));
     var status = resData['status'];
     if (status == 1) {
-      saveImagePaymentAdmin(context, token, paymentAdminData.payId, imageFile);
+      if (imageFile == null) {
+      } else {
+        saveImagePaymentAdmin(
+            context, token, paymentAdminData.payId, imageFile);
+      }
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('บันทึกการโอนเงิน ผิดพลาด')));

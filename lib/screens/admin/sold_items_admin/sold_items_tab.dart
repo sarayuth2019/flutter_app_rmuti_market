@@ -73,7 +73,7 @@ class _SoldItemsTabState extends State<SoldItemsTab> {
                                     Text(
                                         'จำนวนผู้ลงทะเบียน : ${snapshotItemData.data[index].count}/${snapshotItemData.data[index].countRequest}')
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           )),

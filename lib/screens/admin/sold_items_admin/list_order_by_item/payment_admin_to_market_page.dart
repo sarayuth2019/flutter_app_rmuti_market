@@ -27,13 +27,13 @@ class PaymentAminToMarket extends StatefulWidget {
 
 class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
   _PaymentAminToMarketState(this.token, this.adminId, this.listOrders,
-      this.listOrderDetail, this.itemId);
+      this.listOrderDetail, this.itemData);
 
   final token;
   final adminId;
   final listOrders;
   final listOrderDetail;
-  final Items itemId;
+  final Items itemData;
 
   String statusPaymentAdmin = 'รอตรวจสอบจากร้านค้า';
 
@@ -57,378 +57,406 @@ class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
   String? _bankReceiveValue;
   String? _dateTransfer;
   String? _timeTransfer;
+
   //int? _lastNumber;
+  Future<void> _reFreshPage() async {
+    setState(() {
+      print('ReFreshPage');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          iconTheme: IconThemeData(color: Colors.teal),
-        ),
-        body: FutureBuilder(
-          future: getPaymentAdminByItemId(token, listOrders[0].itemId),
-          builder: (BuildContext context,
-              AsyncSnapshot<dynamic> snapshotPaymentAdmin) {
-            if (snapshotPaymentAdmin.data == null) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'ราคาสินค้า',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          ' ${listOrders.map((e) => e.priceSell).reduce((value, element) => value + element)} ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        Text(
-                          'บาท',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      'ชำระเงินผ่านทาง',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    FutureBuilder(
-                      future: listBankMarket(token, listOrders[0].marketId),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshotBankMarket) {
-                        if (snapshotBankMarket.data == null) {
-                          return Text('กำลังโหลด...');
-                        } else {
-                          List<String> _listBankName = [];
-                          snapshotBankMarket.data.forEach((e) {
-                            _listBankName.add(e.nameBank);
-                          });
-                          _listReceiveBankName = _listBankName;
-                          amount = listOrders
-                              .map((e) => e.priceSell)
-                              .reduce((a, b) => a + b);
-                          return Column(
-                            children: [
-                              ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: snapshotBankMarket.data.length,
-                                  itemBuilder: (BuildContext context, index) {
-                                    return Card(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                                '${snapshotBankMarket.data[index].nameBank.toString()}',
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            Text(
-                                                'ชื่อบัญชี : ${snapshotBankMarket.data[index].bankAccountName.toString()}',
-                                                style: TextStyle(
-                                                    color: Colors.grey[600],
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'เลขบัญชี : ${snapshotBankMarket.data[index].bankNumber}',
+    return RefreshIndicator(
+      onRefresh: _reFreshPage,
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            iconTheme: IconThemeData(color: Colors.teal),
+          ),
+          body: FutureBuilder(
+            future: getPaymentAdminByItemId(token, listOrders[0].itemId),
+            builder: (BuildContext context,
+                AsyncSnapshot<dynamic> snapshotPaymentAdmin) {
+              if (snapshotPaymentAdmin.data == null) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'ราคาสินค้า',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            ' ${listOrders.map((e) => e.priceSell).reduce((value, element) => value + element)} ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          Text(
+                            'บาท',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'ชำระเงินผ่านทาง',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      FutureBuilder(
+                        future: listBankMarket(token, listOrders[0].marketId),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshotBankMarket) {
+                          if (snapshotBankMarket.data == null) {
+                            return Text('กำลังโหลด...');
+                          } else {
+                            List<String> _listBankName = [];
+                            snapshotBankMarket.data.forEach((e) {
+                              _listBankName.add(e.nameBank);
+                            });
+                            _listReceiveBankName = _listBankName;
+                            amount = listOrders
+                                .map((e) => e.priceSell)
+                                .reduce((a, b) => a + b);
+                            return Column(
+                              children: [
+                                ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: snapshotBankMarket.data.length,
+                                    itemBuilder: (BuildContext context, index) {
+                                      return Card(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  '${snapshotBankMarket.data[index].nameBank.toString()}',
                                                   style: TextStyle(
-                                                      color: Colors.grey[600]),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Container(
-                                                    height: 20,
-                                                    child: ElevatedButton(
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                                primary: (Colors
-                                                                    .teal)),
-                                                        onPressed: () {
-                                                          FlutterClipboard.copy(
-                                                                  snapshotBankMarket
-                                                                      .data[
-                                                                          index]
-                                                                      .bankNumber
-                                                                      .toString())
-                                                              .then((value) {
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    SnackBar(
-                                                                        content:
-                                                                            Text('Copy Bank Number !')));
-                                                          });
-                                                        },
-                                                        child: Text('copy')))
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                              GestureDetector(
-                                onTap: () {
-                                  _onGallery();
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      decoration: boxDecorationGrey,
-                                      height: 300,
-                                      width: 190,
-                                      child: imageFile == null
-                                          ? Center(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              Text(
+                                                  'ชื่อบัญชี : ${snapshotBankMarket.data[index].bankAccountName.toString()}',
+                                                  style: TextStyle(
+                                                      color: Colors.grey[600],
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              Row(
                                                 children: [
-                                                  Icon(Icons.add),
-                                                  Text('เพิ่มภาพสลิปจ่ายเงิน'),
+                                                  Text(
+                                                    'เลขบัญชี : ${snapshotBankMarket.data[index].bankNumber}',
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.grey[600]),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Container(
+                                                      height: 20,
+                                                      child: ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  primary: (Colors
+                                                                      .teal)),
+                                                          onPressed: () {
+                                                            FlutterClipboard.copy(
+                                                                    snapshotBankMarket
+                                                                        .data[
+                                                                            index]
+                                                                        .bankNumber
+                                                                        .toString())
+                                                                .then((value) {
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      SnackBar(
+                                                                          content:
+                                                                              Text('Copy Bank Number !')));
+                                                            });
+                                                          },
+                                                          child: Text('copy')))
                                                 ],
                                               ),
-                                            )
-                                          : Center(
-                                              child: Container(
-                                                height: 300,
-                                                width: 190,
-                                                child: Image.file(
-                                                  imageFile!,
-                                                  fit: BoxFit.fill,
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                GestureDetector(
+                                  onTap: () {
+                                    _onGallery();
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        decoration: boxDecorationGrey,
+                                        height: 300,
+                                        width: 190,
+                                        child: imageFile == null
+                                            ? Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.add),
+                                                    Text(
+                                                        'เพิ่มภาพสลิปจ่ายเงิน'),
+                                                  ],
                                                 ),
-                                              ),
-                                            )),
+                                              )
+                                            : Center(
+                                                child: Container(
+                                                  height: 300,
+                                                  width: 190,
+                                                  child: Image.file(
+                                                    imageFile!,
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                ),
+                                              )),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'โอนจากธนาคาร',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    DropdownButton(
-                                      value: _bankTransferValue,
-                                      iconEnabledColor: Colors.black,
-                                      isExpanded: true,
-                                      underline: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.black54)),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'โอนจากธนาคาร',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                      hint: Text('เลือกธนาคาร'),
-                                      items: _listTransferBankName
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _bankTransferValue = value as String?;
-                                        });
-                                      },
-                                    ),
-                                    Text(
-                                      'โอนไปยังธนาคาร',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    DropdownButton(
-                                      value: _bankReceiveValue,
-                                      iconEnabledColor: Colors.black,
-                                      isExpanded: true,
-                                      underline: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.black54)),
+                                      DropdownButton(
+                                        value: _bankTransferValue,
+                                        iconEnabledColor: Colors.black,
+                                        isExpanded: true,
+                                        underline: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.black54)),
+                                        ),
+                                        hint: Text('เลือกธนาคาร'),
+                                        items: _listTransferBankName
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(
+                                              value,
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _bankTransferValue =
+                                                value as String?;
+                                          });
+                                        },
                                       ),
-                                      hint: Text('เลือกธนาคาร'),
-                                      items: _listReceiveBankName
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                      Text(
+                                        'โอนไปยังธนาคาร',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      DropdownButton(
+                                        value: _bankReceiveValue,
+                                        iconEnabledColor: Colors.black,
+                                        isExpanded: true,
+                                        underline: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.black54)),
+                                        ),
+                                        hint: Text('เลือกธนาคาร'),
+                                        items: _listReceiveBankName
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(
+                                              value,
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _bankReceiveValue =
+                                                value as String?;
+                                          });
+                                        },
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _pickDate(context);
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: double.infinity,
+                                          decoration: boxDecorationGrey,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text(
+                                                'วันที่โอนเงิน',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              Container(
+                                                  child: _dateTransfer == null
+                                                      ? Text('เดือน-วัน-ปี')
+                                                      : Text(
+                                                          '${_dateTransfer.toString()}')),
+                                            ],
                                           ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _bankReceiveValue = value as String?;
-                                        });
-                                      },
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        _pickDate(context);
-                                      },
-                                      child: Container(
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _pickTime(context);
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: double.infinity,
+                                          decoration: boxDecorationGrey,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text(
+                                                'เวลาที่โอนเงิน',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              Container(
+                                                  child: _timeTransfer == null
+                                                      ? Text('ชม:นาที')
+                                                      : Text(
+                                                          '${_timeTransfer.toString()}')),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text('จำนวนเงิน : บาท'),
+                                      Container(
                                         height: 40,
                                         width: double.infinity,
                                         decoration: boxDecorationGrey,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              'วันที่โอนเงิน',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            Container(
-                                                child: _dateTransfer == null
-                                                    ? Text('เดือน-วัน-ปี')
-                                                    : Text(
-                                                        '${_dateTransfer.toString()}')),
-                                          ],
-                                        ),
+                                        child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0, right: 8.0),
+                                            child: Text(
+                                              '${amount.toString()}',
+                                              style: TextStyle(fontSize: 16),
+                                            )),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        _pickTime(context);
-                                      },
-                                      child: Container(
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      /*
+                                      Container(
                                         height: 40,
                                         width: double.infinity,
                                         decoration: boxDecorationGrey,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              'เวลาที่โอนเงิน',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            Container(
-                                                child: _timeTransfer == null
-                                                    ? Text('ชม:นาที')
-                                                    : Text(
-                                                        '${_timeTransfer.toString()}')),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text('จำนวนเงิน : บาท'),
-                                    Container(
-                                      height: 40,
-                                      width: double.infinity,
-                                      decoration: boxDecorationGrey,
-                                      child: Padding(
+                                        child: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 8.0, right: 8.0),
-                                          child: Text(
-                                            '${amount.toString()}',
-                                            style: TextStyle(fontSize: 16),
-                                          )),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text('เลขบัญชี : '),
-                                        Text('xxxxxx '),
-                                        Text(
-                                          'xxxx',
-                                          style: TextStyle(
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    ),
-                                    /*
-                                    Container(
-                                      height: 40,
-                                      width: double.infinity,
-                                      decoration: boxDecorationGrey,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8.0, right: 8.0),
-                                        child: TextField(
-                                          keyboardType: TextInputType.number,
-                                          onChanged: (value) {
-                                            _lastNumber = int.parse(value);
-                                            print(
-                                                'เลขท้าย บช. : ${_lastNumber.toString()}');
-                                          },
-                                          decoration: InputDecoration(
-                                              hintText: 'เลขท้ายบัญชี 4 ตัว',
-                                              border: InputBorder.none),
+                                          child: TextField(
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (value) {
+                                              _lastNumber = int.parse(value);
+                                              print(
+                                                  'เลขท้าย บช. : ${_lastNumber.toString()}');
+                                            },
+                                            decoration: InputDecoration(
+                                                hintText: 'เลขท้ายบัญชี 4 ตัว',
+                                                border: InputBorder.none),
+                                          ),
                                         ),
                                       ),
-                                    ),
 
-                                     */
-                                    SizedBox(height: 10),
-                                    Center(
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              primary: Colors.teal),
-                                          onPressed: () {
-                                            checkNullData(
-                                                snapshotPaymentAdmin.data);
-                                          },
-                                          child: Text('บันทึกการโอนเงิน')),
-                                    )
-                                  ],
+                                       */
+                                      SizedBox(height: 10),
+                                      snapshotPaymentAdmin.data.status ==
+                                              "รอดำเนินการ"
+                                          ? Center(
+                                              child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors.teal),
+                                                  onPressed: () {
+                                                    checkNullData(
+                                                        snapshotPaymentAdmin
+                                                            .data);
+                                                  },
+                                                  child:
+                                                      Text('บันทึกการโอนเงิน')),
+                                            )
+                                          : Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Card(
+                                                color: Colors.amber,
+                                                child: Center(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: Text(
+                                                      'สถานะ : ${snapshotPaymentAdmin.data.status}',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
-                        }
-                      },
-                    )
-                  ],
-                ),
-              );
-            }
-          },
-        ));
+                              ],
+                            );
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                );
+              }
+            },
+          )),
+    );
   }
 
   void checkNullData(paymentAdminData) {
@@ -467,19 +495,21 @@ class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('กำลังบันทึก...')));
 
-      saveStatusPaymentAdmin(
-          context,
-          token,
-          paymentAdminData,
-          adminId,
-          'จำนวนคนทะเบียน : ${itemId.count}/${itemId.countRequest}',
-          _bankTransferValue,
-          _bankReceiveValue,
-          _dateTransfer,
-          _timeTransfer,
-          amount,
-          statusPaymentAdmin,
-          imageFile);
+      setState(() {
+        saveStatusPaymentAdmin(
+            context,
+            token,
+            paymentAdminData,
+            adminId,
+            'ชำระเงินของ ItemId:${itemData.itemId},จำนวนคนทะเบียน : ${itemData.count}/${itemData.countRequest},รวมเป็นเงิน:${amount.toString()}',
+            _bankTransferValue,
+            _bankReceiveValue,
+            _dateTransfer,
+            _timeTransfer,
+            amount,
+            statusPaymentAdmin,
+            imageFile);
+      });
     }
   }
 

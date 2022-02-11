@@ -27,6 +27,7 @@ void saveImagePaymentAdmin(
     if (statusRes == 1) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('บันทึก สำเร็จ รอการตรวจสอบการชำระเงินจากร้านค้า')));
+      Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('บันทึกภาพ ชำระเงินผิดพลาด !')));

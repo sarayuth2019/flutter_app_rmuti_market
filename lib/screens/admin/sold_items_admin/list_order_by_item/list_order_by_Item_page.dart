@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/sold_items_admin/list_order_by_item/edit_payment_admin_to_market.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/sold_items_admin/list_order_by_item/payment_admin_to_market_page.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/sold_items_admin/list_order_by_item/show_order_detail.dart';
+import 'package:flutter_app_rmuti_market/screens/admin/sold_items_admin/list_order_by_item/show_payment_admin_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/getDetailOrder.dart';
 import 'package:flutter_app_rmuti_market/screens/method/get_image_Item.dart';
@@ -213,7 +215,9 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
                         Text(
                             'รวมเป็นเงิน : ${listOrders.map((e) => e.priceSell).reduce((a, b) => a + b)} บาท',
                             style: TextStyle(fontWeight: FontWeight.bold)),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         FutureBuilder(
                           future:
                               getPaymentAdminByItemId(token, itemData.itemId),
@@ -225,21 +229,30 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
                             } else {
                               return Column(
                                 children: [
+                                  Text(
+                                    'สถานะ : ${snapshotGetPaymentAdminByItemId.data.status}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
+                                  ),
                                   snapshotGetPaymentAdminByItemId.data.status ==
                                           'รอดำเนินการ'
                                       ? buttonTab1()
                                       : Container(),
                                   snapshotGetPaymentAdminByItemId.data.status ==
                                           'รอตรวจสอบจากร้านค้า'
-                                      ? buttonTab2()
+                                      ? buttonTab2(
+                                          snapshotGetPaymentAdminByItemId.data)
                                       : Container(),
                                   snapshotGetPaymentAdminByItemId.data.status ==
                                           'ชำระเงินสำเร็จ'
-                                      ? buttonTab3()
+                                      ? buttonTab3(
+                                          snapshotGetPaymentAdminByItemId.data)
                                       : Container(),
                                   snapshotGetPaymentAdminByItemId.data.status ==
                                           'ชำระเงินผิดพลาด'
-                                      ? buttonTab4()
+                                      ? buttonTab4(
+                                          snapshotGetPaymentAdminByItemId.data)
                                       : Container(),
                                 ],
                               );
@@ -274,32 +287,50 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
         ));
   }
 
-  Widget buttonTab2() {
+  Widget buttonTab2(paymentAdminData) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(primary: Colors.amber),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      ShowPaymentAdminPage(token, paymentAdminData)));
+        },
         child: Text(
           'สลีปการโอนเงิน',
           style: TextStyle(color: Colors.white),
         ));
   }
 
-  Widget buttonTab3() {
+  Widget buttonTab3(paymentAdminData) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(primary: Colors.green),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      ShowPaymentAdminPage(token, paymentAdminData)));
+        },
         child: Text(
           'สลีปการโอนเงิน',
           style: TextStyle(color: Colors.white),
         ));
   }
 
-  Widget buttonTab4() {
+  Widget buttonTab4(paymentAdminData) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(primary: Colors.red),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => EditPaymentAdminToMarket(
+                      token, adminId, paymentAdminData)));
+        },
         child: Text(
-          'โอนเงินผิดพลาด',
+          'ตรวจสอบ/แก้ไข',
           style: TextStyle(color: Colors.white),
         ));
   }
