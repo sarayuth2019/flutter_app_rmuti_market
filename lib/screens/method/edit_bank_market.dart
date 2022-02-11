@@ -42,6 +42,7 @@ class _ShowDialogListBankState extends State<ShowDialogListBank> {
     'ธนาคารออมสิน GSB',
     'ธนาคารอิสลามแห่งประเทศไทย ISBT'
   ];
+
   String? _bankName;
   String? _bankNumber;
   String? _bankAccountName;
