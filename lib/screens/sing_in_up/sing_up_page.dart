@@ -8,7 +8,6 @@ import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart
 import 'package:flutter_app_rmuti_market/screens/method/save_bank_market.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'sing_in_page.dart';
 
 class SingUp extends StatefulWidget {
   @override
@@ -535,7 +534,7 @@ class _SingUp extends State {
           print('SaveBankMarket marketId : ${_marketId.toString()}');
           //////////////บันทึกข้อมูลธนาคาร//////////////////////////
           for (int i = 0; i < listBankMarket.length; i++) {
-            saveBankMarket(_marketId, listBankMarket[i].bankName,
+            saveBankMarket(context,_marketId, listBankMarket[i].bankName,
                 listBankMarket[i].bankNumber, listBankMarket[i].bankAccountName);
           }
           Navigator.pop(context);

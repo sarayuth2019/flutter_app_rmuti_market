@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/market_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/delete_bank_market.dart';
 import 'package:flutter_app_rmuti_market/screens/method/edit_bank_market.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_bankmarket.dart';
+import 'package:flutter_app_rmuti_market/screens/method/save_bank_market.dart';
 
 class EditBankMarketPage extends StatefulWidget {
   EditBankMarketPage(this.token, this.marketData);
@@ -46,6 +48,14 @@ class _EditBankMarketPageState extends State<EditBankMarketPage> {
           style: TextStyle(color: Colors.teal),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.teal,
+        mini: true,
+        onPressed: () {
+          showAddBankMarket(context, marketData);
+        },
+        child: Icon(Icons.add),
+      ),
       body: RefreshIndicator(
         onRefresh: reFresh,
         child: FutureBuilder(
@@ -57,8 +67,9 @@ class _EditBankMarketPageState extends State<EditBankMarketPage> {
                 child: CircularProgressIndicator(),
               );
             } else {
-              listBankMarketData.addAll(snapshotListBankMarket.data);
+              listBankMarketData = snapshotListBankMarket.data;
               return ListView.builder(
+                shrinkWrap: true,
                 itemCount: snapshotListBankMarket.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
@@ -69,58 +80,96 @@ class _EditBankMarketPageState extends State<EditBankMarketPage> {
                       decoration: boxDecorationGrey,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Stack(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'ธนาคาร : ',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      '${listBankMarketData[index].nameBank}',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                                Text(
+                                  'ธนาคาร : ',
+                                  style: TextStyle(fontSize: 16),
                                 ),
-                                Row(
-                                  children: [
-                                    Text('ชื่อบัญชี : '),
-                                    Text(
-                                      '${listBankMarketData[index].bankAccountName}',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text('เลขบัญชี : '),
-                                    Text(
-                                        '${listBankMarketData[index].bankNumber}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ],
+                                Text(
+                                  '${listBankMarketData[index].nameBank}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
-                            Positioned(
-                              width: MediaQuery.of(context).size.width * 1.7,
-                              child: IconButton(
-                                  onPressed: () {
-                                    showDialogEditBankMarket(context, token,
-                                        listBankMarketData[index]);
-                                  },
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: Colors.amber,
-                                  )),
-                            )
+                            Row(
+                              children: [
+                                Text('ชื่อบัญชี : '),
+                                Text(
+                                  '${listBankMarketData[index].bankAccountName}',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('เลขบัญชี : '),
+                                Text('${listBankMarketData[index].bankNumber}',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.amber[600]),
+                                    onPressed: () {
+                                      showDialogEditBankMarket(context, token,
+                                          listBankMarketData[index]);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.edit,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: 6,
+                                        ),
+                                        Text('แก้ไขบัญชี'),
+                                      ],
+                                    )),
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.red),
+                                    onPressed: () {
+                                      print(
+                                          'listBankMarket.length : ${listBankMarketData.length}');
+                                      if (listBankMarketData.length == 1) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    'ต้องมีบัญชีธนาคารอย่างน้อย 1 บัญชี !')));
+                                      } else {
+                                        showDialogDeleteBankMarket(
+                                          context,
+                                          token,
+                                          listBankMarketData[index]
+                                              .bankMarketId,
+                                        );
+                                      }
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.highlight_remove,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: 6,
+                                        ),
+                                        Text('ลบบัญชี'),
+                                      ],
+                                    )),
+                              ],
+                            ),
                           ],
                         ),
                       ),

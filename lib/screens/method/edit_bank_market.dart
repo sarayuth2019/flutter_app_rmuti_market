@@ -196,6 +196,7 @@ class _ShowDialogListBankState extends State<ShowDialogListBank> {
       var resData = jsonDecode(utf8.decode(res.bodyBytes));
       var status = resData['status'];
       if (status == 1) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('แก้ไข สำเร็จ')));
         Navigator.pop(context);
       }
     });
