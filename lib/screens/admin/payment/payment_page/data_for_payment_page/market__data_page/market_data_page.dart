@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/market_page.dart';
-import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/payment_of_item_page.dart';
 import 'package:flutter_app_rmuti_market/screens/account/my_shop_tab/my_shop_tab.dart';
 import 'package:flutter_app_rmuti_market/screens/admin/payment/payment_page/data_for_payment_page/market__data_page/show_review_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/review_market_method.dart';
+import 'package:flutter_app_rmuti_market/screens/method/send_accountData.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 

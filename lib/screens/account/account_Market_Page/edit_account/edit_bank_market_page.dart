@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/market_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
 import 'package:flutter_app_rmuti_market/screens/method/delete_bank_market.dart';
 import 'package:flutter_app_rmuti_market/screens/method/edit_bank_market.dart';
 import 'package:flutter_app_rmuti_market/screens/method/list_bankmarket.dart';
 import 'package:flutter_app_rmuti_market/screens/method/save_bank_market.dart';
+import 'package:flutter_app_rmuti_market/screens/method/send_accountData.dart';
 
 class EditBankMarketPage extends StatefulWidget {
   EditBankMarketPage(this.token, this.marketData);
@@ -36,6 +36,7 @@ class _EditBankMarketPageState extends State<EditBankMarketPage> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +53,7 @@ class _EditBankMarketPageState extends State<EditBankMarketPage> {
         backgroundColor: Colors.teal,
         mini: true,
         onPressed: () {
-          showAddBankMarket(context, marketData);
+          showAddBankMarket(context, marketData,reFresh);
         },
         child: Icon(Icons.add),
       ),
@@ -122,7 +123,7 @@ class _EditBankMarketPageState extends State<EditBankMarketPage> {
                                         primary: Colors.amber[600]),
                                     onPressed: () {
                                       showDialogEditBankMarket(context, token,
-                                          listBankMarketData[index]);
+                                          listBankMarketData[index],reFresh);
                                     },
                                     child: Row(
                                       children: [
@@ -152,7 +153,7 @@ class _EditBankMarketPageState extends State<EditBankMarketPage> {
                                           context,
                                           token,
                                           listBankMarketData[index]
-                                              .bankMarketId,
+                                              .bankMarketId,reFresh
                                         );
                                       }
                                     },

@@ -6,30 +6,32 @@ import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart
 import 'package:flutter_app_rmuti_market/screens/method/list_bankmarket.dart';
 import 'package:http/http.dart' as http;
 
-void showDialogEditBankMarket(context, token, BankMarket bankMarketData) async {
+void showDialogEditBankMarket(context, token, BankMarket bankMarketData,callBack) async {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return ShowDialogListBank(token, bankMarketData);
+        return ShowDialogListBank(token, bankMarketData,callBack);
       });
 }
 
 class ShowDialogListBank extends StatefulWidget {
-  ShowDialogListBank(this.token, this.bankMarketData);
+  ShowDialogListBank(this.token, this.bankMarketData, this.callBack);
 
   final token;
   final BankMarket bankMarketData;
+  final callBack;
 
   @override
   _ShowDialogListBankState createState() =>
-      _ShowDialogListBankState(token, bankMarketData);
+      _ShowDialogListBankState(token, bankMarketData,callBack);
 }
 
 class _ShowDialogListBankState extends State<ShowDialogListBank> {
-  _ShowDialogListBankState(this.token, this.bankMarketData);
+  _ShowDialogListBankState(this.token, this.bankMarketData, this.callBack);
 
   final token;
   final BankMarket bankMarketData;
+  final callBack;
 
   List<String> _listBankName = [
     'พร้อมเพย์',
@@ -160,7 +162,7 @@ class _ShowDialogListBankState extends State<ShowDialogListBank> {
                       style: ElevatedButton.styleFrom(primary: Colors.teal),
                       onPressed: () {
                         editBankMarket(context, token, bankMarketData,
-                            _bankName, _bankAccountName, _bankNumber);
+                            _bankName, _bankAccountName, _bankNumber,callBack);
                       },
                       child: Text('บันทึก')),
                   ElevatedButton(
@@ -179,7 +181,7 @@ class _ShowDialogListBankState extends State<ShowDialogListBank> {
   }
 
   void editBankMarket(context, token, BankMarket bankMarketData, nameBank,
-      bankAccountName, bankNumber) async {
+      bankAccountName, bankNumber,callBack) async {
     String urlEditBankMarket =
         '${Config.API_URL}/BankMarket/update/${bankMarketData.bankMarketId}';
     Map params = Map();
@@ -196,6 +198,7 @@ class _ShowDialogListBankState extends State<ShowDialogListBank> {
       var resData = jsonDecode(utf8.decode(res.bodyBytes));
       var status = resData['status'];
       if (status == 1) {
+        callBack();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('แก้ไข สำเร็จ')));
         Navigator.pop(context);
       }

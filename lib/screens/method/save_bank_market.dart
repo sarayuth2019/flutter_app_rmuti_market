@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
-import 'package:flutter_app_rmuti_market/screens/account/account_Market_Page/market_page.dart';
 import 'package:flutter_app_rmuti_market/screens/method/boxdecoration_stype.dart';
+import 'package:flutter_app_rmuti_market/screens/method/send_accountData.dart';
 import 'package:http/http.dart' as http;
 
 void saveBankMarket(
@@ -10,7 +10,7 @@ void saveBankMarket(
   int marketId,
   String bankName,
   bankNumber,
-  String bankAccountName,
+  String bankAccountName,callBack
 ) async {
   print('marketId : ${marketId.toString()}');
   print('bankName : ${bankName.toString()}');
@@ -30,7 +30,15 @@ void saveBankMarket(
     var status = resData['status'];
     if (status == 1) {
       //print(data);
-      Navigator.pop(context);
+      if(callBack != null){
+        callBack();
+        Navigator.pop(context);
+        print('add Bank Market');
+      }
+      else{
+        Navigator.pop(context);
+        print('save Bank Market');
+      }
     } else {
       print(res.body);
       print('Save BankMarket Fall !!!!!!');
@@ -38,28 +46,30 @@ void saveBankMarket(
   });
 }
 
-void showAddBankMarket(context, marketData) async {
+void showAddBankMarket(context, marketData,callBack) async {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AddBankMarketDialog(marketData);
+        return AddBankMarketDialog(marketData,callBack);
       });
 }
 
 class AddBankMarketDialog extends StatefulWidget {
-  AddBankMarketDialog(this.marketData);
+  AddBankMarketDialog(this.marketData, this.callBack);
 
   final MarketData marketData;
+  final callBack;
 
   @override
   _AddBankMarketDialogState createState() =>
-      _AddBankMarketDialogState(marketData);
+      _AddBankMarketDialogState(marketData,callBack);
 }
 
 class _AddBankMarketDialogState extends State<AddBankMarketDialog> {
-  _AddBankMarketDialogState(this.marketData);
+  _AddBankMarketDialogState(this.marketData, this.callBack);
 
   final MarketData marketData;
+  final callBack;
 
   List<String> _listBankName = [
     'พร้อมเพย์',
@@ -181,7 +191,7 @@ class _AddBankMarketDialogState extends State<AddBankMarketDialog> {
                       style: ElevatedButton.styleFrom(primary: Colors.teal),
                       onPressed: () {
                         saveBankMarket(context, marketData.marketID!,
-                            _bankName!, _bankNumber, _bankAccountName!);
+                            _bankName!, _bankNumber, _bankAccountName!,callBack);
                       },
                       child: Text('บันทึก')),
                   ElevatedButton(

@@ -535,7 +535,7 @@ class _SingUp extends State {
           //////////////บันทึกข้อมูลธนาคาร//////////////////////////
           for (int i = 0; i < listBankMarket.length; i++) {
             saveBankMarket(context,_marketId, listBankMarket[i].bankName,
-                listBankMarket[i].bankNumber, listBankMarket[i].bankAccountName);
+                listBankMarket[i].bankNumber, listBankMarket[i].bankAccountName,null);
           }
           Navigator.pop(context);
         } else if (_resStatus == 0) {

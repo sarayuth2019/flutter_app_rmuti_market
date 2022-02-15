@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
 import 'package:http/http.dart' as http;
 
-void showDialogDeleteBankMarket(context, token, bankMarketId) async {
+void showDialogDeleteBankMarket(context, token, bankMarketId, callBack) async {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -16,7 +16,7 @@ void showDialogDeleteBankMarket(context, token, bankMarketId) async {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(primary: Colors.teal),
                   onPressed: () {
-                    deleteBankMarket(context, token, bankMarketId);
+                    deleteBankMarket(context, token, bankMarketId, callBack);
                   },
                   child: Text('ยืนยัน')),
               ElevatedButton(
@@ -31,7 +31,7 @@ void showDialogDeleteBankMarket(context, token, bankMarketId) async {
       });
 }
 
-void deleteBankMarket(context, token, bankMarketId) async {
+void deleteBankMarket(context, token, bankMarketId, callBack) async {
   String urlDeleteBankMarket =
       '${Config.API_URL}/BankMarket/deleteByBankMarketId';
   Map params = Map();
@@ -45,6 +45,7 @@ void deleteBankMarket(context, token, bankMarketId) async {
     if (status == 1) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('ลบบัญชี สำเร็จ')));
+      callBack();
       Navigator.pop(context);
     } else {
       print(res.body);
