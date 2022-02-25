@@ -96,13 +96,14 @@ class _EditProductPage extends State {
     var _dealFinal =
         '${itemData.dealFinal.split('/')[1]}/${itemData.dealFinal.split('/')[0]}/${itemData.dealFinal.split('/')[2]}';
 
-    _textDealBegin = '${itemData.dealBegin.split('/')[0]}/${itemData.dealBegin.split('/')[1]}/${itemData.dealBegin.split('/')[2]}';
-    _textDealFinal = '${itemData.dealFinal.split('/')[0]}/${itemData.dealFinal.split('/')[1]}/${itemData.dealFinal.split('/')[2]}';
-    _textDateBegin = '${itemData.dateBegin.split('/')[0]}/${itemData.dateBegin.split('/')[1]}/${itemData.dateBegin.split('/')[2]}';
-    _textDateFinal = '${itemData.dateFinal.split('/')[0]}/${itemData.dateFinal.split('/')[1]}/${itemData.dateFinal.split('/')[2]}';
-
-
-
+    _textDealBegin =
+        '${itemData.dealBegin.split('/')[0]}/${itemData.dealBegin.split('/')[1]}/${itemData.dealBegin.split('/')[2]}';
+    _textDealFinal =
+        '${itemData.dealFinal.split('/')[0]}/${itemData.dealFinal.split('/')[1]}/${itemData.dealFinal.split('/')[2]}';
+    _textDateBegin =
+        '${itemData.dateBegin.split('/')[0]}/${itemData.dateBegin.split('/')[1]}/${itemData.dateBegin.split('/')[2]}';
+    _textDateFinal =
+        '${itemData.dateFinal.split('/')[0]}/${itemData.dateFinal.split('/')[1]}/${itemData.dateFinal.split('/')[2]}';
 
     marketID = itemData.marketID;
     nameItem = itemData.nameItem;
@@ -117,10 +118,8 @@ class _EditProductPage extends State {
     textListSize = _textListSize.substring(1, _textListSize.length - 1);
     textListColors = _textListColors.substring(1, _textListColors.length - 1);
 
-
     print('list size : ${listSize}');
     print('list color : ${listColor}');
-
 
     getImage(itemData.itemID).then((value) {
       if (value.length != 0) {
@@ -141,7 +140,7 @@ class _EditProductPage extends State {
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: Text(
-            "Edit Product ID",
+            "แก้ไขสินค้า",
             style: TextStyle(color: Colors.teal),
           ),
           actions: [

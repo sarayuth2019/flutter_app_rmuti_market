@@ -111,7 +111,7 @@ class _SingIn extends State {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: onSingIn,
-                  child: Text('Sing in'),
+                  child: Text('เข้าสู่ระบบ'),
                   style: ElevatedButton.styleFrom(primary: Colors.teal),
                 ),
               ),
