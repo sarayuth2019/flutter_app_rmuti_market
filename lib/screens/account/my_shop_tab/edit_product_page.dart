@@ -314,7 +314,7 @@ class _EditProductPage extends State {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('จำนวนคนที่ต้องการ'),
+                      Text('จำนวนสินค้าที่ต้องการขาย'),
                       Container(
                         decoration: boxDecorationGrey,
                         child: Padding(

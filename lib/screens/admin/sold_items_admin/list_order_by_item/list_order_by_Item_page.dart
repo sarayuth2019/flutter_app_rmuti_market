@@ -110,7 +110,7 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
                     child: Container(
                         alignment: Alignment.center,
                         child: Text(
-                          'ยังไม่มีคนลงทะเบียน',
+                          'ยังไม่มีการลงทะเบียนซื้อ',
                         )),
                   );
                 } else {
@@ -135,7 +135,7 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                    'จำนวนผู้ลงทะเบียน : ${itemData.count}/${itemData.countRequest}')
+                                    'จำนวนการลงทะเบียนซื้อ : ${itemData.count}/${itemData.countRequest}')
                               ],
                             ),
                           ),

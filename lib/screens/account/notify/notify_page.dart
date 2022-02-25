@@ -122,7 +122,7 @@ class _NotifyPage extends State {
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                      'จำนวนผู้ลงทะเบียน ${snapshot.data[index].count}/${snapshot.data[index].countRequest}'),
+                                      'จำนวนสินค้าที่มีคนลงทะเบียน ${snapshot.data[index].count}/${snapshot.data[index].countRequest}'),
                                   SizedBox(
                                     width: 15,
                                   ),

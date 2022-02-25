@@ -228,7 +228,7 @@ class _SellProducts extends State {
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: TextFormField(
                         decoration: InputDecoration(
-                            hintText: ": จำนวนคนที่ต้องการ",
+                            hintText: ": จำนวนสินค้าที่ต้องการขาย",
                             border: InputBorder.none),
                         keyboardType: TextInputType.number,
                         validator: _checkNumUser,

@@ -71,7 +71,7 @@ class _SoldItemsTabState extends State<SoldItemsTab> {
                                 Row(
                                   children: [
                                     Text(
-                                        'จำนวนผู้ลงทะเบียน : ${snapshotItemData.data[index].count}/${snapshotItemData.data[index].countRequest}')
+                                        'จำนวนการลงทะเบียนซื้อ : ${snapshotItemData.data[index].count}/${snapshotItemData.data[index].countRequest}')
                                   ],
                                 ),
                               ],

@@ -383,7 +383,7 @@ class _PaymentPage extends State {
                                                     return Column(
                                                       children: [
                                                         Text(
-                                                            'จำนวนผู้ลงทะเบียน : ${snapshotItemData.data.count}/${snapshotItemData.data.countRequest}'),
+                                                            'จำนวนการลงทะเบียนซื้อ : ${snapshotItemData.data.count}/${snapshotItemData.data.countRequest}'),
                                                         Container(
                                                             child: snapshotItemData
                                                                         .data
