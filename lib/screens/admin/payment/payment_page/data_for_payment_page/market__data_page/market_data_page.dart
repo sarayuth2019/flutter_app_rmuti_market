@@ -245,7 +245,7 @@ class _MarketDataPage extends State {
                                     padding: const EdgeInsets.only(
                                         left: 8.0, right: 8.0),
                                     child: Text(
-                                      "ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
+                                      "ต้องการขาย ${snapshot.data[index].countRequest} ลงทะเบียนซื้อแล้ว ${snapshot.data[index].count}",
                                     ),
                                   ),
                                 ],
