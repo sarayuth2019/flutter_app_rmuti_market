@@ -177,7 +177,7 @@ class _MyShop extends State {
                                         padding: const EdgeInsets.only(
                                             left: 8.0, right: 8.0),
                                         child: Text(
-                                          "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการขาย ${snapshot.data[index].countRequest} ลงทะเบียซื้อแล้ว ${snapshot.data[index].count}",
+                                          "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการขาย ${snapshot.data[index].countRequest} ลงทะเบียนซื้อแล้ว ${snapshot.data[index].count}",
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: _fontSize),
