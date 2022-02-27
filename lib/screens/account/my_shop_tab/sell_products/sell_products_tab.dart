@@ -68,6 +68,10 @@ class _SellProducts extends State {
   String? textListSize;
   String? textListColors;
 
+  String? _textDealBegin;
+  String? _textDealFinal;
+  String? _textDateBegin;
+  String? _textDateFinal;
 
   @override
   Widget build(BuildContext context) {
@@ -306,9 +310,16 @@ class _SellProducts extends State {
                                                                         () {
                                                                       listSize.removeAt(
                                                                           index);
-                                                                      String _textListSize = listColor.toString();
-                                                                      textListSize = _textListSize.substring(1,_textListSize.length -1);
-                                                                      print(textListSize);
+                                                                      String
+                                                                          _textListSize =
+                                                                          listColor
+                                                                              .toString();
+                                                                      textListSize =
+                                                                          _textListSize.substring(
+                                                                              1,
+                                                                              _textListSize.length - 1);
+                                                                      print(
+                                                                          textListSize);
                                                                       print(
                                                                           'listSing length : ${listSize.length}');
                                                                     });
@@ -376,8 +387,14 @@ class _SellProducts extends State {
                                                     setState(() {
                                                       listSize.add(
                                                           '${_textSizeName}:${_textSizePrice}');
-                                                      String _textListSize = listSize.toString();
-                                                      textListSize = _textListSize.substring(1,_textListSize.length -1);
+                                                      String _textListSize =
+                                                          listSize.toString();
+                                                      textListSize =
+                                                          _textListSize.substring(
+                                                              1,
+                                                              _textListSize
+                                                                      .length -
+                                                                  1);
                                                       print(listSize);
                                                       print(textListSize);
                                                     });
@@ -430,9 +447,16 @@ class _SellProducts extends State {
                                                                       listColor
                                                                           .removeAt(
                                                                               index);
-                                                                      String _textListColors = listColor.toString();
-                                                                      textListColors = _textListColors.substring(1,_textListColors.length -1);
-                                                                      print(textListColors);
+                                                                      String
+                                                                          _textListColors =
+                                                                          listColor
+                                                                              .toString();
+                                                                      textListColors =
+                                                                          _textListColors.substring(
+                                                                              1,
+                                                                              _textListColors.length - 1);
+                                                                      print(
+                                                                          textListColors);
                                                                       print(
                                                                           'listSing length : ${listColor.length}');
                                                                     });
@@ -500,8 +524,14 @@ class _SellProducts extends State {
                                                     setState(() {
                                                       listColor.add(
                                                           '${_textColorName}:${_textColorPrice}');
-                                                      String _textListColors = listColor.toString();
-                                                      textListColors = _textListColors.substring(1,_textListColors.length -1);
+                                                      String _textListColors =
+                                                          listColor.toString();
+                                                      textListColors =
+                                                          _textListColors.substring(
+                                                              1,
+                                                              _textListColors
+                                                                      .length -
+                                                                  1);
                                                       print(listColor);
                                                       print(textListColors);
                                                     });
@@ -546,7 +576,7 @@ class _SellProducts extends State {
                                   },
                                   icon: Icon(Icons.date_range)),
                               Text("วันเริ่ม"),
-                              Text("${dealBegin ?? 'เลือกวันที่'}"),
+                              Text("${_textDealBegin ?? 'เลือกวันที่'}"),
                             ],
                           ),
                           Icon(Icons.arrow_forward),
@@ -558,7 +588,7 @@ class _SellProducts extends State {
                                   },
                                   icon: Icon(Icons.date_range)),
                               Text("วันสิ้นสุด"),
-                              Text("${dealFinal ?? 'เลือกวันที่'}"),
+                              Text("${_textDealFinal ?? 'เลือกวันที่'}"),
                             ],
                           ),
                         ],
@@ -585,7 +615,7 @@ class _SellProducts extends State {
                                   },
                                   icon: Icon(Icons.date_range)),
                               Text("วันเริ่ม"),
-                              Text('${dateBegin ?? 'เลือกวันที่'}'),
+                              Text('${_textDateBegin ?? 'เลือกวันที่'}'),
                             ],
                           ),
                           Icon(Icons.arrow_forward),
@@ -597,7 +627,7 @@ class _SellProducts extends State {
                                   },
                                   icon: Icon(Icons.date_range)),
                               Text("วันสิ้นสุด"),
-                              Text("${dateFinal ?? 'เลือกวันที่'}"),
+                              Text("${_textDateFinal ?? 'เลือกวันที่'}"),
                             ],
                           ),
                         ],
@@ -634,7 +664,9 @@ class _SellProducts extends State {
         .then((date) {
       setState(() {
         dealBegin = "${date!.month}/${date.day}/${date.year}";
-        print(date);
+        print(dealBegin);
+        _textDealBegin = "${date.day}/${date.month}/${date.year}";
+        print(_textDealBegin);
       });
     });
   }
@@ -649,7 +681,9 @@ class _SellProducts extends State {
         .then((date) {
       setState(() {
         dealFinal = "${date!.month}/${date.day}/${date.year}";
-        print(date);
+        print(dealFinal);
+        _textDealFinal = "${date.day}/${date.month}/${date.year}";
+        print(_textDealFinal);
       });
     });
   }
@@ -664,7 +698,9 @@ class _SellProducts extends State {
         .then((date) {
       setState(() {
         dateBegin = "${date!.month}/${date.day}/${date.year}";
-        print(date);
+        print(dateBegin);
+        _textDateBegin = "${date.day}/${date.month}/${date.year}";
+        print(_textDateBegin);
       });
     });
   }
@@ -679,7 +715,9 @@ class _SellProducts extends State {
         .then((date) {
       setState(() {
         dateFinal = "${date!.month}/${date.day}/${date.year}";
-        print(date);
+        print(dateFinal);
+        _textDateFinal = "${date.day}/${date.month}/${date.year}";
+        print(_textDateFinal);
       });
     });
   }
