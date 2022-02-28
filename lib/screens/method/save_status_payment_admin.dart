@@ -72,7 +72,6 @@ void saveStatusPaymentAdmin(
     if (status == 1) {
       if (imageFile == null) {
         print('No have Image payment ');
-        Navigator.pop(context);
       } else {
         saveImagePaymentAdmin(
             context, token, paymentAdminData.payId, imageFile);
