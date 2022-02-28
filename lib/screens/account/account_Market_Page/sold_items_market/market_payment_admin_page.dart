@@ -222,6 +222,7 @@ class _MarketPaymentAdminPageState extends State<MarketPaymentAdminPage> {
   }
 
   void _showDialogGetMoney(PaymentAdmin paymentAdmin,String status) async {
+    detail = paymentAdmin.detail.toString();
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -262,7 +263,7 @@ class _MarketPaymentAdminPageState extends State<MarketPaymentAdminPage> {
                                 '=======================> ${status.toString()}');
                             setState(() {
                               marketSaveStatusPaymentAdmin(
-                                  context, token, paymentAdminData, status);
+                                  context, token, paymentAdminData, status,detail);
                             });
                           },
                           child: Text('ยืนยัน')),

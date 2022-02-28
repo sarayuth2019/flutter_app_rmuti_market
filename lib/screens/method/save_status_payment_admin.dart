@@ -6,7 +6,7 @@ import 'package:flutter_app_rmuti_market/screens/method/save_Image_payment_admin
 import 'package:http/http.dart' as http;
 
 void marketSaveStatusPaymentAdmin(
-    context, token, paymentAdminData, status) async {
+    context, token, paymentAdminData, status, detail) async {
   print(
       '=====================================>  Market Save Status Payment Admin ${status.toString()}!!!');
   String _time =
@@ -21,7 +21,7 @@ void marketSaveStatusPaymentAdmin(
       token,
       paymentAdminData,
       paymentAdminData.adminId,
-      paymentAdminData.detail,
+      detail,
       paymentAdminData.bankTransfer,
       paymentAdminData.bankReceive,
       _date,
@@ -71,6 +71,8 @@ void saveStatusPaymentAdmin(
     var status = resData['status'];
     if (status == 1) {
       if (imageFile == null) {
+        print('No have Image payment ');
+        Navigator.pop(context);
       } else {
         saveImagePaymentAdmin(
             context, token, paymentAdminData.payId, imageFile);
