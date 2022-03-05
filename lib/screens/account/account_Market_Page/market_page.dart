@@ -51,23 +51,18 @@ class _MarketPage extends State {
               appBar: AppBar(
                 backgroundColor: Colors.teal,
                 elevation: 0,
-                title: Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MarketSoldItemsMainPage(
-                                      token, marketId)));
-                        },
-                        icon: Icon(
-                          Icons.monetization_on_outlined,
-                          color: Colors.amber,
-                        )),
-                    //Text('ตารางการขาย'),
-                  ],
-                ),
+                title: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MarketSoldItemsMainPage(
+                                  token, marketId)));
+                    },
+                    icon: Icon(
+                      Icons.monetization_on_outlined,
+                      color: Colors.amber,
+                    )),
                 actions: [
                   TextButton(
                       onPressed: logout,
@@ -319,3 +314,5 @@ class _MarketPage extends State {
         MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
   }
 }
+
+
