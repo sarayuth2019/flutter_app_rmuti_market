@@ -22,7 +22,7 @@ class _SingUp extends State {
   final _formKey = GlobalKey<FormState>();
   final _snackBarKey = GlobalKey<ScaffoldState>();
   final singUpSnackBar =
-  SnackBar(content: Text("กำลังสมัคสมาชิก กรุณารอซักครู่..."));
+      SnackBar(content: Text("กำลังสมัคสมาชิก กรุณารอซักครู่..."));
   final singUpFail = SnackBar(content: Text("Email นี้มีผู้ใช้แล้ว"));
   final snackBarNoImage = SnackBar(content: Text("กรุณาเพิ่มรูปภาพร้าน"));
   bool _checkText = false;
@@ -84,28 +84,28 @@ class _SingUp extends State {
                     child: Container(
                       child: imageData == null
                           ? ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child: Container(
-                            height: 200,
-                            width: 270,
-                            color: Colors.grey,
-                            child: Icon(
-                              Icons.add,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                          ))
+                              borderRadius: BorderRadius.circular(30),
+                              child: Container(
+                                height: 200,
+                                width: 270,
+                                color: Colors.grey,
+                                child: Icon(
+                                  Icons.add,
+                                  size: 40,
+                                  color: Colors.white,
+                                ),
+                              ))
                           : ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: Container(
-                          child: Image.memory(
-                            base64Decode(imageData!),
-                            fit: BoxFit.fill,
-                            height: 200,
-                            width: 270,
-                          ),
-                        ),
-                      ),
+                              borderRadius: BorderRadius.circular(30),
+                              child: Container(
+                                child: Image.memory(
+                                  base64Decode(imageData!),
+                                  fit: BoxFit.fill,
+                                  height: 200,
+                                  width: 270,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                 ),
@@ -172,7 +172,7 @@ class _SingUp extends State {
                 ),
                 TextFormField(
                   decoration:
-                  InputDecoration(hintText: "รายละเอียดที่ตั้งของร้าน"),
+                      InputDecoration(hintText: "รายละเอียดที่ตั้งของร้าน"),
                   maxLength: 100,
                   maxLines: null,
                   validator: validateMarketAddress,
@@ -192,46 +192,44 @@ class _SingUp extends State {
                   child: listBankMarket.length == 0
                       ? Container()
                       : Container(
-                    child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: listBankMarket.length,
-                        itemBuilder: (BuildContext context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Container(
-                              decoration: boxDecorationGrey,
-                              child: ListTile(
-                                title: Text(
-                                    '${listBankMarket[index].bankName}'),
-                                subtitle: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        'ชื่อบัญชี : ${listBankMarket[index]
-                                            .bankAccountName}'),
-                                    Text(
-                                        'เลขบัญชี : ${listBankMarket[index]
-                                            .bankNumber}'),
-                                  ],
-                                ),
-                                trailing: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        listBankMarket.removeAt(index);
-                                      });
-                                    },
-                                    icon: Icon(
-                                      Icons.highlight_remove,
-                                      color: Colors.red,
-                                    )),
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
+                          child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: listBankMarket.length,
+                              itemBuilder: (BuildContext context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Container(
+                                    decoration: boxDecorationGrey,
+                                    child: ListTile(
+                                      title: Text(
+                                          '${listBankMarket[index].bankName}'),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              'ชื่อบัญชี : ${listBankMarket[index].bankAccountName}'),
+                                          Text(
+                                              'เลขบัญชี : ${listBankMarket[index].bankNumber}'),
+                                        ],
+                                      ),
+                                      trailing: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              listBankMarket.removeAt(index);
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.highlight_remove,
+                                            color: Colors.red,
+                                          )),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,39 +263,39 @@ class _SingUp extends State {
                     _bankName == null
                         ? Container()
                         : Card(
-                      child: Padding(
-                        padding:
-                        const EdgeInsets.only(left: 4.0, right: 4.0),
-                        child: TextField(
-                          maxLength: 10,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                              hintText: _bankName == "พร้อมเพย์"
-                                  ? 'เบอร์ พร้อมเพย์ (ไม่ต้องเว้นวรรค)'
-                                  : 'เลขบัญชี (ไม่ต้องเว้นวรรค)',
-                              border: InputBorder.none),
-                          onChanged: (text) {
-                            _bankNumber = text;
-                          },
-                        ),
-                      ),
-                    ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 4.0, right: 4.0),
+                              child: TextField(
+                                maxLength: 10,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    hintText: _bankName == "พร้อมเพย์"
+                                        ? 'เบอร์ พร้อมเพย์ (ไม่ต้องเว้นวรรค)'
+                                        : 'เลขบัญชี (ไม่ต้องเว้นวรรค)',
+                                    border: InputBorder.none),
+                                onChanged: (text) {
+                                  _bankNumber = text;
+                                },
+                              ),
+                            ),
+                          ),
                     _bankName == null
                         ? Container()
                         : Card(
-                      child: Padding(
-                        padding:
-                        const EdgeInsets.only(left: 4.0, right: 4.0),
-                        child: TextField(
-                          decoration: InputDecoration(
-                              hintText: 'ชื่อบัญชี',
-                              border: InputBorder.none),
-                          onChanged: (text) {
-                            _bankAccountName = text;
-                          },
-                        ),
-                      ),
-                    ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 4.0, right: 4.0),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                    hintText: 'ชื่อบัญชี',
+                                    border: InputBorder.none),
+                                onChanged: (text) {
+                                  _bankAccountName = text;
+                                },
+                              ),
+                            ),
+                          ),
                   ],
                 ),
                 ElevatedButton(
@@ -338,8 +336,8 @@ class _SingUp extends State {
     );
   }
 
-  Future<List<SaveBankMarket>> addListBank(bankName, bankNumber,
-      bankAccountName) async {
+  Future<List<SaveBankMarket>> addListBank(
+      bankName, bankNumber, bankAccountName) async {
     List<SaveBankMarket> listSaveBank = [];
     listSaveBank.add(SaveBankMarket(bankName, bankNumber, bankAccountName));
     return listSaveBank;
@@ -510,7 +508,7 @@ class _SingUp extends State {
     var request = http.MultipartRequest('POST', Uri.parse(urlSingUp));
     //request.headers.addAll({HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
     var _multipart =
-    await http.MultipartFile.fromPath('marketImage', imageFile!.path);
+        await http.MultipartFile.fromPath('marketImage', imageFile!.path);
     request.files.add(_multipart);
 
     request.fields['email'] = email.toString();
@@ -527,15 +525,20 @@ class _SingUp extends State {
       Map resBody = jsonDecode(res.body) as Map;
       var _resStatus = resBody['status'];
       print("Sing Up Status : ${_resStatus.toString()}");
-      var dataSingUp = resBody['data'];
-      var _marketId = dataSingUp['marketId'];
       setState(() {
         if (_resStatus == 1) {
+          var dataSingUp = resBody['data'];
+          var _marketId = dataSingUp['marketId'];
           print('SaveBankMarket marketId : ${_marketId.toString()}');
           //////////////บันทึกข้อมูลธนาคาร//////////////////////////
           for (int i = 0; i < listBankMarket.length; i++) {
-            saveBankMarket(context,_marketId, listBankMarket[i].bankName,
-                listBankMarket[i].bankNumber, listBankMarket[i].bankAccountName,null);
+            saveBankMarket(
+                context,
+                _marketId,
+                listBankMarket[i].bankName,
+                listBankMarket[i].bankNumber,
+                listBankMarket[i].bankAccountName,
+                null);
           }
           Navigator.pop(context);
         } else if (_resStatus == 0) {
@@ -547,9 +550,11 @@ class _SingUp extends State {
 }
 
 class SaveBankMarket {
-  SaveBankMarket(this.bankName,
-      this.bankNumber,
-      this.bankAccountName,);
+  SaveBankMarket(
+    this.bankName,
+    this.bankNumber,
+    this.bankAccountName,
+  );
 
   final bankName;
   final bankNumber;
