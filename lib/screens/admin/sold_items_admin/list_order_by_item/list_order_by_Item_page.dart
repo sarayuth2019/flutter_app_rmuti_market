@@ -55,217 +55,220 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
             style: TextStyle(fontSize: 17, color: Colors.teal),
           ),
         ),
-        body: Column(
-          children: [
-            FutureBuilder(
-              future: getImage(token, itemData.itemId),
-              builder:
-                  (BuildContext context, AsyncSnapshot<dynamic> snapshotImage) {
-                print(snapshotImage.data.runtimeType);
-                if (snapshotImage.data == null) {
-                  return Container(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              FutureBuilder(
+                future: getImage(token, itemData.itemId),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshotImage) {
+                  print(snapshotImage.data.runtimeType);
+                  if (snapshotImage.data == null) {
+                    return Container(
+                        height: 150,
+                        width: double.infinity,
+                        decoration: boxDecorationGrey,
+                        child: Center(child: Text('กำลังโหลดภาพ...')));
+                  } else {
+                    return Container(
                       height: 150,
                       width: double.infinity,
-                      decoration: boxDecorationGrey,
-                      child: Center(child: Text('กำลังโหลดภาพ...')));
-                } else {
-                  return Container(
-                    height: 150,
-                    width: double.infinity,
-                    child: CarouselSlider.builder(
-                      options: CarouselOptions(
-                          initialPage: 0,
-                          enlargeCenterPage: true,
-                          autoPlay: true),
-                      itemCount: snapshotImage.data.length,
-                      itemBuilder:
-                          (BuildContext context, int index, int realIndex) {
-                        return Container(
-                            child: snapshotImage.data.length == 0
-                                ? Container(
-                                    child:
-                                        Center(child: Text('กำลังโหลดภาพ...')))
-                                : Container(
-                                    height: 150,
-                                    width: double.infinity,
-                                    child: Image.memory(
-                                        base64Decode(snapshotImage.data[index]),
-                                        fit: BoxFit.fill)));
-                      },
-                    ),
-                  );
-                }
-              },
-            ),
-            FutureBuilder(
-              future: listOrdersByItemId(token, itemData.itemId),
-              builder: (BuildContext context,
-                  AsyncSnapshot<dynamic> snapshotListOrders) {
-                if (snapshotListOrders.data == null) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshotListOrders.data.length == 0) {
-                  return Expanded(
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'ยังไม่มีการลงทะเบียนซื้อ',
-                        )),
-                  );
-                } else {
-                  listOrders = snapshotListOrders.data;
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: boxDecorationGrey,
-                          width: double.infinity,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${itemData.nameItem}',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                    'จำนวนการลงทะเบียนซื้อ : ${itemData.count}/${itemData.countRequest}')
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: 10.0, bottom: 4.0),
+                      child: CarouselSlider.builder(
+                        options: CarouselOptions(
+                            initialPage: 0,
+                            enlargeCenterPage: true,
+                            autoPlay: true),
+                        itemCount: snapshotImage.data.length,
+                        itemBuilder:
+                            (BuildContext context, int index, int realIndex) {
+                          return Container(
+                              child: snapshotImage.data.length == 0
+                                  ? Container(
+                                      child:
+                                          Center(child: Text('กำลังโหลดภาพ...')))
+                                  : Container(
+                                      height: 150,
+                                      width: double.infinity,
+                                      child: Image.memory(
+                                          base64Decode(snapshotImage.data[index]),
+                                          fit: BoxFit.fill)));
+                        },
+                      ),
+                    );
+                  }
+                },
+              ),
+              FutureBuilder(
+                future: listOrdersByItemId(token, itemData.itemId),
+                builder: (BuildContext context,
+                    AsyncSnapshot<dynamic> snapshotListOrders) {
+                  if (snapshotListOrders.data == null) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshotListOrders.data.length == 0) {
+                    return Expanded(
+                      child: Container(
+                          alignment: Alignment.center,
                           child: Text(
-                            'รายการการลงทะเบียน',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshotListOrders.data.length,
-                            itemBuilder: (BuildContext context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Container(
-                                  decoration: boxDecorationGrey,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Order Id : ${snapshotListOrders.data[index].orderId}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                                'จำนวนเงิน : ${snapshotListOrders.data[index].priceSell} บาท'),
-                                          ],
-                                        ),
-                                        FutureBuilder(
-                                          future: getDetailOrder(
-                                              token,
-                                              snapshotListOrders
-                                                  .data[index].orderId),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<dynamic>
-                                                  snapshotOrderDetail) {
-                                            if (snapshotOrderDetail.data ==
-                                                null) {
-                                              return Text('กำลังโหลด...');
-                                            } else {
-                                              listOrdersDetail =
-                                                  snapshotOrderDetail.data;
-                                              return TextButton(
-                                                  onPressed: () {
-                                                    showOrderDetail(
-                                                        context,
-                                                        token,
-                                                        snapshotOrderDetail
-                                                            .data);
-                                                  },
-                                                  child: Text(
-                                                    'รายละเอียด',
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.teal),
-                                                  ));
-                                            }
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-                        Text(
-                            'รวมเป็นเงิน : ${listOrders.map((e) => e.priceSell).reduce((a, b) => a + b)} บาท',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        FutureBuilder(
-                          future:
-                              getPaymentAdminByItemId(token, itemData.itemId),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<dynamic>
-                                  snapshotGetPaymentAdminByItemId) {
-                            if (snapshotGetPaymentAdminByItemId.data == null) {
-                              return Text('กำลังโหลด...');
-                            } else {
-                              return Column(
+                            'ยังไม่มีการลงทะเบียนซื้อ',
+                          )),
+                    );
+                  } else {
+                    listOrders = snapshotListOrders.data;
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: boxDecorationGrey,
+                            width: double.infinity,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'สถานะ : ${snapshotGetPaymentAdminByItemId.data.status}',
+                                    '${itemData.nameItem}',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  snapshotGetPaymentAdminByItemId.data.status ==
-                                          'รอดำเนินการ'
-                                      ? buttonTab1()
-                                      : Container(),
-                                  snapshotGetPaymentAdminByItemId.data.status ==
-                                          'รอตรวจสอบจากร้านค้า'
-                                      ? buttonTab2(
-                                          snapshotGetPaymentAdminByItemId.data)
-                                      : Container(),
-                                  snapshotGetPaymentAdminByItemId.data.status ==
-                                          'ชำระเงินสำเร็จ'
-                                      ? buttonTab3(
-                                          snapshotGetPaymentAdminByItemId.data)
-                                      : Container(),
-                                  snapshotGetPaymentAdminByItemId.data.status ==
-                                          'ชำระเงินผิดพลาด'
-                                      ? buttonTab4(
-                                          snapshotGetPaymentAdminByItemId.data)
-                                      : Container(),
+                                  Text(
+                                      'จำนวนการลงทะเบียนซื้อ : ${itemData.count}/${itemData.countRequest}')
                                 ],
-                              );
-                            }
-                          },
-                        )
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 10.0, bottom: 4.0),
+                            child: Text(
+                              'รายการการลงทะเบียน',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: snapshotListOrders.data.length,
+                              itemBuilder: (BuildContext context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Container(
+                                    decoration: boxDecorationGrey,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Order Id : ${snapshotListOrders.data[index].orderId}',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              Text(
+                                                  'จำนวนเงิน : ${snapshotListOrders.data[index].priceSell} บาท'),
+                                            ],
+                                          ),
+                                          FutureBuilder(
+                                            future: getDetailOrder(
+                                                token,
+                                                snapshotListOrders
+                                                    .data[index].orderId),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<dynamic>
+                                                    snapshotOrderDetail) {
+                                              if (snapshotOrderDetail.data ==
+                                                  null) {
+                                                return Text('กำลังโหลด...');
+                                              } else {
+                                                listOrdersDetail =
+                                                    snapshotOrderDetail.data;
+                                                return TextButton(
+                                                    onPressed: () {
+                                                      showOrderDetail(
+                                                          context,
+                                                          token,
+                                                          snapshotOrderDetail
+                                                              .data);
+                                                    },
+                                                    child: Text(
+                                                      'รายละเอียด',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.teal),
+                                                    ));
+                                              }
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                          Text(
+                              'รวมเป็นเงิน : ${listOrders.map((e) => e.priceSell).reduce((a, b) => a + b)} บาท',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          FutureBuilder(
+                            future:
+                                getPaymentAdminByItemId(token, itemData.itemId),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic>
+                                    snapshotGetPaymentAdminByItemId) {
+                              if (snapshotGetPaymentAdminByItemId.data == null) {
+                                return Text('กำลังโหลด...');
+                              } else {
+                                return Column(
+                                  children: [
+                                    Text(
+                                      'สถานะ : ${snapshotGetPaymentAdminByItemId.data.status}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey),
+                                    ),
+                                    snapshotGetPaymentAdminByItemId.data.status ==
+                                            'รอดำเนินการ'
+                                        ? buttonTab1()
+                                        : Container(),
+                                    snapshotGetPaymentAdminByItemId.data.status ==
+                                            'รอตรวจสอบจากร้านค้า'
+                                        ? buttonTab2(
+                                            snapshotGetPaymentAdminByItemId.data)
+                                        : Container(),
+                                    snapshotGetPaymentAdminByItemId.data.status ==
+                                            'ชำระเงินสำเร็จ'
+                                        ? buttonTab3(
+                                            snapshotGetPaymentAdminByItemId.data)
+                                        : Container(),
+                                    snapshotGetPaymentAdminByItemId.data.status ==
+                                            'ชำระเงินผิดพลาด'
+                                        ? buttonTab4(
+                                            snapshotGetPaymentAdminByItemId.data)
+                                        : Container(),
+                                  ],
+                                );
+                              }
+                            },
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

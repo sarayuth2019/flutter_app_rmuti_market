@@ -472,12 +472,12 @@ class _PaymentFormQRCode extends State {
           ////////////////SaveStatusOrder//////////////////
           saveStatusOrder(token, orderData, statusPayment);
           ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('รับสินค้า สำเร็จ')));
+              .showSnackBar(SnackBar(content: Text('ส่งมอบสินค้า สำเร็จ')));
         });
       } else {
         print('save fall !');
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('รับสินค้า ผิดพลาด !')));
+            .showSnackBar(SnackBar(content: Text('ส่งมอบสินค้า ผิดพลาด !')));
       }
     });
   }
