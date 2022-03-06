@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_rmuti_market/config/config.dart';
+import 'package:flutter_app_rmuti_market/screens/method/notify_method.dart';
 import 'package:flutter_app_rmuti_market/screens/method/save_Image_payment_admin.dart';
 import 'package:http/http.dart' as http;
 
@@ -71,10 +72,16 @@ void saveStatusPaymentAdmin(
     var status = resData['status'];
     if (status == 1) {
       if (imageFile == null) {
-        print('No have Image payment ');
+        print('No have Image payment Save By Market');
       } else {
+        print('Save By Admin');
         saveImagePaymentAdmin(
             context, token, paymentAdminData.payId, imageFile);
+        ///////////////////แจ้งเตือนการโอนเงินไปยังร้านค้า///////////////////////////////
+        String textNotifyMarket =
+            'มีการโอนเงินค่าสินค้า Item Id : ${paymentAdminData.itemId} โปรดตรวจสอบและยืนยันการรับเงิน';
+        notifyMarketMethod(context, token, paymentAdminData.marketId,
+            paymentAdminData.payId, 0, 0, textNotifyMarket);
       }
     } else {
       ScaffoldMessenger.of(context)

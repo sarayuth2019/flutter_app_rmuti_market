@@ -7,7 +7,7 @@ import 'package:flutter_app_rmuti_market/screens/method/list_notifyMarket.dart';
 import 'package:http/http.dart' as http;
 
 class NotifyPage extends StatefulWidget {
-  NotifyPage(this.token, this.marketId,this.callBack);
+  NotifyPage(this.token, this.marketId, this.callBack);
 
   final token;
   final int marketId;
@@ -16,12 +16,12 @@ class NotifyPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _NotifyPage(token, marketId,callBack);
+    return _NotifyPage(token, marketId, callBack);
   }
 }
 
 class _NotifyPage extends State {
-  _NotifyPage(this.token, this.marketId,this.callBack);
+  _NotifyPage(this.token, this.marketId, this.callBack);
 
   final token;
   final int marketId;
@@ -31,7 +31,6 @@ class _NotifyPage extends State {
       '${Config.API_URL}/MarketNotify/deleteByMarketId';
   final String urlDeleteNotifyByNotifyId =
       '${Config.API_URL}/MarketNotify/deleteId';
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,98 +65,172 @@ class _NotifyPage extends State {
               child: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                          right: 8.0, left: 8.0, bottom: 8),
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: boxDecorationGrey,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Payment Id : ${snapshot.data[index].payId}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${snapshot.data[index].status.split(' ')[0]}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text(
-                                        '${snapshot.data[index].status.split(' ')[1]}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${snapshot.data[index].status.split(' ')[2]}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${snapshot.data[index].status.split(' ')[3]}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${snapshot.data[index].status.split(' ')[4]}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    '${snapshot.data[index].status.split(' ')[5]}',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                      'จำนวนสินค้าที่มีคนลงทะเบียน ${snapshot.data[index].count}/${snapshot.data[index].countRequest}'),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                          '${snapshot.data[index].createDate}'),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                              top: 0,
-                              right: 0,
-                              child: IconButton(
-                                onPressed: () {
-                                  onDeleteNotifyByNotifyId(
-                                      snapshot.data[index].notifyId);
-                                },
-                                icon: Icon(
-                                  Icons.highlight_remove,
-                                  color: Colors.red,
-                                ),
-                              ))
-                        ],
-                      ),
-                    );
+                    return snapshot.data[index].status.split(' ')[0] ==
+                            'ยืนยันการลงทะเบียนสินค้า'
+                        ? cardNotifyPaymentUser(snapshot, index)
+                        : cardNotifyPaymentAdmin(snapshot, index);
                   }),
             );
           }
         },
+      ),
+    );
+  }
+
+  Widget cardNotifyPaymentUser(snapshot, index) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8),
+      child: Stack(
+        children: [
+          Container(
+            decoration: boxDecorationGrey,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Payment Id : ${snapshot.data[index].payId}',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[0]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[1]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[2]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[3]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[4]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    '${snapshot.data[index].status.split(' ')[5]}',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                      'จำนวนสินค้าที่มีคนลงทะเบียน ${snapshot.data[index].count}/${snapshot.data[index].countRequest}'),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('${snapshot.data[index].createDate}'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                onPressed: () {
+                  onDeleteNotifyByNotifyId(snapshot.data[index].notifyId);
+                },
+                icon: Icon(
+                  Icons.highlight_remove,
+                  color: Colors.red,
+                ),
+              ))
+        ],
+      ),
+    );
+  }
+
+  Widget cardNotifyPaymentAdmin(snapshot, index) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8),
+      child: Stack(
+        children: [
+          Container(
+            decoration: boxDecorationGrey,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'PaymentAdmin Id : ${snapshot.data[index].payId}',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[0]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[1]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[2]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[3]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '${snapshot.data[index].status.split(' ')[4]}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    '${snapshot.data[index].status.split(' ')[5]}',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('${snapshot.data[index].createDate}'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                onPressed: () {
+                  onDeleteNotifyByNotifyId(snapshot.data[index].notifyId);
+                },
+                icon: Icon(
+                  Icons.highlight_remove,
+                  color: Colors.red,
+                ),
+              ))
+        ],
       ),
     );
   }
@@ -196,6 +269,4 @@ class _NotifyPage extends State {
       });
     });
   }
-
 }
-
