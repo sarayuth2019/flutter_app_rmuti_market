@@ -103,7 +103,7 @@ class _EditDateState extends State<EditDate> {
           Container(
             child: Column(
               children: [
-                Text('ระยะเวลาการใช้ส่วนลดรับสินค้า'),
+                Text('ระยะเวลาในการมารับสินค้า'),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Colors.orange),

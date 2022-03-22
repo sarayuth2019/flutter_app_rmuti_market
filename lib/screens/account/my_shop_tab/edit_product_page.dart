@@ -696,7 +696,7 @@ class _EditProductPage extends State {
                     child: Column(
                       children: [
                         Text(
-                          "ระยะเวลาในการใช้สิทธิ์ลดราคา",
+                          "ระยะเวลาในการมารับสินค้า",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Row(

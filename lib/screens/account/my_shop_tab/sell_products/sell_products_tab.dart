@@ -601,7 +601,7 @@ class _SellProducts extends State {
                   child: Column(
                     children: [
                       Text(
-                        "ระยะเวลาในการมารับสินค้าลดราคา",
+                        "ระยะเวลาในการมารับสินค้า",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Row(
