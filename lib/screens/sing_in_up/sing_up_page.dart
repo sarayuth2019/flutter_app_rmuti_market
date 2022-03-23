@@ -540,7 +540,7 @@ class _SingUp extends State {
                 listBankMarket[i].bankAccountName,
                 null);
           }
-          Navigator.pop(context);
+          //Navigator.pop(context);
         } else if (_resStatus == 0) {
           ScaffoldMessenger.of(context).showSnackBar(singUpFail);
         }

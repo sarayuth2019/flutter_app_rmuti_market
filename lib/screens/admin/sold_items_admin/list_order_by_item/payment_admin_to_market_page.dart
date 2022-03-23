@@ -508,7 +508,7 @@ class _PaymentAminToMarketState extends State<PaymentAminToMarket> {
             _timeTransfer,
             amount,
             statusPaymentAdmin,
-            imageFile);
+            imageFile,_reFreshPage);
       });
     }
   }

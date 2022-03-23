@@ -12,24 +12,26 @@ import 'package:flutter_app_rmuti_market/screens/method/save_status_payment_admi
 import 'package:image_picker/image_picker.dart';
 
 class EditPaymentAdminToMarket extends StatefulWidget {
-  EditPaymentAdminToMarket(this.token, this.adminId, this.paymentAdminData);
+  EditPaymentAdminToMarket(this.token, this.adminId, this.paymentAdminData, this.callBack);
 
   final token;
   final adminId;
   final paymentAdminData;
+  final callBack;
 
   @override
   _EditPaymentAdminToMarketState createState() =>
-      _EditPaymentAdminToMarketState(token, adminId, paymentAdminData);
+      _EditPaymentAdminToMarketState(token, adminId, paymentAdminData,callBack);
 }
 
 class _EditPaymentAdminToMarketState extends State<EditPaymentAdminToMarket> {
   _EditPaymentAdminToMarketState(
-      this.token, this.adminId, this.paymentAdminData);
+      this.token, this.adminId, this.paymentAdminData, this.callBack);
 
   final token;
   final adminId;
   final PaymentAdmin paymentAdminData;
+  final callBack;
 
   List<String> _listTransferBankName = [
     'ธนาคารไทยพาณิชย์ SCB',
@@ -463,7 +465,7 @@ class _EditPaymentAdminToMarketState extends State<EditPaymentAdminToMarket> {
             _timeTransfer,
             paymentAdminData.amount,
             statusPaymentAdmin,
-            imageFile);
+            imageFile,callBack);
       });
     }
   }

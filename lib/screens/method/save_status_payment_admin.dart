@@ -7,7 +7,7 @@ import 'package:flutter_app_rmuti_market/screens/method/save_Image_payment_admin
 import 'package:http/http.dart' as http;
 
 void marketSaveStatusPaymentAdmin(
-    context, token, paymentAdminData, status, detail) async {
+    context, token, paymentAdminData, status, detail,callBack) async {
   print(
       '=====================================>  Market Save Status Payment Admin ${status.toString()}!!!');
   String _time =
@@ -29,7 +29,7 @@ void marketSaveStatusPaymentAdmin(
       _time,
       paymentAdminData.amount,
       status,
-      null);
+      null,callBack);
   Navigator.pop(context);
 }
 
@@ -45,7 +45,7 @@ void saveStatusPaymentAdmin(
     time,
     amount,
     statusPaymentAdmin,
-    imageFile) async {
+    imageFile,callBack) async {
   print('Save PaymentAdminData ..........................');
   String urlSavePaymentAdmin =
       '${Config.API_URL}/PayAdmin/update/${paymentAdminData.payId}';
@@ -73,10 +73,11 @@ void saveStatusPaymentAdmin(
     if (status == 1) {
       if (imageFile == null) {
         print('No have Image payment Save By Market');
+        callBack();
       } else {
         print('Save By Admin');
         saveImagePaymentAdmin(
-            context, token, paymentAdminData.payId, imageFile);
+            context, token, paymentAdminData.payId, imageFile,callBack);
         ///////////////////แจ้งเตือนการโอนเงินไปยังร้านค้า///////////////////////////////
         String textNotifyMarket =
             'มีการโอนเงินค่าสินค้า Item Id : ${paymentAdminData.itemId} โปรดตรวจสอบและยืนยันการรับเงิน';

@@ -43,19 +43,19 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _refreshPage,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          iconTheme: IconThemeData(color: Colors.teal),
-          title: Text(
-            '${itemData.itemId} : ${itemData.nameItem}',
-            style: TextStyle(fontSize: 17, color: Colors.teal),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.teal),
+        title: Text(
+          '${itemData.itemId} : ${itemData.nameItem}',
+          style: TextStyle(fontSize: 17, color: Colors.teal),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refreshPage,
+        child: SingleChildScrollView(
           child: Column(
             children: [
               FutureBuilder(
@@ -330,7 +330,7 @@ class _ListOrderByItemPageState extends State<ListOrderByItemPage> {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => EditPaymentAdminToMarket(
-                      token, adminId, paymentAdminData)));
+                      token, adminId, paymentAdminData,_refreshPage)));
         },
         child: Text(
           'ตรวจสอบ/แก้ไข',

@@ -263,7 +263,7 @@ class _MarketPaymentAdminPageState extends State<MarketPaymentAdminPage> {
                                 '=======================> ${status.toString()}');
                             setState(() {
                               marketSaveStatusPaymentAdmin(
-                                  context, token, paymentAdminData, status,detail);
+                                  context, token, paymentAdminData, status,detail,_reFreshPage);
                             });
                           },
                           child: Text('ยืนยัน')),
