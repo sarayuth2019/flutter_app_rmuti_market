@@ -34,7 +34,7 @@ class _MarketOverViewTabState extends State<MarketOverViewTab> {
     // TODO: implement initState
     super.initState();
     _typeDropDownPick = listDropdownButton[0];
-    listAllPaymentData(token).then((value) {
+    listPaymentByMarketId(token, marketId).then((value) {
       if (dateTimeDayNow.day.toString().length == 1 &&
           dateTimeDayNow.month.toString().length == 1) {
         _dropDownPickValue =
