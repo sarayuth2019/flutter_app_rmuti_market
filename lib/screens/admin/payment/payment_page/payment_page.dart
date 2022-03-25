@@ -450,7 +450,7 @@ class _PaymentPage extends State {
                                                                                               String _statusPayment = 'ชำระเงินผิดพลาด';
                                                                                               _showAlertGetMoney(context, snapshotPayment.data, snapshotOrder.data, _statusPayment, snapshotItemData.data, 0);
                                                                                             },
-                                                                                            child: Text('จำนวนเงินผิดพลาด')),
+                                                                                            child: Text('ชำระเงินผิดพลาด')),
                                                                                       ],
                                                                                     )
                                                                                   : Container()),
