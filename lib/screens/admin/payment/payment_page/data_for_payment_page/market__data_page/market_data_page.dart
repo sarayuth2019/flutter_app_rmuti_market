@@ -76,7 +76,7 @@ class _MarketDataPage extends State {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Market ID : ${snapshot.data.marketID}",
+                                      "Market Id : ${snapshot.data.marketID}",
                                       style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold),
